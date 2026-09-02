@@ -77,6 +77,31 @@ Real code exists (`lib/edmunds-cj.ts`, `lib/link-resolution.ts`) that constructs
 
 ---
 
+## Addendum (same day) — Investigation spike results, ChatGPT-aligned
+
+Two spikes run per the required next-step list above, after ChatGPT confirmed alignment on the audit and sequencing.
+
+**1. NHTSA recalls endpoint — confirmed and ready to size.**
+Live call to `api.nhtsa.gov/recalls/recallsByVehicle?make=acura&model=rdx&modelYear=2012` returned real, current recall records with exactly the field set Fractal's reference schema described: campaign number, component, summary, consequence, remedy, `parkIt`/`parkOutSide` flags. Public, free, no API key, no auth. This confirms the NHTSA-only recall approach (`DECISION-20260902-007`) is viable — recall work can now be sized as a contained feature build, not a research spike.
+
+**2. Edmunds raw-fetch/redirect spike — inconclusive from this environment, correctly left open rather than assumed.**
+Claude's own `web_fetch` tool can only retrieve URLs that already appear in a prior search result — it cannot cold-fetch an arbitrary constructed URL such as a specific VIN's `/featured-listing/` page, since individual VIN listings aren't search-indexed. This is a limitation of the sandbox this investigation ran in, **not evidence about Edmunds' behavior toward automated requests.** What was confirmed instead: Edmunds' category/inventory pages are plain server-rendered HTML (not a JS-only SPA) with full listing content visible to a crawler — a mildly positive signal, but not a substitute for testing the actual VIN-specific redirect/classification path.
+
+**Required next test, not yet done:** a controlled server-side fetch from the real `carclever-find-my-car` Vercel runtime (or a preview deployment) against real constructed Edmunds URLs — checking redirect behavior, page classification, and whether Edmunds blocks or rate-limits automated requests differently than a browser. This must be run from the actual deployment environment, not from this session's tooling.
+
+**No latency budget, cost estimate, or implementation commitment for Edmunds destination validation should be treated as settled until that test succeeds.** Everything else in the recommended build sequence can proceed regardless of this result, since it doesn't depend on Edmunds validation being viable.
+
+**Revised next engineering sequence (ChatGPT-confirmed):**
+1. Record this addendum. ✅ (this document)
+2. Run the real Vercel-side Edmunds probe.
+3. If viable, build listing validation first.
+4. Build NHTSA recalls and affordability as contained, parallel additions.
+5. Add tap-to-act.
+6. Add finance/trade-in destination validation (same validation layer as step 3).
+7. Build adaptive comparison last.
+
+---
+
 ## Gating reminder (per the original design brief's own guardrails)
 
 This document is investigation and sequencing feedback only. Find My Car's merge freeze stays in place until André confirms review has concluded. No production behavior change is authorized by this document.
