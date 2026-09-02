@@ -10,17 +10,37 @@ Use the Edmunds relationship as a three-part growth asset:
 
 Affiliate outbound links are not backlinks to GetCarWise. They point away from the site, and commercial affiliate links should be clearly disclosed and qualified appropriately. SEO upside should come indirectly from better task completion, stronger topical usefulness, better internal linking, and content that earns genuine citations or links from other sites. Do not publish large numbers of thin Edmunds links for perceived SEO benefit.
 
+## Current program economics and operating constraints
+
+The supplied CJ advertiser record for account 1429390 adds important detail:
+
+- Network earnings: $50.62 three-month EPC and $18.08 seven-day EPC.
+- Lead commissions under the active 2025 program terms:
+  - $10 per qualifying new-vehicle lead;
+  - $10 per qualifying used-vehicle lead;
+  - $3.50 per qualifying trade-in lead.
+- Referral windows:
+  - 14 days for new-vehicle leads;
+  - 14 days for used-vehicle leads;
+  - 15 days for trade-in leads.
+- Leads require unique users and valid identifying/contact information; duplicate, fraudulent, or invalid leads are not commissionable.
+- New affiliates are limited to 20 leads per day during the first 60 days unless Edmunds confirms that the probationary period has been lifted by email after lead-quality review.
+- Current relationship contact shown in CJ: Paige Burrows (pburrows@edmunds.com). Use the contact details from the authenticated CJ account record when reaching out, and do not expose them publicly.
+- Serviceable area is the United States. The supplied conversion mix is 99.23% US, confirming that US-intent pages should be prioritised.
+
+This makes lead quality more important than raw outbound clicks. A page that generates many low-intent clicks may be less valuable than a smaller page that produces valid new, used, or trade-in leads.
+
 ## Highest-priority CJ opportunities
 
 The attached inventory has 40 Edmunds/CJ links. Prioritize contextual text links and deep links over generic banners.
 
 ### Tier 1 — immediate website tests
 
-- **Used Cars** — three-month EPC $163.69; seven-day EPC $239.50
-- **Sell Your Used Car** — three-month EPC $241.11; seven-day EPC $310.00
-- **Sell My Car** — three-month EPC $152.29
+- **Used Cars** — three-month EPC $163.69; seven-day EPC $239.50; prioritise as a used-lead funnel
+- **Sell Your Used Car** — three-month EPC $241.11; seven-day EPC $310.00; prioritise as a trade-in/valuation funnel
+- **Sell My Car** — three-month EPC $152.29; prioritise as a trade-in/valuation funnel
 - **Used Car Listings** — seven-day EPC $85.71
-- **Evergreen Link** — three-month EPC $30.47; seven-day EPC $65.94; deep-link enabled
+- **Evergreen Link** — three-month EPC $30.47; seven-day EPC $65.94; deep-link enabled, useful when a context-specific creative is unavailable
 - **Car Incentives & Rebates** — three-month EPC $42.16
 
 Use these first because they combine clear user intent, measurable commercial value, and natural placement opportunities.
@@ -61,7 +81,7 @@ Add a small, clearly labelled next-step module to relevant pages:
 - after a new-car buying guide: “Check new-car quotes and incentives”
 - after ownership-cost content: “Review Edmunds’ cost-of-ownership estimates”
 
-Each module should have one primary CTA, one sentence of context, and a disclosure. Avoid presenting multiple competing Edmunds links in the same block.
+Each module should have one primary CTA, one sentence of context, and a disclosure. Instrument the CTA by intent so new-car, used-car, and trade-in lead performance can be separated. Avoid presenting multiple competing Edmunds links in the same block.
 
 ### 2. Intent-matched editorial hubs
 
@@ -104,13 +124,13 @@ Track by page and link:
 - broken or irrelevant destinations;
 - assisted conversions where measurable.
 
-After 30 days, produce a short partner report showing which user intents and placements generate qualified activity.
+After 30 days, produce a short partner report showing which user intents and placements generate qualified activity. Keep traffic below the 20-lead/day probation ceiling until Edmunds confirms the quality gate has been lifted.
 
 ### Ask Edmunds/CJ for a partner conversation
 
 Use the evidence pack to request:
 
-- a named affiliate/account contact;
+- a named affiliate/account contact and confirmation that Paige Burrows is the correct operating contact;
 - confirmation of the best-performing creative and destinations for GetCarWise’s audience;
 - approval or guidance for deep-linking to high-intent contextual destinations;
 - access to current creative, tracking, and attribution recommendations;
