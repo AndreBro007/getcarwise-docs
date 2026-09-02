@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft ready for André review. No WordPress changes should be published until André approves the copy and CTA destinations.
+Approved by André on Sep 2, 2026. Claude may proceed with the page preflight and WordPress implementation, subject to the checks and safeguards below.
 
 ## Target page 1 — Best SUVs under $30,000
 
