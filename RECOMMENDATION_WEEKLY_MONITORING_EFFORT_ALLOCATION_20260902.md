@@ -19,7 +19,11 @@ For the next 2–4 weeks, allocate effort in this order:
 - Reddit reporting shows 9,417 views across 90 tracked items, but engagement is concentrated in r/whatcarshouldIbuy rather than broadly distributed.
 - CJ currently shows $20 commission from 2 leads this year. This is early but materially better than treating revenue as zero.
 - Referring domains are approximately 27 against the 40 target.
-- The website audit found that all 8 reviewed pages lack links to Find My Car or a Claude entry point. Try CarClever is stale, and CarClever Guide explains Claude usage but links only to ChatGPT.
+- The website audit found that all 8 reviewed pages lack links to the new Find My Car app or a Claude entry point. This must be interpreted within a transition period across three apps:
+  - **CarClever** — the established Fractal app, currently Published/Directory and still the live legacy experience.
+  - **CarClever – New & Used Cars** — a Fractal app that was withdrawn from review by André on Sep 1, 2026; it is being phased out rather than promoted.
+  - **CarClever – Find My Car** — the replacement Vercel app, currently in Review for Claude/ChatGPT approval and not yet ready for public endpoint remapping.
+  Therefore, Try CarClever’s stale “Claude coming soon” wording and the CarClever Guide’s ChatGPT-only link are transition-state issues, but they should be corrected only with careful status-aware messaging—not by presenting Find My Car as generally available before approval.
 - The Find My Car roadmap and connector analysis support a thin, outbound-click-oriented experience. Success should therefore be judged by qualified listing/dealer click-through, not feature breadth or time spent inside the widget.
 
 ## 2–4 week allocation
