@@ -25,7 +25,7 @@ The supplied CJ advertiser record for account 1429390 adds important detail:
   - 15 days for trade-in leads.
 - Leads require unique users and valid identifying/contact information; duplicate, fraudulent, or invalid leads are not commissionable.
 - New affiliates are limited to 20 leads per day during the first 60 days unless Edmunds confirms that the probationary period has been lifted by email after lead-quality review.
-- Current relationship contact shown in CJ: Paige Burrows (pburrows@edmunds.com). Use the contact details from the authenticated CJ account record when reaching out, and do not expose them publicly.
+- Current relationship contact shown in CJ: Paige Burrows. Use the contact details from the authenticated CJ account record when reaching out; do not publish the email address in public documentation.
 - Serviceable area is the United States. The supplied conversion mix is 99.23% US, confirming that US-intent pages should be prioritised.
 
 This makes lead quality more important than raw outbound clicks. A page that generates many low-intent clicks may be less valuable than a smaller page that produces valid new, used, or trade-in leads.
