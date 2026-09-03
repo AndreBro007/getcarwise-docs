@@ -148,3 +148,26 @@ Claude must check every CJ URL below in Chrome.
 ## Claude execution note
 
 Please check all 24 URLs in Chrome. Do not use raw dealer URLs as substitutes for the CJ URLs. The question is whether the CJ redirect reaches an exact Edmunds listing, an Edmunds unavailable page, or a generic/similar Edmunds page. Capture the visible outcome and any exact-VIN/dealer/vehicle match.
+
+
+## Appendix B — Claude Chrome ground-truth results (24/24)
+
+Claude checked every CJ URL in Chrome.
+
+| Pool | Exact listing | Unavailable with similar grid | Unavailable bare/no similar grid |
+|---|---:|---:|---:|
+| Southern California used | 5/8 | 2/8 | 1/8 |
+| New York/New Jersey used | 6/8 | 2/8 | 0/8 |
+| Chicago new | 0/8 | 6/8 | 2/8 |
+| **Total** | **12/24** | **10/24** | **2/24** |
+
+The two bare cases are #19 and #20, both 2027 MINI Cooper Countryman VINs:
+
+- `WMZ23GA02V7W39566`
+- `WMZ23GA0XV7W06931`
+
+Both were reloaded and screenshot-verified. Edmunds showed “Vehicle no longer available” but no similar-listings module. This is a genuine third destination outcome, not a transient loading issue.
+
+Three exact VIN matches had trim-label differences between the fixture data and the live Edmunds page: #7 SV vs. Rock Creek, #15 Altitude vs. Laredo, and #16 Willys vs. Sport S. VIN, dealer, and vehicle destination matched; treat these as stale trim metadata, not a broken destination.
+
+**Important:** This Claude result does not by itself complete the Google decision gate. The per-VIN Google found/missed and broader-search recovery mapping must be joined to this table. No production classifier is authorized yet.
