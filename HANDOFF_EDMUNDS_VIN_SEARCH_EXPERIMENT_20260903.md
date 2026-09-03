@@ -171,3 +171,38 @@ Both were reloaded and screenshot-verified. Edmunds showed “Vehicle no longer 
 Three exact VIN matches had trim-label differences between the fixture data and the live Edmunds page: #7 SV vs. Rock Creek, #15 Altitude vs. Laredo, and #16 Willys vs. Sport S. VIN, dealer, and vehicle destination matched; treat these as stale trim metadata, not a broken destination.
 
 **Important:** This Claude result does not by itself complete the Google decision gate. The per-VIN Google found/missed and broader-search recovery mapping must be joined to this table. No production classifier is authorized yet.
+
+
+## Final design decision — approved for implementation
+
+The experiment is now sufficient to proceed with the following design for both new and used vehicles.
+
+### User-facing behavior
+
+Keep the existing simple, consistent card actions:
+
+- **Check avail.**
+- **View similar**
+
+Every outbound destination remains CJ-wrapped using the existing affiliate URL builder. Never expose raw Google, raw dealer, or non-CJ URLs.
+
+### Internal destination logic
+
+1. Construct the exact VIN-specific Edmunds URL and wrap it with CJ.
+2. Use that exact CJ URL behind **Check avail.** by default.
+3. If an exact VIN check/search fails, run one short targeted Google search restricted to Edmunds:
+   `site:edmunds.com + year + make + model + trim + dealer/location`.
+4. Do not run separate stock-number, price, mileage, or color searches. Testing the Audi showed that adding stock `23989A` did not improve discovery.
+5. If the targeted search identifies a useful Edmunds make/model/trim/dealer page, it may inform the fallback destination, but it does not prove exact VIN identity. There is a small risk it opens another vehicle at the same dealer.
+6. If the exact CJ URL is known to be unavailable, use the targeted CJ Edmunds fallback for the same vehicle. Keep **Check avail.** as the short label.
+7. Keep **View similar** as the broader similar-vehicle action. New vehicles will naturally use targeted similar-new Edmunds searches more often.
+
+### Evidence and limits
+
+Claude checked all 24 CJ URLs in Chrome: 12 exact listings, 10 unavailable pages with populated similar grids, and 2 bare unavailable pages with no similar grid. The two bare pages were new MINI Countryman cases and were reloaded/screenshot-verified.
+
+The important conclusion is that the exact CJ URL worked correctly when the listing was live, including the Audi case: Edmunds showed the same vehicle, dealer, and VIN. Google/broader search is a discovery aid, not the availability authority.
+
+### Implementation boundary
+
+Claude may now implement the approved destination-resolution behavior in the engineering lane, subject to the existing test/regression gates. Preserve the existing Find My Car intent matching, CJ affiliate construction, button labels, disclosures, and fallback links. Do not redesign the UI or send users to generic vehicle pools. Add deterministic tests for exact VIN, targeted fallback, unavailable-with-similar, and unavailable-bare outcomes.
