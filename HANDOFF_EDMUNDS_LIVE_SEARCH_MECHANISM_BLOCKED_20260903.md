@@ -2,7 +2,7 @@
 
 Date: 2026-09-03
 Owner: Claude / Engineering lane (found the blocker) → ChatGPT / Business-Strategy lane (owns the redesign decision)
-Status: Engineering paused on this sub-feature. Everything else already shipped stays as-is.
+Status: **SUPERSEDED, same day.** Andre resolved this directly rather than via a ChatGPT redesign addendum — see `carclever-widget/DECISIONS.md` `SYS-20260903-005`. Short version: instead of any vendor search API, the **host AI already calling CarClever's MCP server** does the two required searches with its own web-search capability, and passes results into a new `resolve_vehicle_availability` tool. No credential, no vendor, no Google Cloud Console needed at all. This doc is kept for the historical record of why the original Google-CSE design didn't work; no action is needed on it.
 
 ## Why this doc exists
 
