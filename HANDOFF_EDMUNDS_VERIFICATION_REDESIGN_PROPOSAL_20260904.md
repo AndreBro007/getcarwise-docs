@@ -61,7 +61,7 @@ We spent a long back-and-forth getting to trustworthy numbers, and made real mis
 
 **Every "miss" was a genuine, confirmed 404** ("Vehicle no longer available... sold or removed by the dealer"), and critically: **Edmunds' own dead-listing page automatically shows real, live "similar vehicles" with real prices and mileage** — this happened consistently, not occasionally. This matters a lot for the strategic read below.
 
-**One unplanned but interesting finding:** of used vehicles sourced from CarMax dealers specifically (CarMax owns Edmunds), 4 of 5 tested hit (80%) vs. 2 of 3 non-CarMax (67%) — small sample, directionally consistent with a corporate-ownership effect, not proven.
+**One unplanned but interesting finding:** of used vehicles sourced from CarMax dealers specifically (CarMax owns Edmunds), 4 of 5 tested hit (80%) vs. 2 of 3 non-CarMax (67%) — small sample, directionally consistent with a corporate-ownership effect, not proven. Note: CarMax is exclusively a used-vehicle retailer (confirmed — they sold off their last new-vehicle franchises years ago and stopped entirely), so this pattern can only ever be relevant to the Used bucket. It has no bearing on the New-vehicle hit-rate problem.
 
 **One data-quality footnote, unrelated to the design decision:** decoding one VIN through NHTSA's official vPIC API returned an explicitly ambiguous trim ("EX, X-Line" — both, not one), explaining an observed mismatch between our own data's trim field and Edmunds' listed trim for the same vehicle. Not a bug in either data source — some manufacturers' VINs don't uniquely encode trim-level packages. Worth knowing this class of discrepancy exists and isn't something to chase as an error.
 
