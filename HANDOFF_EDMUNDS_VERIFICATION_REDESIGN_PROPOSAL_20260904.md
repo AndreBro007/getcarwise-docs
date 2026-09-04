@@ -13,6 +13,7 @@ The mandatory two-call host-search-verification flow (`find_matching_vehicle` �
 
 - **New vehicles:** Check avail. → the "close" (trim-specific) Edmunds URL. View similar → the "loose" (bare make/model) Edmunds URL. No confirmation attempted — construction only.
 - **Used vehicles:** Check avail. → the exact-VIN deterministic URL (may 404). View similar → the "close" (trim-specific) Edmunds URL.
+- **Carvana listings** (already confirmed 100% dead on Edmunds, a known fact — see below): proposed to get the same treatment as New, rather than the current null-Check-avail behavior.
 
 This is a full return to a construction-only architecture (like the one that existed before this session's live-search work began), but with two real improvements baked in that didn't exist before: (1) View similar is now condition-aware — it widens or narrows depending on how confident Check avail. is, instead of always being the same generic category link; (2) New-vehicle destinations skip a Check avail. attempt that testing shows rarely pays off, going straight to a page that's actually more likely to be useful.
 
@@ -87,9 +88,20 @@ So the honest tradeoff is: we're trading a "confirmed real-time" signal (which c
 - Not proposing any live search of any kind — this design has zero runtime network dependency beyond the existing deterministic URL construction, matching this app's pre-session architecture.
 - Not proposing to touch V1 (the submitted/production app under Anthropic review) — this is scoped entirely to the same isolated V2 branch this session's other work has been on.
 
+## Proposed refinement: apply the same New-vehicle logic to Carvana listings
+
+This is a separate, already-established fact, not a new finding — the original field audit (see credit below) confirmed Carvana listings are **100% dead on Edmunds, live-tested 10/10**, because Carvana is a direct-to-consumer seller with no reason to appear in a competing franchise-dealer affiliate feed. That's a stronger, confirmed-not-probabilistic signal than New's ~15-23% hit rate — yet the current codebase treats Carvana more conservatively than we're now proposing for New: Carvana never even attempts to construct an exact-VIN URL (correct, since it's confirmed dead), but `affiliateUrl` is left `null` entirely, meaning Check avail. doesn't render at all for Carvana listings — the user only ever sees a single fallback-only button.
+
+**Proposed refinement, matching the New-vehicle logic exactly:** since Carvana is at least as reliably non-viable for exact-VIN confirmation as New vehicles are, give it the same treatment — Check avail. → "close" (trim-specific) deterministic URL, View similar → "loose" (bare make/model) deterministic URL, instead of leaving Check avail. empty. This gives Carvana listings an actual two-button experience instead of the current single-button fallback-only case, at no added risk (we already know not to trust an exact-VIN attempt for these).
+
+## Resource used this session worth flagging
+
+The existing `specs/Auto_Dev_Field_Audit_v1.md` (in `carclever-widget`) was consulted directly this session and had good, load-bearing information already on file — the Carvana-dead-100%-of-the-time finding cited above came from there, along with the original reasoning for why `affiliateFallbackUrl` (the category-page safety net) exists at all. Worth keeping in mind as a source of truth for this kind of question going forward rather than re-deriving facts that are already documented.
+
 ## Questions for you — strategic assessment, not just technical sign-off
 
 1. **Is a 77% Used / ~15-23% New hit-rate split an acceptable production tradeoff**, given the two-layer fallback (Edmunds' own auto-populated similar grid, plus our own upgraded View similar)? Or does this change how CarClever should be positioned/marketed (e.g., should "Check availability" language anywhere in the product imply more confidence than this now delivers)?
 2. **Does the New-vehicle number (~15-23%) change anything about how New inventory should be surfaced or labeled**, given Check avail. will now essentially never confirm for this segment?
 3. **Is the CarMax-sourced-listing pattern (4/5 vs 2/3, small sample) worth a dedicated follow-up test**, given CarMax owns Edmunds and there may be a real, exploitable signal there for a future iteration?
 4. Anything about this reasoning you'd push back on before we build it?
+5. Any objection to giving Carvana listings the same "close/loose" two-button treatment as New (see proposed refinement above), rather than the current single-button fallback-only experience?
