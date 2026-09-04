@@ -45,6 +45,12 @@ This maps cleanly onto every field the design brief (Section A) and the earlier 
 
 **What this endpoint does NOT give us, confirmed:** VIN-level applicability or remedy-completion status — matches the already-accepted trade-off above, not a new finding.
 
+## Tool-boundary decision (settled architecture)
+
+Recalls are part of the **check_vehicle tool**, not find_matching_vehicle and not a new standalone recalls tool. For V1, check_vehicle owns the known VIN/listing Buyer Check and recall result. The normal search remains fast and should not perform recall lookups for every search result. If recalls cannot be retrieved, check_vehicle must still return the rest of the Buyer Check with an honest partial result and the recall state set to **“Recall status unavailable.”**
+
+This follows settled architecture decision DECISION-20260902-008: four tools (find_matching_vehicle, check_vehicle, calculate_affordability, resolve_dealer_url), with comparison remaining AI-led and tap-to-act handled through natural-language follow-up prompts. Architecture is settled; implementation remains subject to the documented review, probe, regression, and approval gates.
+
 ## Proposed integration point (mirrors the existing NHTSA electrification call exactly)
 
 Same stage as `decodeNhtsaElectrification()` — called on the final shortlist (5-8 vehicles) only, never the full candidate pool, so it can never thin out or delay the search itself. One genuine efficiency opportunity this endpoint's shape enables that the electrification call doesn't: **since this is make/model/year-keyed rather than VIN-keyed, multiple shortlisted vehicles sharing the same make/model/year (a common case — e.g. two same-trim listings from different dealers) only need one recall lookup, not one per vehicle.** Worth deduplicating before firing the calls.
