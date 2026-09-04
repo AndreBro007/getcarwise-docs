@@ -59,10 +59,11 @@ Recommended meta:
 Recommended CTA:
 
 - Label: `Browse Used Cars on Edmunds`
-- Placement: after the ranked recommendations/comparison and before the final CarClever Lite prompt, or at the first natural point where the reader is ready to browse inventory.
-- Destination: the approved active CJ/Edmunds used-cars tracking URL from the supplied inventory.
+- Destination: use the highest-value relevant approved CJ destination from the supplied inventory: the Used Cars destination (reported three-month EPC approximately $163.69; seven-day EPC approximately $239.50). Use Used Car Listings only if it is the better page-specific destination and the active CJ record confirms it.
+- Placement/style: add it in the same way and approximately the same position as the already-updated `/tools/best-compact-suv-under-30000/` page: a short lead-in such as “Ready to see what’s actually for sale?”, followed by one clear CTA link, immediately after the main recommendations/comparison section and before the embedded CarClever Lite section.
+- First inspect the entire rendered page and WordPress content for an existing generic Edmunds/CJ link. Replace or reposition a generic link if present; do not create duplicate Edmunds CTAs.
 - Do not use a raw Edmunds URL when a CJ tracking URL is required.
-- Add the standard affiliate disclosure near the first commercial CTA.
+- Add the standard affiliate disclosure directly below or beside the CTA.
 
 Rationale: this page has meaningful used-car shopping intent and the strongest impression volume among the pages still needing a contextual commercial next step.
 
@@ -93,10 +94,10 @@ Recommended meta:
 
 Recommended CTA:
 
-- Label: `Browse SUVs on Edmunds`
-- Placement: after the comparison/recommendation section, before the final “Next Steps.”
-- Destination: use the approved SUV or relevant used-car CJ tracking URL from the supplied inventory.
-- Add the standard affiliate disclosure near the first commercial CTA.
+- Label: `Browse Used Cars on Edmunds`
+- Destination: use the highest-value relevant approved CJ destination from the supplied inventory: the Used Cars destination (reported three-month EPC approximately $163.69; seven-day EPC approximately $239.50). Use Used Car Listings only if it is the better page-specific destination and the active CJ record confirms it.
+- Placement/style: mirror the already-updated `/tools/best-compact-suv-under-30000/` page: short lead-in, one clear CTA link, after the comparison/recommendation section and before “Next Steps,” with the affiliate disclosure directly below or beside it.
+- First inspect the entire rendered page and WordPress content for an existing generic Edmunds/CJ link. Replace or reposition a generic link if present; do not create duplicate Edmunds CTAs.
 - Use one CTA only; do not add a link catalogue.
 
 Rationale: 340 impressions and only 2 clicks indicate a worthwhile CTR opportunity, while the page naturally leads to current inventory research.
@@ -129,10 +130,10 @@ Recommended meta:
 
 Recommended CTA:
 
-- Label: `Browse Used SUVs on Edmunds`
-- Placement: after the ranked picks/comparison section and before the final CarClever Lite prompt or closing next-step section.
-- Destination: the approved used-cars or used-car-listings CJ tracking URL from the supplied inventory.
-- Add the standard affiliate disclosure near the first commercial CTA.
+- Label: `Browse Used Cars on Edmunds`
+- Destination: use the highest-value relevant approved CJ destination from the supplied inventory: the Used Cars destination (reported three-month EPC approximately $163.69; seven-day EPC approximately $239.50). Use Used Car Listings only if it is the better page-specific destination and the active CJ record confirms it.
+- Placement/style: mirror the already-updated `/tools/best-compact-suv-under-30000/` page: short lead-in, one clear CTA link, after the ranked picks/comparison section and before the embedded CarClever Lite prompt, with the affiliate disclosure directly below or beside it.
+- First inspect the entire rendered page and WordPress content for an existing generic Edmunds/CJ link. Replace or reposition a generic link if present; do not create duplicate Edmunds CTAs.
 - Keep the page’s promise used-focused; do not introduce new-car claims unless the content is also revised to support them.
 
 Rationale: it has zero clicks from 115 impressions and is directly aligned with a commercial used-SUV journey.
