@@ -119,3 +119,14 @@ Please return:
 ## Boundary
 
 This handoff authorises research, browser inspection, and preparation. It does not authorise production application changes, Vercel changes, MCP changes, Find My Car merges, or publication of the new CTA without the required approval.
+
+
+## Addendum — independent public-page review
+
+ChatGPT inspected the public homepage, Tools page, Blog index, Deal Score, PHEV, 3-Row SUV, page 827, Cross-Shopping New vs Used, and True Cost of Ownership pages.
+
+Additional candidates for later testing:
+- `/cross-shopping-new-vs-used-when-new-actually-costs-less/`: strong replacement/upgrade context; current CTA path is mainly CarClever Lite/ChatGPT.
+- `/true-cost-of-ownership-explained/`: strong financial-decision context; valuation/residual-value section may support a contextual sell CTA.
+
+Do not add a second CTA to pages already covered by the Sep 4 handoff without a separate experiment rationale. Deal Score's sparse public rendering should be verified before adding a CTA. Public inspection cannot replace authenticated GSC/Clarity data or WordPress content inspection.
