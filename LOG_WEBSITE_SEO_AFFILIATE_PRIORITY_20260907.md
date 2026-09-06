@@ -142,3 +142,23 @@ ChatGPT reviewed publicly rendered pages directly while Claude's browser work is
 - Authenticated GSC and Clarity extraction still requires Claude Chrome or an André export.
 - WordPress content inspection and changes require Claude/Chrome or the authorised WordPress workflow.
 - No live changes were made by ChatGPT in this review.
+
+
+## Additional public-site review — Sep 7, 2026
+
+### New findings
+
+- The public Blog index lists 9 guides and provides useful links to Price Check, Deal Score, CarClever Lite, and Try CarClever. This is a potential internal-link distribution channel for future CTA tests.
+- `/cross-shopping-new-vs-used-when-new-actually-costs-less/` is a strong contextual candidate for a valuation/sell CTA because it discusses replacing a vehicle, trade-offs, residual value, and uses Edmunds/KBB as valuation references. Its current conversion path points mainly to CarClever Lite/ChatGPT and does not show a dedicated sell/trade-in CTA in the rendered content.
+- `/true-cost-of-ownership-explained/` is another strong contextual candidate, especially near the “residual value” section or before the final tool CTA. Its primary current CTA is the ChatGPT affordability tool; no dedicated sell/trade-in CTA was visible in the rendered content.
+- The 3-Row SUV page already has a substantial article and one Used Cars CTA. It should not receive a second commercial CTA without a specific test rationale.
+- The live Deal Score page renders as a thin page with only a calculator link and global navigation in the public crawl. This is a potential SEO/conversion issue independent of the sell/trade-in experiment and needs WordPress/Chrome verification.
+
+### Revised CTA test candidates
+
+1. Price Check: best direct intent; requires Claude/WordPress inspection because public fetch was rate-limited.
+2. Cross-Shopping New vs Used article: best editorial replacement/upgrade intent; proposed secondary test after Price Check.
+3. True Cost of Ownership article: good financial-decision context; secondary candidate.
+4. Deal Score: only after confirming whether the sparse rendering is real content or a crawl/embed limitation.
+
+Do not add sell/trade-in CTAs to every article. Use one controlled page first, then expand only if the first test produces measurable eligible leads.
