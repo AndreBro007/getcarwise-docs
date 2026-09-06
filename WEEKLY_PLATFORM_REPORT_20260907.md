@@ -20,12 +20,13 @@ No red flags. Broadly consistent with the Sep 1-2 read (that was a 7-day window 
 
 - **Totals:** 60 clicks / 5.36k impressions / 1.1% CTR / avg position 27.9.
 - **Top queries:** carclever (3 clicks/51 impr), getcarwise (3/40), car clever (3/16), best small suv under 30k (1/20).
-- **🔴 Confirmed, unresolved: the zero-click SUV keyword pattern from Sep 1-2 is still present, largely unchanged:**
-  - "best suv under 30000" — 337 impressions, 0 clicks
+- **Correction to an initial read of this data:** the zero-click pattern below was flagged Sep 1-2 and looked unresolved in this 3-month GSC pull — **but TASKS.md #49/#51 confirm the fix (new title + meta + CJ link) was already shipped live Sep 3** on the single page these 4 queries all resolve to (`/tools/best-compact-suv-under-30000/`, id 827):
+  - "best suv under 30000" — 337 impressions, 0 clicks (3-month aggregate)
   - "suv under 30000" — 188 impressions, 0 clicks
   - "best suvs under 30000" — 152 impressions, 0 clicks
   - "suvs under 30000" — 108 impressions, 0 clicks
-- Google is surfacing these pages at real volume; the SERP snippet (title/meta) is still the likely blocker, not ranking. **This fix has not been actioned since being identified Sep 1-2.**
+- These are 3-month rolling totals, so they're still dominated by the ~2.5 months of pre-fix history; a handful of post-Sep-3 days can't move the aggregate yet. **This is not a missed fix — it's too early to read click impact from the aggregate view.** Next check should pull a Sep 3-onward date-filtered range specifically to see if the new snippet is earning clicks.
+- **What's genuinely still open:** TASKS.md #50, the site-wide audit for other pages with the same pattern — sent to ChatGPT Sep 3, still marked "awaiting audit list" as of this check.
 
 ## 3. Microsoft Clarity (7 days)
 
@@ -57,14 +58,15 @@ No red flags. Broadly consistent with the Sep 1-2 read (that was a 7-day window 
 
 ## Cross-Platform Synthesis
 
-**The single clearest actionable finding, confirmed independently across GSC, Rank Math, and Semrush:** getcarwise.app ranks for real, high-volume "SUV under $X" style commercial keywords (positions 25-57, hundreds of impressions/month) but converts almost none of that into clicks. This is a title/meta-snippet problem, not a content or ranking problem — and it was already identified and logged as a fix on Sep 1-2 (TASKS.md #49-51) but **has not yet been actioned.**
+**The single clearest pattern, confirmed independently across GSC, Rank Math, and Semrush:** getcarwise.app ranks for real, high-volume "SUV under $X" style commercial keywords (positions 25-57, hundreds of impressions/month) but converts almost none of that into clicks in the 3-month aggregate. The flagship instance of this (the "SUV under $30k" cluster, page 827) was already diagnosed and fixed Sep 3 (TASKS.md #49/#51) — new title/meta + CJ link live. Too soon to see the click-rate effect in a 3-month rolling window. **The genuinely open item is TASKS.md #50** — the site-wide audit for other pages with the same signature, sent to ChatGPT Sep 3, still pending a returned list.
 
 **Genuine positive movement this week:** AI-assistant discovery (Clarity's AI Visibility) is up meaningfully (18.33%→24.90% SoA), and Semrush's referring-domain count shows a large jump that — if verified — clears the Sep 30 traction gate early.
 
 **Flat/no change:** CJ revenue ($20/2 leads, static), GA4 traffic (broadly consistent with prior reads), 404 monitor (routine scanner noise, not a real problem).
 
-## Recommended Next Actions (not yet actioned, flagging for André/ChatGPT sign-off since this crosses into SEO/business lane)
+## Recommended Next Actions (flagging for André/ChatGPT sign-off since this crosses into SEO/business lane)
 
 1. Independently verify the 56-referring-domains Semrush jump before treating the Sep 30 traction gate as met.
-2. Action the still-open zero-click SUV title/meta fix (logged Sep 1-2, TASKS.md #49-51) — this is the highest-leverage, lowest-effort item found across two consecutive weekly checks.
-3. Continue monitoring Clarity dead-clicks (14.71%) — not urgent but trending up from last week's small sample.
+2. Chase TASKS.md #50 — ChatGPT's site-wide zero-click page audit, still pending since Sep 3.
+3. Next weekly check: pull a Sep 3-onward date-filtered GSC range (not the 3-month rolling default) to see whether page 827's Sep 3 fix is actually lifting clicks yet.
+4. Continue monitoring Clarity dead-clicks (14.71%) — not urgent but trending up from last week's small sample.
