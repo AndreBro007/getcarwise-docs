@@ -1,3 +1,42 @@
+# Recalls Feature (V3, formerly "V2.3") — STATUS UPDATE Sep 6, 2026: Built, Shipped, Live-Tested — Real Regression Found, Decision Needed
+
+**This handoff has moved past "investigation only" — the feature described below was built and shipped since this doc was last written. Read this update section first, the rest of the file below is the original Sep 4 investigation, kept as historical record.**
+
+## Canonical version terminology (effective Sep 6, 2026 — supersedes this doc's own Sep 4 "V2.1/V2.2/V2.3" note below)
+
+- **V1** = production `main`. Untouched.
+- **V2** = `release/v2` branch (commit `e2ffe66`). Combines what this doc's Sep 4 note called "V2.1" (count-display fix) + "V2.2" (Edmunds CTA/link redesign) into one shipped release. No new tools.
+- **V3** = `feature/v3-check-vehicle` branch (commit `719fc13`, branched from V2). **This is what this doc's Sep 4 note called "V2.3" — that label is retired.** Adds the `check_vehicle` tool described below.
+
+Full canonical mapping (GitHub branch / Vercel project / connector name, for all three versions): top of `STATE.md`, `DECISIONS.md`, and every other admin doc in `carclever-widget`, plus `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md` in the same repo.
+
+## What actually got built (matches this doc's proposed design almost exactly)
+
+`check_vehicle` shipped with the NHTSA-only mechanism this doc proposed, the 4-state model largely as proposed (none/severe/routine/unavailable), and Buyer Check integration exactly as described (own concern line for severe, `needsVerification` for routine/unavailable). Full source: `lib/nhtsa-recalls-client.ts`, `lib/buyer-check.ts`, `app/[transport]/route.ts` on branch `feature/v3-check-vehicle`.
+
+## Real regression found, live-tested on both Claude and ChatGPT, decision still not made
+
+`check_vehicle` is **text-only** — no listing/photo/link — so a VIN due-diligence question ("is this a good buy? any red flags?") that used to get a full one-shot answer (listing + link + Buyer Check, all from `find_matching_vehicle`'s old VIN path) now silently loses the listing/photo/link half of that answer, because it correctly routes to `check_vehicle` instead per that tool's own description. Confirmed cross-platform (Claude and ChatGPT both reproduce it identically) — this is a real design consequence of the four-tool split, not a host quirk or a bug in the recall logic itself. Full detail: `DECISIONS.md` `SYS-20260906-001`/`SYS-20260906-002`.
+
+**Three options laid out, not yet decided — this needs ChatGPT's business/design call, not just an engineering fix:**
+1. Give `check_vehicle` its own listing-resolution capability when a VIN produces one — restores the old one-shot experience, but blurs the tool's original lean/text-only design intent.
+2. Leave as-is — the listing is retrievable via a natural follow-up, already confirmed working through `resolve_dealer_url`. Cheapest, but a real UX regression from before the split.
+3. Narrow `check_vehicle`'s own tool description so it stops winning this specific phrasing ("is this a good buy? any red flags?") when a listing/link response would actually be preferred — pushes ambiguous due-diligence questions back toward `find_matching_vehicle`'s VIN path instead.
+
+## New: a "risk reasons" field also shipped in V2, worth knowing before designing anything V3-adjacent
+
+Not part of `check_vehicle` — this landed in **V2** (the NHTSA-trim-decode commit chain), but it's directly relevant to any future recall/risk-explanation design: `lib/risk-tier.ts` gained `explainRiskTier()`, a companion to the existing `classifyRiskTier()`, returning a `reasons: string[]` array (e.g. "VIN identity check failed...", "A reported accident or history issue is on file...") explaining *why* a card got an amber/red tier — not just the bare tier. Fully wired into the API output schema (`RiskSchema.reasons`) and used for every card `find_matching_vehicle` produces.
+
+**Overlap with V3:** since V3 branches directly from V2's tip, `check_vehicle` inherits and uses the exact same `classifyRiskTier()`/`explainRiskTier()` functions for any card it resolves — this is shared code, not duplicated. What's genuinely new and separate in V3 is the recall-specific handling in `buildBuyerCheck()` (a different function, feeding `BuyerCheck.concerns`/`needsVerification`/`nextSteps`, not `RiskSchema.reasons`). Both follow the same underlying "explain the flag, don't just show a bare state" principle (`DECISION-20260902-008`), but they're sibling mechanisms feeding different output shapes, not competing or overlapping work — worth knowing as existing precedent if V3 planning extends further into risk-explanation design.
+
+## Test/dev infrastructure now exists for both platforms (didn't exist Sep 4)
+
+Permanent Vercel dev projects `ccfmc-dev-v2`/`ccfmc-dev-v3`, with matching ChatGPT and Claude connectors (`CarClever V2 Test`, `CarClever V3 Test`), all live-tested end-to-end as of Sep 6. Full setup, gotchas, and connector URLs: `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md` (this repo). Full pass/fail test log for both platforms across all three versions: `TESTING.md`'s Test Run Log, in `carclever-find-my-car` (present on both `release/v2` and `feature/v3-check-vehicle` branches).
+
+---
+
+# Original Sep 4, 2026 investigation (historical — terminology below is superseded by the update above; content otherwise still accurate)
+
 # Recalls Feature (V2.3) — Engineering Investigation, Ready for ChatGPT's Final Design/Spec Pass
 
 Date: 2026-09-04
