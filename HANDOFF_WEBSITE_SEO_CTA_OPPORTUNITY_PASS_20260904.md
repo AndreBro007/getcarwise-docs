@@ -1,3 +1,23 @@
+## ✅ STATUS: COMPLETE — Sep 6, 2026 (Claude, Engineering lane)
+
+All 5 pages done and verified live (fresh re-fetch after each write, not just a "saved" toast):
+
+| Page | Title | Meta | CTA + disclosure |
+|---|---|---|---|
+| `/tools/best-used-phev-plug-in-hybrid/` | ✅ updated | ✅ updated | ✅ added |
+| `/tools/best-3-row-suv-under-50000/` | ✅ updated | ✅ updated | ✅ added |
+| `/tools/best-compact-suv-under-25000/` | ✅ updated | ✅ updated | ✅ added |
+| `/tools/best-midsize-sedan-under-40000/` | unchanged (already good) | unchanged (already good) | ✅ added |
+| `/about-getcarwise-our-story/` | unchanged | unchanged | **deliberately skipped** — agreed with this doc's own read that it's not a commercial CTA target |
+
+All CTAs use the "Used Cars" CJ link (`15701072`, EPCs cross-checked against `reference/edmunds_cj_links_2026-08-12.csv`), label "Browse Used Cars on Edmunds", placed immediately before the CarClever Lite embed (or before "Next Steps" on the 3-row SUV page), each followed by a one-line affiliate disclosure.
+
+**Access note for future handoffs of this kind:** `getcarwise.app` isn't reachable from Claude's sandboxed bash/web tools directly — this was done via Claude-in-Chrome against an authenticated `wp-admin` browser tab instead. Full technical detail, a WordPress-auth gotcha (Application Passwords don't work for this; Rank Math fields need the block-editor UI, not core REST), and one caught-in-time near-miss are logged in `carclever-widget/DECISIONS.md` → `SYS-20260906-003`, and summarized in `STATE.md`'s top entry, if useful context for scoping future website work this way.
+
+**Not done, still open for a future pass (per this doc's own "Post-implementation verification" section below):** re-checking Search Console after a reporting period, and the next round of secondary-candidate pages beyond the two already covered above.
+
+---
+
 # WEBSITE HANDOFF — SEO/CTA OPPORTUNITY PASS — 2026-09-04
 
 ## Purpose
