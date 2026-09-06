@@ -115,3 +115,30 @@ After an agreed observation period or traffic threshold, compare:
 - performance against the existing Used Cars CTA.
 
 Do not declare the experiment successful from EPC alone.
+
+
+## Independent live-page review — Sep 7, 2026
+
+ChatGPT reviewed publicly rendered pages directly while Claude's browser work is pending.
+
+### Findings
+
+- The homepage is already broadly neutral: “The Only Independent AI Evaluating Cars,” with current-car-shopping CTAs and an affiliate disclosure at the bottom.
+- The Tools page remains explicitly used-car-focused (“Verification Tools for Used Car Buyers,” “used car” repeated across tool descriptions). This is not automatically wrong, but it creates a homepage/Tools-page scope split that should be reviewed only after actual web-tool product scope is confirmed.
+- The live Deal Score page is extremely thin in the rendered view: title, one calculator link, and global navigation/footer. It does not expose a visible contextual Edmunds CTA in the crawled output. This makes it a possible monetisation surface, but also suggests a content/SEO quality issue that should be verified in WordPress and against the intended page design.
+- The live PHEV page has a clear above-the-fold Used Cars CTA before the CarClever Lite embed, with disclosure. This confirms the placement pattern used in the September handoff.
+- The live 3-Row SUV page has a substantial comparison article, a Used Cars CTA after the FAQ section, and a second “Next Steps” section. Its current CTA placement is serviceable, but a sell/trade-in CTA would be more naturally tested after the ownership/budget discussion or near the final next steps—not near the opening recommendations.
+- The live page-827 SUV article has the new title/meta-aligned content and a prominent SUV-specific Edmunds CTA immediately after the opening context. It should be treated as the completed control/example, not edited again without new evidence.
+
+### Page-placement recommendation
+
+1. First candidate: `/tools/price-check/` — inspect through WordPress/Chrome because public crawling was intermittently rate-limited. Place one Sell Your Used Car CTA after the valuation explanation/result and before the embedded tool or next steps.
+2. Second candidate: `/tools/deal-score/` — first verify whether the sparse public rendering reflects genuinely thin WordPress content or an embed/rendering limitation. If genuinely thin, improve the page's explanatory content before adding a commercial CTA.
+3. Existing SEO articles — do not add another CTA to PHEV or page 827. The 3-Row SUV page could receive a sell/trade-in CTA only after avoiding duplication and confirming the page's traffic/conversion role.
+
+### Access and ownership update
+
+- Public page inspection and strategic recommendations can be done by ChatGPT.
+- Authenticated GSC and Clarity extraction still requires Claude Chrome or an André export.
+- WordPress content inspection and changes require Claude/Chrome or the authorised WordPress workflow.
+- No live changes were made by ChatGPT in this review.
