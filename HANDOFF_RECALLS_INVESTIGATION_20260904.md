@@ -120,3 +120,36 @@ This slots into the already-recorded plan (`DECISION-20260902-007`): "Recalls (N
 1. Final resolution on the open question above (default state when recalls exist but aren't severity-flagged).
 2. Exact compact-display wording/format for the 4 states (the design brief gives the states, not the literal user-facing copy).
 3. Confirmation this is the actual next priority, or whether affordability/tap-to-act should go first given they're already listed as "ready to build" from the original roadmap methodology-extraction work.
+
+---
+
+## Consolidated CarClever MCP To-Do List (compiled Sep 6, 2026 — Find My Car focus, individual items sourced from TASKS.md, cross-referenced here for ChatGPT's convenience)
+
+### 🔴 Immediate open decisions (blocking or near-blocking)
+1. **`check_vehicle` listing-loss regression** — see the 3 options above. This is the most direct thing for this ChatGPT session to resolve.
+2. **V1 Anthropic review status** — still pending as of last check, confirm each session.
+3. **Hybrid-result contamination** (`vehicle.fuel` unreliable, gas trims leak into hybrid-only searches) — root-caused, Option A (cheap, patch existing field) vs Option B (NHTSA `ElectrificationLevel`, stronger, Claude's own lean) — not decided. `DECISIONS.md` `SYS-20260817-027`.
+
+### 🟡 Find My Car Roadmap (pre-existing prioritized list, `TASKS.md`)
+| # | Item | Status |
+|---|---|---|
+| 1 | Re-test directory discoverability once approved | Pending approval |
+| 2 | VIN-first risk/"Buyer Check" tool | Already live (categorical, not numeric — deliberately rejects Fractal's old numeric model) |
+| 3 | Single hard-number affordability line (loan payment only, not full TCO) | Methodology extracted (`DECISION-20260902-001`), not yet built |
+| 4 | AI-driven adaptive comparison (not a fixed table) | Design ready, not started |
+| 5 | Tap-to-act button row (position-label A/B/C, re-send mechanism) | Mechanism confirmed (`DECISION-20260902-001`), not built |
+| 6 | Cross-session persistence | Backlog, low priority |
+
+### 🔴 Other known bugs/gaps, not started
+- Result-count funnel display ("X indexed → Y matched → shown") — needs V2's count-fix as prerequisite (done)
+- Link/Carfax/photo display consistency — real fix is a rendered UI card, not more prose tuning
+- Match-score differentiation (identical `matchScore: 91` on structurally different vehicles) — scope question first, risks crossing into flagship's deal-scoring job. `SYS-032` (TASKS.md)
+- Non-passenger vehicles (ATVs/trailers) appearing in unfiltered searches — data-scope characteristic, low priority (Finding B)
+- VIN Buyer Check widget non-render — one observed instance, never reproduced (Finding C)
+- CarMax retest (3/3 failures once, likely transient, unconfirmed)
+
+### 🧹 Housekeeping / infra
+- 18 stale merged branches on `carclever-widget` — safe bulk-delete, no urgency
+- `AndreBro007/CarClever` (Codex-built, live at car-clever.vercel.app) — real keep/integrate/retire decision, not urgent
+- WordPress page repointing once Find My Car is fully live (CarClever Guide, Try CarClever, Tools Hub, etc.) — see `AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260826.md`
+- Vercel MCP connector account-visibility bug (`list_projects` returns empty) — re-check each session, don't re-attempt project creation via it blind
