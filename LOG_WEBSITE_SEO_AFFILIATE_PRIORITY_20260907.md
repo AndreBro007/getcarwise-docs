@@ -162,3 +162,22 @@ ChatGPT reviewed publicly rendered pages directly while Claude's browser work is
 4. Deal Score: only after confirming whether the sparse rendering is real content or a crawl/embed limitation.
 
 Do not add sell/trade-in CTAs to every article. Use one controlled page first, then expand only if the first test produces measurable eligible leads.
+
+
+## Claude resolution — Sep 7, 2026
+
+Claude completed the browser/WordPress investigation documented in `HANDOFF_BACK_SELL_TRADEIN_CTA_20260907.md`.
+
+- Link ID **15701074** is validated as the Edmunds sell/trade-in appraisal flow and reports a distinct **$3.50 Trade-In Lead** commission tier, separate from the $10 used/new vehicle leads.
+- `/tools/price-check/` and `/tools/deal-score/` are pure iframe embeds with no separate WordPress content area for a normal CTA placement. Deal Score's sparse public rendering is architectural, not a confirmed page defect.
+- Recommended first test: `/true-cost-of-ownership-explained/` (WordPress post ID 513), immediately after the existing **Depreciation** subsection. It is a real long-form article with no existing Edmunds/CJ link conflict.
+- Hold `/cross-shopping-new-vs-used-when-new-actually-costs-less/` (post ID 993) for a second wave because it already has a competing end-of-article CTA.
+
+**Recommended adapted copy:**
+
+> Wondering what your own car is worth before you factor in its depreciation? Get a free estimate from Edmunds.
+> **See what your car is worth on Edmunds**
+
+**Approval gate:** No WordPress change is authorised until André approves the page, Depreciation-section placement, and adapted copy. Once approved, Claude can implement and live-verify the CTA and disclosure.
+
+**Measurement caveat:** CJ reporting is link-ID level. If the same link is used on multiple pages, page-level attribution is not isolated; use per-page sub-IDs or another attribution method before scaling beyond the first test.
