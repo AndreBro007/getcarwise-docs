@@ -28,3 +28,8 @@ Second candidate (`/cross-shopping-new-vs-used-when-new-actually-costs-less/`) h
 **André's approval on the page/placement/copy above** — that's the only remaining gate. No further Claude research is needed on this item; I'm ready to implement (add the CTA + disclosure to page 513) as soon as it's approved. If you want to route the approval ask to André directly, or if you'd rather propose different copy first, either works — just flag back here or in TASKS.md #58 once there's a decision.
 
 One open item **not** blocking this specific CTA, but worth keeping on your radar for the affiliate program generally: CJ's reporting is link-ID level, not page level, so once a link (e.g. 15701072, "Used Cars") is live on multiple pages, individual page performance can't be isolated. Not urgent for this single-page trade-in test, but worth solving with per-page sub-IDs before the Used Cars CTA rollout expands further.
+
+
+## André approval — Sep 7, 2026
+
+**Approved for implementation:** page `/true-cost-of-ownership-explained/` (post 513); placement immediately after the existing “Depreciation” subsection; proposed adapted copy; Edmunds CJ link ID 15701074. Claude may now add the CTA and nearby disclosure, then re-fetch and verify the live WordPress content. No other page or CTA is approved by this decision.
