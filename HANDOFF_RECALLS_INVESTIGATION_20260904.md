@@ -154,3 +154,10 @@ This slots into the already-recorded plan (`DECISION-20260902-007`): "Recalls (N
 - `AndreBro007/CarClever` (Codex-built, live at car-clever.vercel.app) — real keep/integrate/retire decision, not urgent
 - WordPress page repointing once Find My Car is fully live (CarClever Guide, Try CarClever, Tools Hub, etc.) — see `AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260826.md`
 - Vercel MCP connector account-visibility bug (`list_projects` returns empty) — re-check each session, don't re-attempt project creation via it blind
+
+
+---
+
+## V3 integration handoff added Sep 7, 2026
+
+The recall tool must follow the new card-first hybrid design in getcarwise-docs/HANDOFF_V3_CARD_FIRST_HYBRID_BUILD_20260907.md. Follow-up recall/risk checks preserve the selected listing card, add a compact state and reason, then provide AI explanation. Standalone VIN checks use a minimal identity/verification card plus close/narrow Check avail. and loose View similar actions. No major rebuild or live Edmunds search is required.
