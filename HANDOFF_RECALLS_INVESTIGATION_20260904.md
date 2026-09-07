@@ -140,13 +140,14 @@ This slots into the already-recorded plan (`DECISION-20260902-007`): "Recalls (N
 | 5 | Tap-to-act button row (position-label A/B/C, re-send mechanism) | Mechanism confirmed (`DECISION-20260902-001`), not built |
 | 6 | Cross-session persistence | Backlog, low priority |
 
-### 🔴 Other known bugs/gaps, not started
-- Result-count funnel display ("X indexed → Y matched → shown") — needs V2's count-fix as prerequisite (done)
-- Link/Carfax/photo display consistency — real fix is a rendered UI card, not more prose tuning
-- Match-score differentiation (identical `matchScore: 91` on structurally different vehicles) — scope question first, risks crossing into flagship's deal-scoring job. `SYS-032` (TASKS.md)
-- Non-passenger vehicles (ATVs/trailers) appearing in unfiltered searches — data-scope characteristic, low priority (Finding B)
-- VIN Buyer Check widget non-render — one observed instance, never reproduced (Finding C)
-- CarMax retest (3/3 failures once, likely transient, unconfirmed)
+### 🔴 Other known bugs/gaps — INVESTIGATED Sep 7, 2026, see full findings in `HANDOFF_V2_BACKLOG_INVESTIGATION_20260907.md`
+- ~~Result-count funnel display~~ — resolved, was V2.1's count-fix.
+- Link/Carfax/photo display consistency — **investigated, no defect found.** Photo validation and link resolution were already redesigned/hardened this cycle. Hold as verification-only; needs a concrete repro to reopen.
+- Match-score differentiation (identical `matchScore: 91` on structurally different vehicles) — **investigated, confirmed as a coarse-by-design v1 formula, not a hidden bug.** A bounded fix (continuous price-proximity scoring instead of binary thresholds) is identified and does not touch weights/philosophy. **The one clear buildable V2.4 candidate** — awaiting André/ChatGPT go-ahead on the specific approach.
+- Non-passenger vehicles (ATVs/trailers) appearing in unfiltered searches — **investigated, confirmed no code-level filter exists** (same "no dedicated filter, host-model/description-driven" pattern as hybrid handling below). Possible V2.6 candidate (a narrow denylist) if reproduced with a real case; not yet reproduced.
+- ~~VIN Buyer Check widget non-render~~ — **investigated, root cause found and already fixed on `release/v2`** (client-side widget-URI caching; the resource URI was bumped in response to this exact report, `SYS-20260904-003`). Close as resolved; added as a standing release-checklist reminder instead of a one-off fix.
+- CarMax retest — **investigated, no CarMax-specific code exists anywhere in the repo** to be defective. Keep as a periodic test-fixture only, not a release item, absent a fresh reproducible failure.
+- **New from investigation, not in the original list:** hybrid-result contamination — confirmed as deliberate no-hard-filter architecture (host-model/description-driven, same pattern as non-passenger vehicles above), not an app defect as currently scoped. Malformed ZIP handling — confirmed **already fixed**, predates V2 entirely.
 
 ### 🧹 Housekeeping / infra
 - 18 stale merged branches on `carclever-widget` — safe bulk-delete, no urgency
