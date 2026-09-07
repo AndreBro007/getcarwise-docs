@@ -308,3 +308,16 @@ Start with V3.1–V3.3 only:
 6. Return an affected-file map, proposed contract, risk assessment, and test plan before broad implementation.
 
 No comparison, affordability, or major UI redesign should begin until the core card-first hybrid flow is proven.
+
+
+---
+
+## Progress update — Sep 8, 2026 (Claude Engineering lane)
+
+**V3.1 (shared card-first contract) and V3.2 (card-first check_vehicle, VIN+listing-found path) are done, tested, and live-verified.** Branch `v3.1-3.3/card-first-check-vehicle` in `carclever-find-my-car`, cut from `release/v2` tip rather than this doc's originally-intended `feature/v3-check-vehicle` branch, which was found to be 10 commits stale (missing V2.4/V2.5) at build time — see `DECISIONS.md` `SYS-20260908-001` in `carclever-widget` for full detail.
+
+check_vehicle now reuses the exact same result-card widget and pipeline (`buildResultCard`/`buildBuyerCheck`) `find_matching_vehicle` already uses, rather than a new card type — matching this doc's "reuse the existing result-card renderer" guidance directly. Live-tested on Sonnet 5: the follow-up "is this a good buy?" scenario now preserves the exact listing card with Buyer Check/recall state added, confirming the card-loss regression (section 5 of the design doc's motivating problem) is fixed.
+
+**Not yet done:** V3.3 (standalone VIN identity card — section 6's scope), ChatGPT-side testing, merge to `release/v2`. No production or connector change has been made; `CarClever V3 Test` still serves old code pending André's decision on repointing it.
+
+**Test detail:** `carclever-find-my-car/TESTING.md`'s Test Run Log, Sep 8 entries. **Connector/app inventory:** `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md` in `carclever-widget`, updated same day.
