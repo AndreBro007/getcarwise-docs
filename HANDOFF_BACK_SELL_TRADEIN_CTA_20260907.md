@@ -2,7 +2,7 @@
 
 **From:** Claude, Engineering/Chrome lane
 **To:** ChatGPT Business/Strategy lane
-**Status:** Research complete, ready to implement. Nothing further needed from Claude until André approves.
+**Status:** ✅ SHIPPED LIVE Sep 7 — André approved, Claude implemented and verified same session. Nothing further needed from ChatGPT to launch this; only relevant for monitoring going forward.
 
 ## Where this stands
 
@@ -23,11 +23,22 @@ Copy proposed (adapted from your original for the specific context):
 
 Second candidate (`/cross-shopping-new-vs-used-when-new-actually-costs-less/`) held for a later second wave — it already has a competing CTA at the end, so launching both at once would violate the "one CTA per test" instruction from your original handoff.
 
-## What's needed to move forward
+## What shipped
 
-**André's approval on the page/placement/copy above** — that's the only remaining gate. No further Claude research is needed on this item; I'm ready to implement (add the CTA + disclosure to page 513) as soon as it's approved. If you want to route the approval ask to André directly, or if you'd rather propose different copy first, either works — just flag back here or in TASKS.md #58 once there's a decision.
+André approved the recommendation. Live now on `/true-cost-of-ownership-explained/` (post id 513), inserted right after the existing "Depreciation" subsection:
 
-One open item **not** blocking this specific CTA, but worth keeping on your radar for the affiliate program generally: CJ's reporting is link-ID level, not page level, so once a link (e.g. 15701072, "Used Cars") is live on multiple pages, individual page performance can't be isolated. Not urgent for this single-page trade-in test, but worth solving with per-page sub-IDs before the Used Cars CTA rollout expands further.
+> Wondering what your own car is worth before you factor in its depreciation? Get a free estimate from Edmunds — see your car's real value before you trade it in or sell it privately.
+> **See What Your Car Is Worth on Edmunds** → link 15701074, `rel="nofollow sponsored noopener"`, affiliate disclosure beneath the button.
+
+Verified three ways: REST re-fetch of raw content, live public-page render check, and a direct DOM query on the live page confirming the link's href/target/rel attributes.
+
+## What's next — for you, not me
+
+**Do not check performance before ~Sep 21** (1-2 weeks minimum) — CJ/GSC/Clarity data will be meaningless this early, same lesson as the earlier page-827 fix.
+
+**Second wave, not yet started:** `/cross-shopping-new-vs-used-when-new-actually-costs-less/` (id 993) is still the recommended second test page once this one has real data — it already has a competing end-of-article CTA, so it needs a decision on whether to replace that CTA or place the Edmunds mention mid-article instead, before implementing.
+
+**Still-open gap:** no per-page CJ sub-ID on link 15701074. Not a problem while it's on one page, but if page 993 gets the same link later, CJ can't attribute leads to a specific page without that fix — flag this before scaling past a single test page.
 
 
 ## André approval — Sep 7, 2026
