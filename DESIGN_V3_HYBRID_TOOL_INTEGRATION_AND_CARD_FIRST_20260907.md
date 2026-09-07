@@ -162,3 +162,16 @@ V3 succeeds if additional tools are invoked for intended buyer intents, check_ve
 5. Run the cross-platform matrix before adding affordability, comparison, or more tools.
 
 The tools remain separate for invocation and capability discovery, but share a card-first vehicle-context contract.
+
+
+## André clarification — standalone VIN card and Edmunds actions (Sep 7, 2026)
+
+For a standalone VIN check, the intended compact response is:
+
+1. Minimal identity/verification card.
+2. Honest indication when no exact listing is available.
+3. Close/narrow “Check avail.” action, using the same condition-aware close destination pattern used for New vehicles.
+4. Loose “View similar” action, using the same broader fallback pattern used for New vehicles.
+5. AI explanation text after the card, not instead of it.
+
+This gives a standalone VIN user useful next actions without requiring the tool to perform live listing search or invent an exact listing. The exact-VIN destination should not be presented as confirmed when the tool does not have verified listing context.
