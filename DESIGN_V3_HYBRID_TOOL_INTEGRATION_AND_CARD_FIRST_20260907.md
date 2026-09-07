@@ -175,3 +175,178 @@ For a standalone VIN check, the intended compact response is:
 5. AI explanation text after the card, not instead of it.
 
 This gives a standalone VIN user useful next actions without requiring the tool to perform live listing search or invent an exact listing. The exact-VIN destination should not be presented as confirmed when the tool does not have verified listing context.
+
+
+## 23. André-approved refinement — intent-driven comparison
+
+Comparison must be driven by:
+1. The user’s stated goal.
+2. The constraints entered.
+3. The priority language used.
+4. The data available for each vehicle.
+5. The point reached in the buying cycle.
+
+Do not produce a generic table every time.
+
+Examples:
+- “Best SUV for my family” → space, practicality, safety-related evidence, value, and fit.
+- “Which is the best deal?” → price position, condition, mileage, match quality, and risk signals.
+- “Which should I buy?” → overall fit, material trade-offs, unknowns, and next verification.
+- “Cheapest monthly payment” → price, payment assumptions, and condition.
+- “Best nearly-new option” → Used/CPO, low mileage, trim, price proximity, and history completeness.
+
+The AI should explain why the winner fits the user’s request and identify the most important trade-off. The comparison card should show only the decision-relevant fields for that request.
+
+## 24. V3 phased build plan
+
+### V3.1 — Card-first tool contract
+
+Goal: establish the shared vehicle-context and response order without adding a new user workflow.
+
+Scope:
+1. Map current payloads for find_matching_vehicle, check_vehicle, and resolve_dealer_url.
+2. Define the minimum shared vehicle context.
+3. Ensure every vehicle response can lead with a card/context card.
+4. Preserve current search card behavior unchanged.
+5. Keep V1 and V2 branches untouched.
+
+Gate:
+- existing V3 recall and search tests pass;
+- no card regression;
+- standalone and follow-up response shapes are documented.
+
+### V3.2 — Card-first check_vehicle integration
+
+Goal: fix the current risk/recall experience.
+
+Scope:
+1. Follow-up check from a listing preserves the selected listing card.
+2. Add compact Buyer Check and recall states to that card.
+3. Provide reason-bearing risk labels.
+4. Keep AI explanation after the card.
+5. Preserve unknown/unavailable states.
+6. Keep listing actions available.
+
+Gate:
+- known VIN/listing follow-up;
+- standalone VIN;
+- no listing available;
+- recall unavailable;
+- risk reason matches displayed label;
+- exact vehicle identity preserved.
+
+### V3.3 — Standalone VIN action flow
+
+Goal: make VIN-first use useful without requiring a previous search.
+
+Scope:
+1. Minimal identity/verification card.
+2. Honest no-listing state.
+3. Close/narrow Check avail. button using the New-vehicle pattern.
+4. Loose View similar button.
+5. AI explanation after the card.
+6. No live Edmunds search or unverified exact-listing claim.
+
+Gate:
+- valid VIN;
+- invalid VIN;
+- valid VIN with no listing;
+- Used, New, and CPO examples;
+- Claude and ChatGPT rendering.
+
+### V3.4 — Intent-driven labels and action selection
+
+Goal: make the compact card adapt to the user’s stage in the buying cycle.
+
+Scope:
+1. Search cards prioritize match/value and condition.
+2. Risk cards prioritize Risk/Recall and verification action.
+3. Listing-action cards prioritize Check avail./View similar.
+4. Comparison cards prioritize only fields relevant to the stated question.
+5. Cap default badges at two or three.
+6. Never hide the primary listing action.
+
+Gate:
+- labels change appropriately by tool and intent;
+- no crowded cards;
+- action remains clear at a glance;
+- no loss of listing click-through.
+
+### V3.5 — AI-driven comparison
+
+Goal: answer “which one should I choose?” with adaptive reasoning rather than a generic table.
+
+Scope:
+1. Accept selected result labels, VINs, or the current shortlist.
+2. Return complete structured evidence to the host AI.
+3. Let the AI select comparison dimensions from user intent.
+4. Return a compact card/conclusion for each compared vehicle.
+5. Provide one winner, one alternative where useful, key trade-offs, and verification steps.
+6. Keep a listing action for every compared vehicle.
+
+Gate:
+- family/practicality comparison;
+- best value;
+- cheapest payment;
+- best nearly-new option;
+- risk/unknown trade-off;
+- explicit user priorities that conflict.
+
+### V3.6 — Affordability action
+
+Goal: add a useful purchase-cycle step without creating a full financial dashboard.
+
+Scope:
+1. Single monthly-payment estimate.
+2. Show price, term, APR, and down-payment assumptions.
+3. Keep affordability separate from risk.
+4. Return the same vehicle card plus payment line.
+5. Preserve listing action.
+
+Gate:
+- known and unknown price;
+- different terms;
+- zero down payment;
+- APR assumptions;
+- clear disclaimer;
+- no claim that the user can afford the vehicle.
+
+## 25. Build and release strategy
+
+Use incremental engineering phases internally, but do not submit every phase as a separate public app version.
+
+Recommended approach:
+1. Build and test V3.1 through V3.3 privately first.
+2. Stabilize the core three-tool experience.
+3. Add V3.4 only after card-first behavior is reliable.
+4. Add comparison and affordability only when each is independently complete.
+5. Submit one coherent V3 release containing the tools and workflows that are fully tested.
+6. Keep later capabilities for V3.1/V3.2-style post-launch updates or the next reviewed release, depending on platform requirements.
+
+The reason is that separate tools increase capability and discoverability, but submitting too early with half-finished hybrid behavior creates a poor review and user experience. Conversely, waiting to build every possible feature creates unnecessary scope and delays useful validation.
+
+The public release should be a coherent bundle:
+- find_matching_vehicle;
+- check_vehicle;
+- resolve_dealer_url;
+- card-first standalone/follow-up behavior;
+- tested descriptions and starter prompts;
+- stable lean UI.
+
+Comparison and affordability should not be included merely because they exist in the roadmap. Include them only if their complete user flow, card output, evidence handling, and regression coverage are ready.
+
+OpenAI’s current guidance says to thoroughly test the MCP server, tools, and optional UI across scenarios before submission, and that published MCP metadata uses reviewed snapshots; metadata changes require a new reviewed version. [OpenAI submission guidance](https://developers.openai.com/plugins/deploy/submission), [OpenAI review guidance](https://developers.openai.com/plugins/app-guidelines), [OpenAI connection guidance](https://developers.openai.com/plugins/deploy/connect-chatgpt)
+
+For Anthropic, maintain the same discipline: test the remote MCP server and real Claude user experience privately, then submit the stable tool set rather than a moving development target. Anthropic documents reviewed connectors as remote MCP servers using the same MCP infrastructure. [Anthropic MCP documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)
+
+## 26. Recommended immediate next step
+
+Give Claude the V3.1–V3.3 handoff:
+1. Map existing payloads.
+2. Define the smallest shared vehicle-context contract.
+3. Make check_vehicle card-first for listing follow-ups.
+4. Add standalone VIN card actions.
+5. Preserve existing search and link behavior.
+6. Test Claude and ChatGPT before considering comparison or affordability.
+
+No production or V1 change is authorized by this design alone.
