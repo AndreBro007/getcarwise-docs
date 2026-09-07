@@ -181,3 +181,8 @@ Claude completed the browser/WordPress investigation documented in `HANDOFF_BACK
 **Approval gate:** No WordPress change is authorised until André approves the page, Depreciation-section placement, and adapted copy. Once approved, Claude can implement and live-verify the CTA and disclosure.
 
 **Measurement caveat:** CJ reporting is link-ID level. If the same link is used on multiple pages, page-level attribution is not isolated; use per-page sub-IDs or another attribution method before scaling beyond the first test.
+
+
+## Approval status update — Sep 7, 2026
+
+André has now **confirmed** the previously pending gate: implement link ID 15701074 on `/true-cost-of-ownership-explained/` (post 513), immediately after the existing Depreciation subsection, using the proposed adapted copy. Claude owns the WordPress implementation and live re-fetch verification. This approval applies only to this single-page experiment; the Cross-Shopping page remains held for a later wave.
