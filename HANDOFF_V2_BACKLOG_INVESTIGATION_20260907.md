@@ -89,3 +89,13 @@ Re: `PLAN_V2_COMPLETION_AND_RELEASE_BUCKETS_20260907.md`, investigating against 
 | 7 | Match-score differentiation | Yes, by design (coarse formula) | App design limitation, bounded fix available | V2.4 candidate |
 
 **Net effect: of the 7 items, only #7 (match-score) and conditionally #6 (non-passenger, pending reproduction) represent genuine, containable V2 work. #3 and #5 are already resolved. #1, #2, #4 are not application defects as currently scoped.** No code has been changed as part of this investigation — awaiting André/ChatGPT's direction on which of #6/#7 to actually build, and confirmation on #7's specific bounded-fix approach.
+
+---
+
+## RESOLUTION — Sep 7, 2026
+
+Both open items resolved. **#7 (match-score) approved and shipped**: implemented exactly per the guardrails André set (continuous price-proximity scoring, modest gated Used-value tie-break, weights/labels/`penalizedByRelaxation` untouched), live-tested pre-merge (real 3-tier differentiation confirmed, $4,985-$42,149 spread), merged into `release/v2` (tip `ab617d2`), confirmed identical in production on both Claude and ChatGPT. **#6 (non-passenger vehicles) closed/deferred** by ChatGPT's own Sep 7 ruling — no concrete ATV/trailer reproduction exists, reopen only if a real example appears.
+
+A separate, unrelated real bug (New/Used mislabeling in the host-facing text summary — not `structuredContent`, which already had the data) was found live while testing #7 and fixed too, same session (`SYS-20260907-002`).
+
+**V2 backlog is now fully closed out** — nothing else pending from this investigation. Full detail: `DECISIONS.md` `SYS-20260907-003`, `STATUS_V2.4_MATCH_SCORE_IMPLEMENTATION_20260907.md`, `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md`, `TESTING.md` Test Run Log.
