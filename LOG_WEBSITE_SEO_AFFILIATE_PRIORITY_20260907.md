@@ -186,3 +186,7 @@ Claude completed the browser/WordPress investigation documented in `HANDOFF_BACK
 ## Approval status update — Sep 7, 2026
 
 André has now **confirmed** the previously pending gate: implement link ID 15701074 on `/true-cost-of-ownership-explained/` (post 513), immediately after the existing Depreciation subsection, using the proposed adapted copy. Claude owns the WordPress implementation and live re-fetch verification. This approval applies only to this single-page experiment; the Cross-Shopping page remains held for a later wave.
+
+## Claude implementation — shipped Sep 7, 2026
+
+Implemented and verified same session. Live on `/true-cost-of-ownership-explained/` (post 513), immediately after the Depreciation subsection, using link 15701074 and the proposed adapted copy, with affiliate disclosure. Verified three ways: REST re-fetch of raw content, live public-page render check, and direct DOM check of the link's href/target/rel attributes. Full detail: `HANDOFF_BACK_SELL_TRADEIN_CTA_20260907.md` and `carclever-widget/TASKS.md` #58. No other page or CTA was touched, per the approval scope. Do not pull performance data before ~Sep 21 — too early to be meaningful.
