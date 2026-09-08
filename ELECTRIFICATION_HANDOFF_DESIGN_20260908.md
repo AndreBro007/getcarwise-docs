@@ -1,7 +1,7 @@
 # Electrification Handoff — Shared Tool Contract Design
 
 **Status:** Decision draft. No active submission, schema, code, or deployment is changed.  
-**Scope:** Preserve accurate hybrid/PHEV/EV listing searches while moving deterministic field translation and verification out of the public description.  
+**Scope:** Preserve accurate hybrid (including mild), PHEV, and EV listing searches while moving deterministic field translation and verification out of the public description.  
 **Baseline:** Existing V2 code; V3 is excluded.
 
 ## What the existing design does
@@ -41,7 +41,7 @@ Use two optional, flat fields:
 
 | Field | Candidate definition |
 | --- | --- |
-| `electrificationTypes` | Acceptable electrified powertrain types: `hybrid`, `plug_in_hybrid`, and/or `electric`. |
+| `electrificationTypes` | Acceptable electrified powertrain types: `hybrid` (including conventional and mild hybrids), `plug_in_hybrid`, and/or `electric`. |
 | `electrificationRequirement` | Whether the stated electrification types are `required` or `preferred`. |
 
 Examples of the meaning—not instructions to the host:
@@ -63,7 +63,7 @@ This is a small stable technical taxonomy, not a changing category table. The AI
 | Input hand-off | Shared schema | Carry accepted electrification type(s) and required/preferred strength explicitly. |
 | Candidate model/trim selection | AI, with code normalization | Resolve appropriate model/variant names without a giant backend model table. |
 | Provider query | Code | Apply stable provider mapping and current V2 query safeguards. |
-| Final verification | Code | Use provider data plus NHTSA VIN evidence to classify a returned vehicle’s actual electrification. |
+| Final verification | Code | Use provider data plus NHTSA VIN evidence to classify a returned vehicle’s actual electrification. Internal evidence distinguishes mild hybrid; public `hybrid` accepts it. |
 | Required request | Code | Select compatible model/trim candidates and return the evidence state. Auto.dev fuel is display-only, never contrary evidence; any stricter NHTSA-based exclusion needs feasibility and regression proof. |
 | Preferred request | Code | Keep acceptable alternatives but rank confirmed matching electrification above them and disclose evidence. |
 | User explanation | Result evidence | State confirmed, unconfirmed, or changed powertrain status; do not rely on host prose to infer it. |
@@ -72,7 +72,7 @@ This is a small stable technical taxonomy, not a changing category table. The AI
 
 1. Can `electrificationTypes` and `electrificationRequirement` be added to the V2-baseline schema without reducing host field-routing reliability?
 2. Does the query path have enough candidate breadth before final VIN verification to enforce a required request without hiding genuine variants?
-3. What normalised result enum should code derive from NHTSA’s `ElectrificationLevel`, primary fuel, and secondary fuel—specifically distinguishing hybrid, PHEV, and EV rather than only “electrified”?
+3. What normalised result enum should code derive from NHTSA’s `ElectrificationLevel`, primary fuel, and secondary fuel—distinguishing hybrid, mild hybrid, PHEV, and EV in evidence while treating mild hybrid as an accepted public `hybrid` result?
 4. Define the evidence states that combine model/trim identity and NHTSA confirmation. NHTSA currently runs only after shortlist selection, so it must not become an exclusion gate without testing candidate breadth, latency, and false-negative risk.
 5. How should trim-like electrified variants such as PowerBoost interact with `trimRequired` when the user did not name the trim directly?
 
@@ -82,7 +82,7 @@ Approve H3 as the intended shared-contract shape, subject to Claude feasibility 
 
 ## Required regression cases
 
-- RAV4 hybrid/PHEV required versus preferred;
+- conventional and mild hybrid accepted under public `hybrid`, plus PHEV required versus preferred;
 - unnamed hybrid SUV required;
 - EV required;
 - F-150 PowerBoost / other trim-like electrified configuration;
