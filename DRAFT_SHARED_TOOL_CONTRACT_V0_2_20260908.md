@@ -104,3 +104,28 @@ No description or schema change should proceed without the existing regression s
 3. Does the concise field table retain every user-visible semantic that should stay public?
 4. Which of the open feasibility points should Claude investigate first after approval?
 
+
+
+## Shared-review decisions — 2026-09-08
+
+### A. Discovery cues — approved
+
+The shared opening will explicitly mention optimisation requests such as **lowest price, newest, lowest mileage, and best within a stated budget**. These are legitimate user-intent/discoverability cues from V1, expressed declaratively rather than as an instruction to invoke the tool.
+
+### B. `goals` → `vehicleNeeds` — approved direction
+
+`vehicleNeeds` is a narrower public name for the existing `goals` role, not a new category-table system or a behaviour reduction.
+
+- It remains a short array of practical, listing-relevant needs.
+- It continues to carry soft intent for AI interpretation and ranking/context; it is not a hard eligibility filter by itself.
+- Needs such as reliability, low running cost, family, commuting, and towing remain expressible, but retain the existing evidence/verification boundary.
+- The implementation should accept both `goals` and `vehicleNeeds` during migration so that the public-name change does not regress current behaviour.
+
+### C. Electrification — agreed ownership split
+
+Hybrid/PHEV/EV handling remains AI-interpreted, with deterministic translation and verification in code.
+
+- AI identifies the natural-language request and whether electrification is required or preferred.
+- Code handles stable model/variant expansion, trim enforcement where the electrified configuration is trim-like, and returned powertrain evidence.
+- A small stable structured hand-off from AI to code is preferred over relying only on a prose `vehicleNeeds` phrase. The exact schema shape remains a Claude feasibility question.
+- This preserves the V2-baseline model/variant and trim behaviour; no broad changing category table is introduced.
