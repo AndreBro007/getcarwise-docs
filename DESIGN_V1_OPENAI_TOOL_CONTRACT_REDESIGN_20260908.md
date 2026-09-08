@@ -250,3 +250,16 @@ These are confirmed design directions for the V2-baseline OpenAI resubmission an
 4. **Practical needs boundary:** practical needs remain in scope when they clearly mean “find current listings.” The tool must distinguish AI-interpreted fit from listing evidence that actually verifies a specific claim; it must not imply that V1/V2 independently proves reliability, safety, running cost, or vehicle-specific towing suitability.
 5. **Hybrid and trim:** AI retains required-versus-preferred interpretation. Code owns hybrid/PHEV variant expansion and verification, provider-specific behavior, model normalization, trim enforcement, and related result disclosures.
 
+
+## Confirmed Batch 3 directions — André, 2026-09-08
+
+These decisions apply to a **future OpenAI resubmission candidate built from the existing V2 baseline**. They do not redefine V2 or authorise changes to it.
+
+A. **Exact VIN:** retain the already-built V2 exact live-listing lookup. In the future public contract, treat Buyer Check as an additive evidence summary rather than the main public tool trigger; reserve a dedicated VIN-due-diligence contract for later V3 work.
+
+B. **Priority and risk:** retain concise user-intent priorities. Move ranking mechanics and the evidence model to code/result explanations; do not publish the full methodology in the tool description.
+
+C. **Location:** retain AI-led interpretation of a user’s location in the resubmission candidate. Do not create a new deterministic location-resolution subsystem solely for this contract redesign. The tool description need not publish the implementation details.
+
+D. **Widening and empty results:** remove mechanics from the public description; retain only a short transparency commitment that the result explains material changes or limitations.
+
