@@ -263,3 +263,33 @@ C. **Location:** retain AI-led interpretation of a user’s location in the resu
 
 D. **Widening and empty results:** remove mechanics from the public description; retain only a short transparency commitment that the result explains material changes or limitations.
 
+
+## Field-audit reconciliation — 2026-09-08
+
+The living `specs/Auto_Dev_Field_Audit_v1.md` was re-read in full after the initial schema recommendation. The following correction and constraints supersede any earlier oversimplification in this brief.
+
+### Corrected: `vehicleType` is not merely a duplicate of `bodyType`
+
+`bodyType` maps to `vehicle.bodyStyle`, a broadly populated, live-verified filter. `vehicleType` maps to the distinct `vehicle.type` field. It is mechanically filterable but undocumented and demonstrably inconsistent by model (for example, real wagons can be tagged as Crossovers). Existing V2 code contains a live-verified drop-and-retry, hard-exclude, and backfill safety design specifically to avoid zeroing valid inventory or showing known mismatches.
+
+**Contract direction:** do not remove `vehicleType` simply to reduce field count. Keep it as a concise, user-meaningful refinement only while the existing backend safeguards remain. Any future proposal to derive or remove it requires a concrete equivalence test across the previously problematic model/body-style cases; it is an engineering validation question, not an assumed overlap.
+
+### Other field-audit constraints the redesign must preserve
+
+| Field or concept | Audit finding | Contract implication |
+|---|---|---|
+| `vehicle.model` | Trust Class B; names can span variants; runtime type violations exist; code now safely normalizes provider output | AI still supplies models/interpretation. Keep only a short public model definition; retain code normalization and tolerant verification. |
+| `vehicle.trim` | Not safe as a provider hard filter; raw values can violate string type | Keep required-versus-preferred user intent; backend must continue local matching and ingestion normalization. |
+| `vehicle.fuel` | Cannot distinguish hybrid/PHEV reliably | Keep hybrid required-versus-preferred as AI intent; code must continue variant/electrification handling and evidence limits. |
+| `vehicle.cylinders` | Mechanically verified but undocumented; host has repeatedly failed to send it despite coaching | Do not remove the concise V8/cylinder cue until real routing tests prove a shorter definition preserves send behavior. |
+| `vehicle.interiorColor` | Real hard filter but host has inconsistent send-it-versus-post-filter behavior | Retain a clear field definition and test it explicitly after compression. |
+| `vehicle.seats` | Response-only, not an API filter | Keep as a preference/evidence request, never a hard eligibility promise. |
+| `retailListing.cpo`, accident, ownership | Missing data is not negative evidence | Keep as user preferences; code/result output owns the three-state evidence explanation. |
+| `vehicle.doors` | Filter works, but provider can omit the total count | Keep field if useful; code must preserve null count behavior rather than description-level host instructions. |
+| `retailListing.used` | Real strict boolean filter; V2 fixes condition-neutral candidate fairness | Keep condition input; preserve V2 code behavior. |
+| ZIP / state | ZIP can be valid-format but non-geographic; state is a real filter | Keep the conservative AI-led location design and the existing code-side invalid-ZIP control query. |
+
+### Consequence for the final schema review
+
+The redesign must not equate shorter metadata with less protection. Fields with documented host-routing failures (`cylinders`, `interiorColor`) or provider-instability (`vehicleType`, trim, fuel) require explicit regression tests before their wording is materially reduced or their public shape changes.
+
