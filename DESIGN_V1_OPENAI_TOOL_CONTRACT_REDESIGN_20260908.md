@@ -238,3 +238,15 @@ Redesign search so AI supplies a compact CarClever-level intent and code owns th
 - No decision yet to change V1 tool names.
 - No production code change, deployment, app submission, or resubmission is authorised by this document.
 - No conclusion that the prior description work was wrong. It solved genuine host-behavior issues; this redesign changes where those rules live.
+
+
+## Confirmed design directions — André, 2026-09-08
+
+These are confirmed design directions for the V2-baseline OpenAI resubmission analysis. They are not production implementation approvals.
+
+1. **Release baseline:** design the resubmission around V2's existing two-tool surface. Do not include, rely on, or describe V3 tools or capabilities. Custom-domain/release handling is explicitly deferred until the contract redesign is complete.
+2. **AI versus code:** AI remains responsible for interpreting a listing request, including practical needs such as a large family SUV, teen-driver car, commuting, or towing. Code owns stable technical translation, normalization, provider quirks, validation, verification, widening, and result generation.
+3. **No lifestyle taxonomy:** do not build broad, maintained category tables for concepts such as “best family cars” or “reliable teen cars.” Add code lookups only for stable, non-interpretive mappings or confirmed technical bugs.
+4. **Practical needs boundary:** practical needs remain in scope when they clearly mean “find current listings.” The tool must distinguish AI-interpreted fit from listing evidence that actually verifies a specific claim; it must not imply that V1/V2 independently proves reliability, safety, running cost, or vehicle-specific towing suitability.
+5. **Hybrid and trim:** AI retains required-versus-preferred interpretation. Code owns hybrid/PHEV variant expansion and verification, provider-specific behavior, model normalization, trim enforcement, and related result disclosures.
+
