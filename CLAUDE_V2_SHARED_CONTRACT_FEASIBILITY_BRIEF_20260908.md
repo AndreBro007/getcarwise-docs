@@ -11,7 +11,7 @@
 3. The opening retains V1 discovery cues: current listings, shortlists, explicit requirements, lowest price, newest, lowest mileage, best within budget, practical needs, and exact VIN.
 4. `goals` becomes public `vehicleNeeds`, retaining the same soft-intent role. During migration, code should accept both names.
 5. `bodyType`, `vehicleType`, trim, seating, technical fields, condition/history, priority, and location remain as documented in the shared contract. Existing V2 field-audit safeguards remain code responsibilities.
-6. Electrification is first-class: conventional hybrid, plug-in hybrid, and electric requests must retain **type(s)** and **required versus preferred** intent.
+6. Electrification is first-class: public `hybrid` includes conventional and mild hybrids; plug-in hybrid and electric remain distinct. Requests retain **type(s)** and **required versus preferred** intent.
 7. Auto.dev `vehicle.fuel` is display-only. “Gasoline” does not disprove hybrid/PHEV status and must never be used as an electrification filter or exclusion.
 
 ## Candidate shared main description
@@ -24,7 +24,7 @@
 >
 > The search can use direct requirements such as make, model, price, year, mileage, location, body style, drivetrain, transmission, trim, seating, colour, condition, electrification, and purchase priority. A stated requirement is evaluated as a matching criterion; an expressed preference informs ranking. Practical listing needs such as a large family SUV, a teen-driver car, a commuter vehicle, or a vehicle for towing can also be represented when the user is seeking vehicles for sale. They help identify and rank suitable candidates, but they do not independently establish reliability, safety, running cost, exact towing suitability, vehicle condition, accident-free history, or certification.
 >
-> An exact 17-character VIN refers to one specific listing. If that listing is unavailable, the result reports that outcome rather than returning a similar vehicle. Electrification requests identify accepted types—hybrid, plug-in hybrid, and electric—and whether they are required or preferred. A primary-fuel label alone does not determine hybrid or plug-in-hybrid status.
+> An exact 17-character VIN refers to one specific listing. If that listing is unavailable, the result reports that outcome rather than returning a similar vehicle. Electrification requests identify accepted types—hybrid (including mild hybrid), plug-in hybrid, and electric—and whether they are required or preferred. A primary-fuel label alone does not determine hybrid or plug-in-hybrid status.
 >
 > Results contain current matching listings, usable viewing links when available, and evidence showing which requested criteria were confirmed, unconfirmed, or changed during the search. Missing history, ownership, certification, equipment, or specification data remains unknown; it is not treated as proof that a vehicle satisfies or fails a request.
 >
@@ -51,7 +51,7 @@ All current V2 fields remain unless stated below. Definitions remain concise and
 | `doors` / `cylinders` | Requested door count and engine cylinder count; V8=8, V6=6, I4/four-cylinder=4. Displacement is not represented by `cylinders`. |
 | `used` | Used only, new only, or omitted for both. |
 | `cpo` / `noAccidents` / `oneOwner` | Evidence requests. Results distinguish confirmed/known, reported negative where applicable, and unreported—not false. |
-| `electrificationTypes` | One or more accepted electrified types: `hybrid`, `plug_in_hybrid`, and/or `electric`. |
+| `electrificationTypes` | One or more accepted electrified types: `hybrid` (including conventional and mild hybrids), `plug_in_hybrid`, and/or `electric`. |
 | `electrificationRequirement` | Whether the stated electrification types are `required` or `preferred`. |
 
 ## Required implementation ownership
@@ -62,7 +62,7 @@ All current V2 fields remain unless stated below. Definitions remain concise and
 | Natural-language interpretation | AI identifies practical need, electrification type(s), strength, and applicable model/trim candidates. No large backend category/model table. |
 | Provider mapping | Code handles model normalization, stable Auto.dev mapping, existing V2 retries/backfills, and post-verification. |
 | Electrification candidate selection | AI continues resolving compatible model/trim variants. A named hybrid/PHEV/EV variant is not discarded merely because provider primary fuel is gasoline. |
-| Electrification verification | Code combines model/trim identity with NHTSA VIN evidence for final-shortlist evidence. It must classify hybrid, plug-in hybrid, and electric distinctly; the current boolean “electrified” helper is insufficient for the full contract. |
+| Electrification verification | Code combines model/trim identity with NHTSA VIN evidence for final-shortlist evidence. It must classify hybrid, plug-in hybrid, and electric distinctly; it preserves mild-hybrid evidence internally while treating it as an accepted public `hybrid` result. The current boolean “electrified” helper is insufficient for the full contract. |
 | `required` versus `preferred` | Required and preferred must produce demonstrably different selection/ranking behaviour. Do not make NHTSA a new pre-shortlist exclusion gate unless regression evidence shows candidate breadth, latency, and false-negative risk remain acceptable. |
 | Result evidence | Return confirmed, unconfirmed, changed, and data-conflict evidence from code. Do not depend on host prose to make those distinctions. |
 | Existing audit safeguards | Retain V2 protections for inconsistent `vehicleType`, unsafe raw trim, response-only seats, host-sensitive `interiorColor`/`cylinders`, unknown history/CPO/ownership, ZIP edge cases, and exact VIN. |
@@ -71,7 +71,7 @@ All current V2 fields remain unless stated below. Definitions remain concise and
 
 1. Does the host reliably route the three new public concepts: `vehicleNeeds`, `electrificationTypes`, and `electrificationRequirement`?
 2. What is the minimal safe schema shape for `electrificationTypes` (array/enum limits) and `electrificationRequirement` (required only when types exist)?
-3. How should NHTSA `ElectrificationLevel`, primary fuel, and secondary fuel be normalised into distinct conventional-hybrid, plug-in-hybrid, and electric evidence—including any mild-hybrid source values—without silently conflating categories?
+3. How should NHTSA `ElectrificationLevel`, primary fuel, and secondary fuel be normalised into hybrid, plug-in-hybrid, and electric evidence while preserving mild-hybrid source evidence distinctly? Public `hybrid` must accept conventional and mild hybrids.
 4. Can existing candidate generation supply enough model/trim breadth for a required electrification request before final VIN confirmation?
 5. What does “required” do when model/trim identity is compatible but NHTSA is unavailable? Present the evidence-state policy and its user-visible wording; do not use Auto.dev primary fuel as a shortcut.
 6. Which existing V2 tests need amended fixtures, and which new deterministic fixtures/live smoke tests are needed?
@@ -82,7 +82,7 @@ All current V2 fields remain unless stated below. Definitions remain concise and
 - current inventory / shortlist discovery;
 - cheapest, newest, lowest mileage, and best-within-budget intent;
 - family, teen-driver, commuter, and towing needs;
-- conventional hybrid, PHEV, and EV as required and preferred;
+- hybrid (including conventional and mild hybrid), PHEV, and EV as required and preferred;
 - a hybrid listing whose provider primary fuel is gasoline;
 - model/trim hybrid variants, including F-150 PowerBoost;
 - exact VIN and unavailable VIN;
