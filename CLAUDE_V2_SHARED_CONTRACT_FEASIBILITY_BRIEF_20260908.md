@@ -101,7 +101,8 @@ A feasibility response only:
 1. exact proposed schema/code deltas from V2 baseline;
 2. identified regression risks and test plan;
 3. any reason a shared common description cannot work in either platform;
-4. a recommendation on whether the new fields can be implemented without degrading reliable searches.
+4. a recommendation on whether the new fields can be implemented without degrading reliable searches;
+5. a V1-equivalence response covering practical-need model/trim scope, required/preferred electrification, city-only location, API-audit invariants, and the proposed deterministic and live A/B tests.
 
 No implementation should start until that response is reviewed and explicitly approved.
 
@@ -110,3 +111,4 @@ No implementation should start until that response is reviewed and explicitly ap
 - [Shared contract candidate](https://github.com/AndreBro007/getcarwise-docs/blob/main/DRAFT_SHARED_TOOL_CONTRACT_V0_2_20260908.md)
 - [Electrification hand-off design](https://github.com/AndreBro007/getcarwise-docs/blob/main/ELECTRIFICATION_HANDOFF_DESIGN_20260908.md)
 - [OpenAI/Anthropic compatibility decision](https://github.com/AndreBro007/getcarwise-docs/blob/main/PLATFORM_TOOL_DESCRIPTION_COMPATIBILITY_DECISION_20260908.md)
+- [V1 to V2 search-results equivalence gate](https://github.com/AndreBro007/getcarwise-docs/blob/main/V1_V2_SEARCH_RESULTS_EQUIVALENCE_GATE_20260908.md)
