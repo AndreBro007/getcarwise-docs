@@ -35,7 +35,7 @@ The missing capability is a bounded, type-specific eligibility and evidence stag
 Add:
 
 - `vehicleNeeds?: string[]`
-- `electrificationTypes?: ("hybrid" | "plug_in_hybrid" | "electric")[]`
+- `electrificationTypes?: ("hybrid" | "plug_in_hybrid" | "electric")[]`, where public `hybrid` includes conventional and mild hybrids
 - `electrificationRequirement?: "required" | "preferred"`
 
 During the migration period, accept both `goals` and `vehicleNeeds` and merge/deduplicate them into the existing soft-intent representation. `vehicleNeeds` remains capped and listing-relevant; it is not a transcript or broad profile channel.
@@ -72,23 +72,18 @@ The key feasibility question is how V2 gets enough type-confirmed candidates bef
 
 The implementation must measure latency, NHTSA availability, and final-candidate breadth before setting the exact pool size. NHTSA must not become an unbounded pre-search gate.
 
-### D. Mild hybrids: explicit open decision
+### D. Mild hybrids: resolved public behaviour
 
-Mild hybrids must **not** be silently treated as conventional hybrids or as non-electrified.
+Public `hybrid` includes both conventional and mild hybrids. This avoids excluding vehicles that ordinary users reasonably expect in a hybrid search. `plug_in_hybrid` and `electric` remain distinct types.
 
-Internal classification should keep `mild_hybrid` distinct regardless of the public-schema decision. The remaining product decision is whether to:
-
-1. expose `mild_hybrid` as a fourth accepted public type; or
-2. retain the three public values but define `hybrid` precisely as conventional hybrid and report mild-hybrid availability separately.
-
-Recommendation: expose it as a fourth type if live NHTSA fixtures demonstrate reliable classification. This is clearer for users and avoids a silent match-policy change. If source values are too inconsistent, keep it separate internally and do not claim it satisfies a conventional-hybrid requirement.
+Internal classification must still keep `mild_hybrid` distinct from conventional hybrid. This is evidence precision, not a separate user-facing taxonomy: a verified mild hybrid may be labelled accurately, and it satisfies a public `hybrid` request. It must not satisfy a `plug_in_hybrid` request.
 
 ## Regression gate additions
 
 In addition to the existing V2 suite, add deterministic fixtures and controlled live smoke tests for:
 
-- conventional hybrid, plug-in hybrid, battery electric, and mild hybrid;
-- each type as both `required` and `preferred`;
+- conventional hybrid, mild hybrid, plug-in hybrid, and battery electric;
+- public `hybrid` (covering conventional and mild), plug-in hybrid, and electric as both `required` and `preferred`;
 - a hybrid whose Auto.dev primary fuel is Gasoline;
 - a confirmed different electrification type;
 - compatible named model/trim with unavailable or ambiguous NHTSA response;
