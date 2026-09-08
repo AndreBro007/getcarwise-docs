@@ -129,3 +129,25 @@ Hybrid/PHEV/EV handling remains AI-interpreted, with deterministic translation a
 - Code handles stable model/variant expansion, trim enforcement where the electrified configuration is trim-like, and returned powertrain evidence.
 - A small stable structured hand-off from AI to code is preferred over relying only on a prose `vehicleNeeds` phrase. The exact schema shape remains a Claude feasibility question.
 - This preserves the V2-baseline model/variant and trim behaviour; no broad changing category table is introduced.
+
+
+## Auto.dev field-audit re-check — D through G
+
+The living audit was re-read after the D–G review. The proposed concise definitions remain valid; this re-check adds no field removals or new public prose. It confirms the following implementation and regression constraints:
+
+| Area | Audit re-check | Effect on shared contract |
+| --- | --- | --- |
+| `model` | Trust Class B; provider model strings can span variants and can have runtime type errors. | Keep the concise make-free model semantics; retain ingestion normalization and tolerant matching in code. |
+| `bodyType` | Broad `vehicle.bodyStyle` is highly populated and works as a filter. | Keep as the direct broad body-style field. |
+| `vehicleType` | `vehicle.type` works mechanically but is undocumented and per-model tagging is inconsistent; live E-Class/V90 failures required V2 retry/backfill safeguards. | Keep the concise user semantic only. Do not claim provider certainty; retain all V2 safeguards and test coverage. |
+| `trimRequired` / `trimPreference` | Raw provider trim is not a safe query filter and can be malformed at runtime. | Keep required-versus-preferred semantics; local normalization/matching remains code. |
+| `seatsMinPreference` | Seats is response-only, not a provider filter. | Keep as evidence/preference only; no hard filtering. |
+| Transmission, drivetrain, exterior colour | Verified working refinements. | Keep concise direct-request definitions. |
+| `interiorColor` | Filter works, but host routing has shown real inconsistency. | Keep concise field; require host-routing regression tests before release. |
+| `cylinders` | Works as a real filter but is undocumented; host routing has shown real inconsistency. | Keep the V8/V6/I4 semantic cue; require host-routing regression tests before release. |
+| `doors` | Refinement works; provider can omit the total-match count while returning valid rows. | Keep direct-request definition; preserve null rather than false-zero totals in code. |
+| `used` | Confirmed strict boolean filter; V2 fixed a real lean-projection condition-blindness bug. | Keep direct boolean meaning and preserve V2 condition handling. |
+| CPO, accidents, ownership | CPO/history evidence is not safe as hard exclusion; unknown must remain distinct from reported negative. | Keep evidence-request definitions and the unknown-not-false rule. |
+| ZIP/state/radius | State is a real filter; ZIP can be non-geographic and silently yield zero results. | Keep concise location inputs; retain validation, scope disclosure, and control-query protection in code. |
+
+**Review outcome:** D–G remain approved as drafted, subject to the already-listed regression gate. The audit strengthens the decision to keep stable user semantics in the shared description while assigning provider quirks and data-trust protections to code.
