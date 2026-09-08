@@ -3,7 +3,7 @@
 **From:** ChatGPT business/strategy lane  
 **To:** Claude engineering lane  
 **Status:** Investigation only. No implementation, deployment, connector change, or submission is authorised.  
-**Priority:** Active, separate lane. V3 pause is requested pending Claude’s safe-state confirmation.
+**Priority:** Active, separate lane. V3 pause confirmed at branch v3.1-3.3/card-first-check-vehicle, commit 4032feb.
 
 ## Why this handoff exists
 
@@ -17,7 +17,7 @@ The active V1 contract is also still under Anthropic review. Do not change it, i
 
 This is a future OpenAI resubmission candidate built from the existing tested V2 baseline. It is not a new V2 release and it does not redefine V2.
 
-V3 pause is requested while this feasibility investigation runs. Before beginning this work, record and confirm the current V3 safe state; do not then continue, merge, repoint a connector, deploy, or start another V3 phase. André will separately instruct the V3 agent to stop.
+V3 is paused while this feasibility investigation runs. Safe state confirmed Sep 8: branch v3.1-3.3/card-first-check-vehicle at commit 4032feb; V3.1 through V3.3 are committed and pushed, with no uncommitted work. The no-VIN make/model/year V3.3 path remains unverified. Do not continue, merge, repoint a connector, deploy, or start another V3 phase.
 
 Use no V3 tool or capability in this workstream.
 
@@ -75,4 +75,4 @@ Return a feasibility response only. Do not modify code.
 
 ## Handoff discipline
 
-Keep this workstream distinct from V3 in branch names, notes, test results, and discussions. First confirm and record V3's safe stopping point. If a question would require changing an active review, a deployed connector, or V3 work, stop and return it for André’s decision.
+Keep this workstream distinct from V3 in branch names, notes, test results, and discussions. V3's safe stopping point is recorded above. If a question would require changing an active review, a deployed connector, or V3 work, stop and return it for André’s decision.
