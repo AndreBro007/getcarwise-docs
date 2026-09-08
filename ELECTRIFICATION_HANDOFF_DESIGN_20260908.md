@@ -22,7 +22,7 @@ This explains why the long V1 description became detailed: it was compensating f
 2. Code owns stable translation, verification, and result handling.
 3. “Required” and “preferred” remain distinct.
 4. The public schema stays small, explicit, and purpose-related.
-5. A required electrification request must not be presented as satisfied by an unverified or gasoline result.
+5. Auto.dev `vehicle.fuel` alone never confirms or rejects an electrification request: a hybrid may correctly report primary fuel as gasoline. Required matching must combine compatible model/trim identity with NHTSA electrification evidence where available.
 6. A preference may rank verified electrified results ahead of acceptable non-electrified alternatives.
 7. Existing V2 trim semantics remain intact.
 
@@ -64,7 +64,7 @@ This is a small stable technical taxonomy, not a changing category table. The AI
 | Candidate model/trim selection | AI, with code normalization | Resolve appropriate model/variant names without a giant backend model table. |
 | Provider query | Code | Apply stable provider mapping and current V2 query safeguards. |
 | Final verification | Code | Use provider data plus NHTSA VIN evidence to classify a returned vehicle’s actual electrification. |
-| Required request | Code | Only present a vehicle as a match when its required electrification is confirmed. Unknown or contrary evidence is not a confirmed match. |
+| Required request | Code | Select compatible model/trim candidates and return the evidence state. Auto.dev fuel is display-only, never contrary evidence; any stricter NHTSA-based exclusion needs feasibility and regression proof. |
 | Preferred request | Code | Keep acceptable alternatives but rank confirmed matching electrification above them and disclose evidence. |
 | User explanation | Result evidence | State confirmed, unconfirmed, or changed powertrain status; do not rely on host prose to infer it. |
 
@@ -73,7 +73,7 @@ This is a small stable technical taxonomy, not a changing category table. The AI
 1. Can `electrificationTypes` and `electrificationRequirement` be added to the V2-baseline schema without reducing host field-routing reliability?
 2. Does the query path have enough candidate breadth before final VIN verification to enforce a required request without hiding genuine variants?
 3. What normalised result enum should code derive from NHTSA’s `ElectrificationLevel`, primary fuel, and secondary fuel—specifically distinguishing hybrid, PHEV, and EV rather than only “electrified”?
-4. For a required request with unavailable verification evidence, should V2 exclude the candidate from the matching shortlist or return it separately as “needs verification”? The agreed accuracy-first direction favours exclusion from confirmed matches; the UX consequence needs an explicit implementation decision.
+4. Define the evidence states that combine model/trim identity and NHTSA confirmation. NHTSA currently runs only after shortlist selection, so it must not become an exclusion gate without testing candidate breadth, latency, and false-negative risk.
 5. How should trim-like electrified variants such as PowerBoost interact with `trimRequired` when the user did not name the trim directly?
 
 ## Decision requested
@@ -87,7 +87,7 @@ Approve H3 as the intended shared-contract shape, subject to Claude feasibility 
 - EV required;
 - F-150 PowerBoost / other trim-like electrified configuration;
 - verified hybrid with provider fuel reported as gasoline;
-- unverified/contrary powertrain evidence;
+- Auto.dev gasoline value on a confirmed hybrid;\n- unavailable versus authoritative NHTSA electrification evidence;\n- unambiguous model/trim mismatch;
 - hybrid/PHEV plus explicit trim requirement;
 - price-priority request where a cheaper gasoline result competes with a required electrified result.
 
@@ -95,3 +95,19 @@ Approve H3 as the intended shared-contract shape, subject to Claude feasibility 
 
 - [Living Auto.dev field audit](https://github.com/AndreBro007/carclever-widget/blob/main/specs/Auto_Dev_Field_Audit_v1.md): `vehicle.fuel` is unsuitable as a hybrid/PHEV filter; model-name resolution and NHTSA evidence are required.
 - Existing V2 `fuel-type.ts`, `nhtsa-client.ts`, `trim-match.ts`, and route logic: provider fuel normalization, known-hybrid correction, NHTSA final-shortlist decode, and local trim semantics.
+
+
+## Audit correction — 2026-09-08
+
+The earlier shorthand “provider gasoline result” was incorrect and must not drive eligibility.
+
+The living field audit establishes that Auto.dev `vehicle.fuel = "Gasoline"` can be technically correct for a hybrid’s **primary** fuel. Auto.dev lacks a secondary/electrification field, so a hybrid and a plain gasoline vehicle are indistinguishable from `vehicle.fuel` alone. It remains display-only.
+
+The correct evidence order is:
+
+1. **Candidate selection:** AI resolves compatible model and, where needed, trim/variant names. This remains the current V2 mechanism.
+2. **Provider fuel:** display-only; it neither includes nor excludes an electrified candidate.
+3. **NHTSA VIN evidence:** authoritative electrification/secondary-fuel confirmation for the final shortlist, with the existing provider-display override.
+4. **Result claim:** a candidate is described from the combined evidence. A bare/ambiguous model with no confirmation must not be described as a confirmed hybrid/PHEV/EV; a known hybrid variant is not rejected merely because Auto.dev says gasoline.
+
+This correction leaves H3's two-field hand-off as an option, but it removes the premature proposal to hard-exclude a candidate solely because provider fuel is gasoline or NHTSA is unavailable. Whether NHTSA should ever become an eligibility gate is a separate Claude feasibility and regression decision.
