@@ -102,3 +102,14 @@ Covered by the real functional test `"no electrification fields preserves existi
 2. **Ambiguity case still synthetic-only** — not found in real data despite sampling 19 real VINs this session.
 3. **Coordinated Claude/ChatGPT cutover (Gate 4) has not been executed**, only planned.
 4. Standard remaining items from the feasibility package: full production A/B/equivalence test with live Auto.dev traffic (not available in this sandboxed session).
+ 
+
+## Final release update — 2026-09-09
+
+The amended V2 implementation was merged into `release/v2` at `5e8735e` and manually deployed because Git-connected deployment lagged. The current READY production deployment is release tip `a9d6439`, serving `https://ccfmc-dev-v2.vercel.app/mcp`.
+
+Connector validation subsequently passed through both the ChatGPT and Claude V2 test apps, including practical model resolution, hybrid/PHEV required and preferred searches, mixed electrification types, exact VIN/risk flows, priority axes, legacy-`goals` behavior, and the five-result display cap.
+
+The test suite was rerun after the final description and schema-path corrections: 222 custom checks plus 79 node tests, zero failures. The single TypeScript error in `tests/best-for-budget-ranking.test.ts:105:39` is pre-existing against the exact release baseline and remains separately flagged.
+
+V1/Anthropic remains at `https://carclever-find-my-car.vercel.app/mcp` and was not changed. V3 preview deployments have historically received V2 branch pushes; this is an environment-isolation issue, not evidence that V3 production serves V2, and remains a separate operational cleanup item.
