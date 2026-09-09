@@ -133,3 +133,8 @@ reasoning recorded in `CHANGE_LOG.md`.
 
 No implementation of the real V2 schema begins until these are explicitly
 signed off, per the locked two-gate sequence from earlier in this process.
+ 
+
+## Current status — 2026-09-09
+
+The findings led to the amended V2 implementation now merged and deployed on `release/v2`. Current live evidence, connector tests, and remaining deployment/domain work are recorded in `CURRENT_V2_STATE_20260909.md` and `VALIDATION_GATES_20260909.md`.
