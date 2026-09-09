@@ -1,4 +1,4 @@
-# Draft — Shared OpenAI and Anthropic Tool Contract
+> **Administrative correction — Sep 9, 2026:** The `goals` field is fully retired from the active V2 shared-contract design. There is no dual-acceptance period and no `goals`/ `vehicleNeeds` compatibility fallback. The canonical field is `vehicleNeeds`; any reference below to accepting, exposing, or resolving `goals` is stale historical context and must not be used to design or implement the contract. André confirmed this retirement.\n\n# Draft — Shared OpenAI and Anthropic Tool Contract
 
 **Status:** Shared-contract candidate 0.2 for discussion. This document changes no active submission, source code, schema, or deployment.  
 **Scope:** One public `find_matching_vehicle` description and concise field definitions that could be used by both OpenAI and Anthropic if approved. Existing V2 code is the future implementation baseline; V3 remains excluded.  
