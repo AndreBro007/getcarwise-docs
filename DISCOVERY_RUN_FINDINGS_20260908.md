@@ -1,4 +1,4 @@
-# V2 Shared Contract — Discovery Run Findings (Sep 8, 2026 session)
+> **Administrative correction — Sep 9, 2026:** The `goals` field is fully retired from the active V2 shared-contract design. There is no dual-acceptance period and no `goals`/ `vehicleNeeds` compatibility fallback. The canonical field is `vehicleNeeds`; any reference below to accepting, exposing, or resolving `goals` is stale historical context and must not be used to design or implement the contract. André confirmed this retirement.\n\n# V2 Shared Contract — Discovery Run Findings (Sep 8, 2026 session)
 
 **Status:** Partial evidence gathered. No implementation done. No production code touched.
 Probe: `research/v2-schema-probe` branch, deployed at
