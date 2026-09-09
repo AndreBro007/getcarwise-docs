@@ -163,3 +163,17 @@ No implementation should start until this gate is reviewed and approved.
 - Submitted V1 OpenAI manifest: https://github.com/AndreBro007/carclever-widget/blob/main/openai-submissions/carclever-find-my-car-1-0-0__7_.json
 - Living API audit: https://github.com/AndreBro007/carclever-widget/blob/main/specs/Auto_Dev_Field_Audit_v1.md
 - Existing V2 feasibility brief: https://github.com/AndreBro007/getcarwise-docs/blob/main/CLAUDE_V2_SHARED_CONTRACT_FEASIBILITY_BRIEF_20260908.md
+
+
+---
+
+## Gate disposition — 2026-09-09
+
+The V2 implementation and connector testing completed the required equivalence review for the current release:
+
+- Practical family-SUV requests resolved to real model lists and returned the intended shortlist.
+- Hybrid/PHEV required and preferred behavior was exercised through both ChatGPT and Claude V2 connectors.
+- Exact VIN behavior, priority axes, evidence states, legacy-field rejection, and the five-card cap were exercised.
+- The amended public description now matches the implemented schema and code ownership split.
+
+The V1/Anthropic endpoint remains separate and untouched. The final submitted OpenAI URL still requires a deliberate endpoint/domain decision; the current V2 release endpoint is `https://ccfmc-dev-v2.vercel.app/mcp`.
