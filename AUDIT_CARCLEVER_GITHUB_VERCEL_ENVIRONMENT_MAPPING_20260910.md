@@ -1,6 +1,6 @@
 # CarClever GitHub ↔ Vercel Environment Mapping Audit — 2026-09-10
 
-**Status:** Verified read-only infrastructure audit  
+**Status:** Verified read-only infrastructure audit; strategy follow-up added 2026-09-10  
 **Scope:** GitHub repository/branch/PR topology, Vercel project/deployment topology, current V1/V2/V3 boundaries, preview-deployment fan-out, and release-isolation recommendations before final OpenAI resubmission testing.  
 **No application code, Vercel settings, branches, pull requests, connectors, domains, or deployments were changed by this audit.**
 
@@ -123,18 +123,18 @@ No production cross-contamination was found in this audit.
 | `ccfmc-dev-v2` | `release/v2` | Allow `release/v2` and only deliberate V2 development/correction branches required for testing. Deny V3 and unrelated research branches. |
 | `ccfmc-dev-v3` | `v3.1-3.3/card-first-check-vehicle` | Allow only the current V3 branch/family. Deny V2 and research branches. |
 | `carclever-v2-schema-probe` | `research/v2-schema-probe` | Allow only schema-probe/research work while the project is still needed. |
-| `ccfmc-dev` | legacy | Disable automatic Git deployments if retained only for history, or decommission later after André confirms it is no longer needed. |
-| `getcarwise-app` | `carclever-widget/main` | Treat separately. Consider whether documentation-only admin commits should really trigger production builds; use an ignored-build or equivalent policy if not. |
+| `ccfmc-dev` | legacy | Disable broad automatic Git deployments. Later strategy review determines whether it remains as the short-URL ChatGPT test harness or is decommissioned. |
+| `getcarwise-app` | `carclever-widget/main` | Separate website/widget workstream; excluded from the current Find My Car release audit unless a critical dependency is found. |
 
 Vercel currently supports per-branch Git deployment rules through `git.deploymentEnabled`, including glob/minimatch patterns. Unspecified branches default to enabled, so a reliable isolation configuration must be designed carefully rather than assuming only the production branch deploys.
 
 ## 9. Recommended sequence before OpenAI resubmission
 
 1. **Confirm the V1/Anthropic review status with André before any V1 infrastructure change.** Current project governance says V1 remains frozen while that review is active.
-2. Agree the branch allow/deny matrix above, particularly whether V1 should suppress all non-main previews during review and whether legacy `ccfmc-dev` should stop auto-building.
+2. Agree the branch allow/deny matrix above.
 3. Hand the approved Vercel filtering/configuration change to the Engineering lane for implementation.
 4. Re-audit each relevant Vercel project after the change: production branch, production SHA, domain, and one deliberate allowed Preview; confirm an unrelated branch no longer fans out.
-5. Decide and configure the final stable branded V2 MCP submission domain. Do not assume `getcarwise.app` is already attached to the V2 project.
+5. Decide and configure the final stable OpenAI V2 MCP submission origin.
 6. Run the final OpenAI smoke/regression test against the **exact MCP endpoint that will be submitted**, and record the deployed SHA used for that test.
 7. Only then proceed with the resubmission package.
 
@@ -142,12 +142,12 @@ Vercel currently supports per-branch Git deployment rules through `git.deploymen
 
 These are **not authorized actions**, only candidates for a later explicit cleanup decision:
 
-- close stale draft PR #1 and PR #2 if no longer needed;
+- close stale draft PR #1 and PR #2 if confirmed superseded;
 - delete obsolete historical feature/test branches after confirming no rollback/reference need;
-- disable or remove the legacy `ccfmc-dev` Vercel project if it has no active purpose;
-- retire the schema-probe Vercel project after the V2 submission work no longer needs it;
+- retain `ccfmc-dev` only if the known short-URL ChatGPT test need remains, otherwise decommission after a replacement is proven;
+- inactivate and later remove the schema-probe Vercel project after dependency verification;
 - review the old `car-clever` project separately;
-- reduce unnecessary `getcarwise-app` production builds caused by documentation-only changes in `carclever-widget`.
+- review `getcarwise-app` production-build behavior separately under the website-app workstream.
 
 ## 11. Governance / ownership
 
@@ -159,8 +159,66 @@ These are **not authorized actions**, only candidates for a later explicit clean
 
 The V2 shared-contract implementation and connector validation are already recorded as complete. The relevant remaining operational items are:
 
-- final stable/branded OpenAI submission domain;
+- final stable OpenAI submission origin/domain;
 - V3/V2 preview branch isolation;
 - exact-endpoint final smoke testing before resubmission.
 
-No evidence found in this audit requires reverting V2 application work. The next infrastructure task is to make the existing environment boundaries explicit in Vercel so the deployment UI reflects the intended V1/V2/V3 separation instead of producing cross-project Preview noise.
+No evidence found in this audit requires reverting V2 application work.
+
+## 13. Strategy follow-up — 2026-09-10
+
+Further investigation after André's review of the initial audit produced the following additional findings. The detailed proposed operating model is now recorded in `STRATEGY_CARCLEVER_CROSS_PLATFORM_RELEASE_AND_DEPLOYMENT_20260910.md`.
+
+### 13.1 Preview semantics confirmed
+
+Vercel Preview deployments are isolated builds of branch commits. They do not merge Git and do not later merge themselves into V1, V2, V3, or `main`. A production change still requires a deliberate Git/release action or deployment promotion. The cross-project V2 builds observed in V3 remain deployment noise/isolation failures, not hidden merges.
+
+### 13.2 Auto-deploy root cause remains unproven
+
+Preview fan-out has **not** been proven to be the cause of V2's intermittent production auto-deployment behavior. It is still worth eliminating because it creates unnecessary builds and ambiguity. After branch isolation, Engineering should run a controlled deployment-trigger test to determine whether V2 production now updates deterministically. No supported per-project “deploy this project first” priority mechanism was identified; correct branch filtering is the primary control.
+
+### 13.3 Platform policy changes the permanent architecture
+
+Anthropic's submitted V1 connection is recorded as `https://carclever-find-my-car.vercel.app/mcp`. Current Anthropic documentation says published MCP tool-surface changes can be deployed to the live server without a new directory submission, while listing changes are managed separately. Because changing the published server hostname is not clearly documented as a self-service no-review operation, the safest strategy is to retain Claude's submitted MCP origin and upgrade code behind it after the review gate clears.
+
+OpenAI's current published-plugin maintenance rules are stricter: changing the MCP origin (`scheme`, `hostname`, or `port`) requires a **new plugin**, while tool/schema/description/annotation/resource-contract changes require a new reviewed plugin version. Consequently the OpenAI V2 submission hostname should be treated as permanent before resubmission. `https://carclever.getcarwise.app/mcp` is the preferred branded candidate, subject to a complete dependency/domain verification before any move or attachment.
+
+### 13.4 PR #1 and PR #2 are now verified as superseded, not pending production merges
+
+Git comparison shows PR #1 head `6700bbb` is an ancestor of current `release/v2`; current V2 contains that work and is far ahead of it. PR #1's original DO-NOT-MERGE gate protected V1 during review, but the old PR is no longer the correct release vehicle.
+
+For PR #2, the V2.2 portion is also already represented in current `release/v2`, while the PR branch later accumulated V3/check-vehicle-era commits and diverged from current V2. It should therefore not be merged into `main` as a route to V2 production.
+
+**Proposed disposition for both:** close as superseded after André approves the release strategy and Claude independently rechecks the ancestry; do not merge either old PR.
+
+### 13.5 V3 must be rebased conceptually onto final V2
+
+Live Git comparison shows paused V3 has diverged and is substantially behind current `release/v2`. Future V3 should be created from the final V2 baseline and have still-valid V3-specific work selectively ported and fully retested. The old V3 branch should not be merged wholesale.
+
+### 13.6 Temporary Vercel-project disposition refined
+
+- `ccfmc-dev`: **do not delete yet**. It solved a documented, real ChatGPT Preview-domain/DNS-length problem. Convert it to a dormant/manual short-URL ChatGPT test harness, block broad auto-deployments, and delete only after a replacement test process is proven.
+- `carclever-v2-schema-probe`: its temporary research purpose is complete. Proposed path is inactivate first (stop Git auto-deploy / remove temporary connector after approval), retain briefly through final V2 smoke testing, then delete after confirming no dependency points to it.
+
+### 13.7 Long-term release model proposed
+
+Use one application codebase and versioned `release/vN` candidates, but treat Claude and OpenAI as two permanent production channels with stable MCP origins. Default to both channels serving the exact same tested SHA. Temporary platform version skew is permitted only when submission/review timing forces it. V2/V3 should be releases promoted through channels, not permanent hosting identities.
+
+### 13.8 Testing architecture expanded
+
+The V1→V2 equivalence method remains the baseline. Future releases should add automated commit/contract CI, exact-SHA deployed-environment verification, same-window V1/candidate A/B tests, cross-host ChatGPT/Claude acceptance, exact-submission-host smoke tests, and post-release monitoring. A release manifest should record the exact SHA, deployments, MCP origins, contract snapshot, platform status, tests, and rollback point for every promotion.
+
+### 13.9 New strategy reference
+
+Primary follow-up strategy document:
+
+- `STRATEGY_CARCLEVER_CROSS_PLATFORM_RELEASE_AND_DEPLOYMENT_20260910.md`
+
+Existing supporting references remain:
+
+- `CURRENT_V2_STATE_20260909.md`
+- `V2_CONNECTOR_TEST_RECORD_20260909.md`
+- `V1_V2_SEARCH_RESULTS_EQUIVALENCE_GATE_20260908.md`
+- `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md`
+
+No application, Vercel, domain, connector, PR, or branch changes were made by this follow-up. All execution remains gated on André's decisions and belongs to Claude Engineering where applicable.
