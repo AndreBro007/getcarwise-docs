@@ -111,3 +111,20 @@ The correct evidence order is:
 4. **Result claim:** a candidate is described from the combined evidence. A bare/ambiguous model with no confirmation must not be described as a confirmed hybrid/PHEV/EV; a known hybrid variant is not rejected merely because Auto.dev says gasoline.
 
 This correction leaves H3's two-field hand-off as an option, but it removes the premature proposal to hard-exclude a candidate solely because provider fuel is gasoline or NHTSA is unavailable. Whether NHTSA should ever become an eligibility gate is a separate Claude feasibility and regression decision.
+
+
+---
+
+## Implementation status — 2026-09-09
+
+The H3 design is implemented on V2 `release/v2`. The design ownership split remains the governing interpretation:
+
+- The host/AI resolves natural-language practical and electrification intent into real model/variant names.
+- Code owns schema validation, stable matching semantics, NHTSA verification, required filtering, preferred ranking, shortfall disclosure, and result handling.
+- No broad changing lifestyle/model table was introduced.
+- Public types are `hybrid | plug_in_hybrid | electric`; internal NHTSA `mild_hybrid` remains an outcome, not a caller input.
+- The live MCP registration passes the complete strict schema, so legacy `goals` rejection and cross-field electrification validation are enforced in the real path.
+
+Validation is complete for the current release endpoint, with the real-world NHTSA limitation recorded in `VALIDATION_GATES_20260909.md`: BEV/PHEV confirmed live; mild-hybrid candidates commonly return blank NHTSA electrification data; the ambiguity case remains synthetic-only.
+
+The implementation is merged into `release/v2` and deployed to the V2 test/production project. V1/Anthropic and V3 remain separate.
