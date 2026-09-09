@@ -143,3 +143,8 @@ The next decision is not “which platform gets the better description?” It is
 - [Anthropic — MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector): MCP selection relies on names and descriptions.
 - Historic Anthropic directory feedback supplied by André: used as the authoritative record of the earlier directory-review concern. No public current Anthropic directory-policy page was available in the reviewed sources, so this report does not infer additional directory rules beyond that feedback.
 
+ 
+
+## Current status — 2026-09-09
+
+The amended description has now been exercised through both the ChatGPT and Claude V2 test applications. The V2 endpoint is `https://ccfmc-dev-v2.vercel.app/mcp` while final branded-domain routing remains a separate release task. The existing Anthropic-reviewed V1 endpoint remains unchanged. See `CURRENT_V2_STATE_20260909.md`.
