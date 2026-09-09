@@ -121,4 +121,8 @@ Claude should run the existing automated/live tests and add focused cases before
 
 ---
 
-**Evidence consulted:** the submitted V1 manifest; the existing V2 baseline’s tool route and intent parser; prior discoverability/description review and regressions; the living Auto.dev field audit; and the current OpenAI app and MCP tool guidance. This draft preserves the earlier work’s hard-won behaviours while changing where the responsibility lives.
+**Evidence consulted:** the submitted V1 manifest; the existing V2 baseline’s tool route and intent parser; prior discoverability/description review and regressions; the living Auto.dev field audit; and the current OpenAI app and MCP tool guidance. This draft preserves the earlier work’s hard-won behaviours while changing where the responsibility lives. 
+
+## Current disposition — 2026-09-09
+
+This draft is superseded by the implemented amended V2 contract. The live contract uses `vehicleNeeds`, the three-value public electrification enum, required/preferred semantics, strict legacy-`goals` rejection, and the amended field descriptions. The final current-state record is `CURRENT_V2_STATE_20260909.md`; do not use this draft as the live submission text.
