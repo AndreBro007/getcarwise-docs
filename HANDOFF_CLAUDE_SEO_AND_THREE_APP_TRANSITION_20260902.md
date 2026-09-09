@@ -102,3 +102,18 @@ For transition messaging:
 - AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260902.md — current page findings
 - DECISION_RECORD_FIND_MY_CAR_PHASE_OUT.md — transition decision and gate
 - RECOMMENDATION_WEEKLY_MONITORING_EFFORT_ALLOCATION_20260902.md — effort allocation
+
+
+---
+
+## Current three-app boundary — 2026-09-09
+
+The three app environments must remain distinct:
+
+| Environment | Current role | Current endpoint/state |
+|---|---|---|
+| V1 / Anthropic-reviewed | Existing submitted production contract | `https://carclever-find-my-car.vercel.app/mcp`; untouched |
+| V2 / amended contract | Current tested release | `https://ccfmc-dev-v2.vercel.app/mcp`; `release/v2`, deployment tip `a9d6439` |
+| V3 | Separate future/card-first environment | Not a V2 release target; V3 preview filtering requires separate cleanup |
+
+The V2 amendment is not a V1 merge by default. Any change to the V1 endpoint must be explicitly coordinated with the Anthropic review. A stable branded V2 endpoint may be introduced later by domain routing, but the MCP path remains `/mcp`. See `CURRENT_V2_STATE_20260909.md`.
