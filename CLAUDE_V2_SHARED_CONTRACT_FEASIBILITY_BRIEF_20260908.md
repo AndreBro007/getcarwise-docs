@@ -112,3 +112,8 @@ No implementation should start until that response is reviewed and explicitly ap
 - [Electrification hand-off design](https://github.com/AndreBro007/getcarwise-docs/blob/main/ELECTRIFICATION_HANDOFF_DESIGN_20260908.md)
 - [OpenAI/Anthropic compatibility decision](https://github.com/AndreBro007/getcarwise-docs/blob/main/PLATFORM_TOOL_DESCRIPTION_COMPATIBILITY_DECISION_20260908.md)
 - [V1 to V2 search-results equivalence gate](https://github.com/AndreBro007/getcarwise-docs/blob/main/V1_V2_SEARCH_RESULTS_EQUIVALENCE_GATE_20260908.md)
+ 
+
+## Current disposition — 2026-09-09
+
+This feasibility brief is historical planning material. The amended V2 contract it describes is implemented and tested on `release/v2`. Refer to `CURRENT_V2_STATE_20260909.md` and `VALIDATION_GATES_20260909.md` for final behavior, test, deployment, and remaining limitation status.
