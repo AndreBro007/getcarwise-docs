@@ -1,4 +1,4 @@
-# Claude Feasibility Brief — Shared Tool Contract, V2 Baseline
+> **Administrative correction — Sep 9, 2026:** The `goals` field is fully retired from the active V2 shared-contract design. There is no dual-acceptance period and no `goals`/ `vehicleNeeds` compatibility fallback. The canonical field is `vehicleNeeds`; any reference below to accepting, exposing, or resolving `goals` is stale historical context and must not be used to design or implement the contract. André confirmed this retirement.\n\n# Claude Feasibility Brief — Shared Tool Contract, V2 Baseline
 
 **Status:** Approved design direction for feasibility review. This is not authority to modify code, deploy, or resubmit.  
 **Implementation baseline:** Existing tested V2 release branch.  
