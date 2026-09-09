@@ -4,6 +4,10 @@ Doc-only. No code touched. Authored by Claude (Engineering lane), for André + C
 
 ## 1. Exact schema delta (`route.ts`, proposed — not yet coded)
 
+**Open questions #1 and #2 answered by André, Sep 9 2026:**
+1. `electrificationTypes: ["hybrid"]` implicitly includes `mild_hybrid` — callers never list it separately. `plug_in_hybrid` stays distinct, never implied by `hybrid`.
+2. Legacy `goals` is hard-rejected post-cutover (schema/contract error stating `vehicleNeeds` is now required), not silently ignored — silent-ignore risked discarding practical needs and producing misleading results.
+
 Remove:
 - `goals: z.array(z.string()).optional()` field
 - `input.goals` broad-search trigger (`isBroadSearch = !baseQuery.model || (input.goals?.length > 0)`)
@@ -11,12 +15,12 @@ Remove:
 
 Add:
 - `vehicleNeeds: z.array(z.string()).optional()` — same semantic role `goals` played (ranking/context input, not a hard filter), renamed only. No behavior change beyond the name.
-- `electrificationTypes: z.array(z.enum(["hybrid","plug_in_hybrid","electric","mild_hybrid"])).optional()` — which electrified types satisfy the request. Open question (#1 below): does `hybrid` implicitly include `mild_hybrid`, or must callers list both?
+- `electrificationTypes: z.array(z.enum(["hybrid","plug_in_hybrid","electric","mild_hybrid"])).optional()` — which electrified types satisfy the request. `hybrid` implicitly includes `mild_hybrid` (André, Sep 9); `plug_in_hybrid` never implied.
 - `electrificationRequirement: z.enum(["required","preferred"]).optional()` — `required` triggers the bounded 20-VIN NHTSA pool + confirmed-only shortlist (per `SYS-20260909-002/003`); `preferred` affects ranking only, never excludes.
 
 ## 2. `goals` retirement
 
-Full removal, no dual-accept, no migration period (locked by André, `SYS-20260909-004`). Any host still sending `goals` gets it silently ignored — **open question #2:** should this be a hard schema-validation rejection instead, so a host relying on the old field fails loudly rather than having its input silently dropped?
+Full removal, no dual-accept, no migration period (locked by André, `SYS-20260909-004`). Any host still sending `goals` post-cutover gets a hard schema/contract error stating `vehicleNeeds` is now required (André, Sep 9 — silent-ignore rejected as risking discarded practical needs and misleading results).
 
 ## 3. `vehicleNeeds` behavior
 
@@ -26,7 +30,7 @@ Identical to old `goals`: freeform ranking/context signal, never a hard eligibil
 
 - `required`: only vehicles confirmed by NHTSA as matching one of `electrificationTypes` are returned. Unconfirmed (`unknown`/`ambiguous` per classifier) are excluded, never backfilled with gas variants — per audit Section C. If fewer than the normal shortlist count confirm, return fewer results with an explicit shortfall flag (not yet coded — this is schema/behavior design only).
 - `preferred`: ranking boost only, no exclusion. Vehicles with `unknown`/`ambiguous` electrification are still eligible.
-- `mild_hybrid` satisfies `hybrid`, never `plug_in_hybrid` (audit Section D) — **open question #1 above** still needs resolving before this is codeable.
+- `mild_hybrid` satisfies `hybrid`, never `plug_in_hybrid` (audit Section D; confirmed by André Sep 9 — resolved, codeable).
 
 ## 5. Host-routing risks
 
@@ -48,19 +52,19 @@ Identical to old `goals`: freeform ranking/context signal, never a hard eligibil
 2. `electrificationRequirement: "required"` with 0, 1, and 20 confirmed matches in the pool — verify shortfall flag behavior at each.
 3. `electrificationRequirement: "preferred"` — verify no exclusion occurs even when 0 vehicles confirm.
 4. Mixed `electrificationTypes` array (e.g. `["hybrid","electric"]`) — verify OR semantics, not AND.
-5. `mild_hybrid` vehicle against `electrificationTypes: ["hybrid"]` vs `["plug_in_hybrid"]` — confirm satisfies former, not latter (pending open question #1).
-6. Host sends legacy `goals` field post-cutover — confirm the chosen behavior (silently ignored vs. rejected, per open question #2) actually happens.
+5. `mild_hybrid` vehicle against `electrificationTypes: ["hybrid"]` vs `["plug_in_hybrid"]` — confirm satisfies former, not latter (semantics locked, needs fixture).
+6. Host sends legacy `goals` field post-cutover — confirm hard schema/contract error returned (not silent-ignore).
 7. City-handling regression (ambiguous city names) — re-run existing fixtures unchanged, confirm this migration doesn't touch that path at all.
 8. Full V1/V2 side-by-side on a shared query set (no electrification/vehicleNeeds involved) — confirm zero behavior drift on searches that don't touch the new fields at all.
 
 ## 8. Implementation recommendation
 
-Do not implement until: (a) open questions #1 and #2 above are answered, (b) regression cases 1–8 have deterministic fixtures written (not yet started), (c) both tool descriptions (Claude + ChatGPT/OpenAI) are ready to cut over together. Recommend a single atomic PR, not incremental route edits, given the "hard cutover, no dual-accept" constraint in Section 5.
+Semantics now locked (André, Sep 9). Do not implement until the three release gates below are cleared. Recommend a single atomic PR, not incremental route edits, given the "hard cutover, no dual-accept" constraint in Section 5.
 
-## Explicit blockers
+## Release gates (blockers) — confirmed valid by André, Sep 9
 
-1. `electrificationTypes` array semantics unresolved (see #1) — mild_hybrid/hybrid overlap not yet specified precisely enough to code.
-2. Legacy-`goals` post-cutover behavior unresolved (see #2) — silent-ignore vs. hard-reject.
-3. Zero regression fixtures exist yet for any of the 8 cases above.
-4. No coordinated cutover plan between Claude's and ChatGPT's tool descriptions.
-5. `mild_hybrid`/BEV/ambiguous classifier branches still lack real NHTSA fixtures (carried over from `SYS-20260909-003`).
+1. Add real BEV, mild-hybrid, and ambiguity NHTSA fixtures (carried over from `SYS-20260909-003`).
+2. Define one coordinated Claude/ChatGPT tool-description cutover and refresh plan (no staged/partial rollout given hard-cutover constraint).
+3. Write full regression fixtures for all 8 cases in Section 7 before implementation authorization.
+
+**Status: semantics resolved, package ready for review. Implementation remains blocked on the three gates above.**
