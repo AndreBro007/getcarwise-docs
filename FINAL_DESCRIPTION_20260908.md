@@ -73,3 +73,21 @@ and why.
 1. **`model` (500 char) and text-field (200 char) ceilings are research-only, not production values.** These were deliberately set generous so the probe wouldn't reject real host output before it could be measured. A real production cap needs to come from a larger evidence sample than this discovery run gathered — see `FINAL_FINDINGS_20260908.md`'s "what's left" section.
 2. **Cross-field validation rules** (priceMin≤priceMax, yearMin≤yearMax, electrificationRequirement requires non-empty electrificationTypes, etc.) exist in the probe's handler logic, not enforced at the schema level shown here — see the full `route.ts` source for exact implementation if building real schema-level validation.
 3. **This is a schema/description artifact only** — it contains no backend logic (NHTSA classifier, bounded verification pool, Auto.dev query construction). Those are separate, still-open implementation work per the electrification feasibility audit's proposal-and-review gate.
+
+
+---
+
+## Current implementation status — 2026-09-09
+
+This document remains the public-description baseline, but the live V2 implementation is now the amended version described below. The current V2 source is on `release/v2`, merged at `5e8735e`, with deployed release tip `a9d6439`.
+
+Amendments now present in live V2:
+
+- Practical-needs and broad electrification requests instruct the host to resolve suitable real model names and include them in `model`, alongside `vehicleNeeds`.
+- Public electrification input is `hybrid | plug_in_hybrid | electric`; `hybrid` includes internal mild-hybrid classification.
+- Required versus preferred electrification is explicit.
+- Legacy `goals` is rejected through the actual MCP registration path.
+- The `resultsShown` count is enforced in code and documented on the output field rather than as procedural narration in the main description.
+- The `priorityAxis` field retains concise routing examples while avoiding internal scoring mechanics.
+
+For the authoritative current-state record, see `CURRENT_V2_STATE_20260909.md`.
