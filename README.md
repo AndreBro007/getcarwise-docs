@@ -105,3 +105,10 @@ See `carclever-widget` PLAYBOOK.md → TASK: SESSION_END for full protocol.
 - AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260826.md
 - PLAN_PRIORITY_3_WEBSITE_REVIEW_20260826.md
 - PROTOCOL_SESSION_END_20260826.md
+ 
+
+## Current V2 status
+
+The current amended V2 contract and release status are documented in [CURRENT_V2_STATE_20260909.md](CURRENT_V2_STATE_20260909.md). The V2 release is merged into `release/v2` and deployed at `https://ccfmc-dev-v2.vercel.app/mcp`. Historical design and feasibility documents now include dated implementation-status addenda so proposed versus implemented material is distinguishable.
+
+The Anthropic-reviewed V1 endpoint remains separate and untouched.
