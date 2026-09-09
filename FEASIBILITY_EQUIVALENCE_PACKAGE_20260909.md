@@ -68,3 +68,20 @@ Semantics now locked (André, Sep 9). Do not implement until the three release g
 3. Write full regression fixtures for all 8 cases in Section 7 before implementation authorization.
 
 **Status: semantics resolved, package ready for review. Implementation remains blocked on the three gates above.**
+
+
+---
+
+## Final implementation disposition — 2026-09-09
+
+The proposed schema delta in this document has been implemented and is no longer merely proposed.
+
+Corrections to the historical proposal:
+
+- The public enum is `hybrid | plug_in_hybrid | electric`; `mild_hybrid` is internal-only.
+- The actual implementation uses the host-resolved `model` field for practical/electrification candidate scope, consistent with the approved handoff design; it does not introduce a broad backend model table.
+- Required and preferred semantics are implemented and tested.
+- Legacy `goals` is rejected through the real MCP registration path, not merely by direct parsing of an unused schema object.
+- The former pool-size-20 rationale is not treated as empirical fact. `ELECTRIFICATION_POOL_SIZE = 20` remains provisional and unvalidated.
+
+Final evidence is recorded in `VALIDATION_GATES_20260909.md` and `CURRENT_V2_STATE_20260909.md`. The document’s earlier “before implementation” wording is retained as historical context.
