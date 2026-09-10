@@ -10,16 +10,16 @@
 |---|---|---|---|---|
 | 1 | Anthropic-specific V2 tool-description/schema compliance review | ChatGPT | ✅ **COMPLETE / REVISED Sep 10** | `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`; minimal high-risk wording areas identified, with strict both-host no-regression gate |
 | 2 | Decide permanent MCP origin set | André + ChatGPT | **UNDER DISCUSSION — NO HOSTNAME APPROVED** | Final Claude/OpenAI/test origins recorded as confirmed only after architecture + technical validation |
-| 3 | Determine Anthropic production-origin strategy | André + ChatGPT | **OPEN** | Choose: keep current submitted origin, or ask Anthropic to change to an owned domain; live UI confirms URL/auth are Anthropic-managed, not self-service editable |
-| 4 | Clean retest of historical ChatGPT Preview-domain failure before approving shared test hostname | Claude + ChatGPT verification | **NEXT INFRA TEST DESIGN** | Reproduce/control long-branch-alias case, verify Vercel Authentication state, confirm short `ccfmc-dev` baseline, then test candidate owned short domain in ChatGPT |
+| 3 | Determine Anthropic production-origin strategy | André + ChatGPT | **OPEN / SUPPORT QUESTION SENT Sep 10** | Current UI says URL/auth are Anthropic-managed. Email sent to `mcp-review@anthropic.com` asking whether an in-review URL can move to owned domain, queue/review impact, what Rescan Tools refreshes, and whether active review has started |
+| 4 | Clean retest of historical ChatGPT Preview-domain failure before approving shared test hostname | Claude + ChatGPT verification | **PLAN DEFINED; MANUAL EXECUTION IN FRESH CHAT** | Same-SHA A/B/C test: long branch alias with Vercel Auth off vs short `ccfmc-dev` vs short owned-domain candidate; test connector creation, MCP calls, widget/resource origin/CSP |
 | 5 | Design and implement branch/project isolation | Claude | After architecture confirmation | Each Vercel project reacts only to intended pointer/release branch; unrelated branch fan-out blocked |
 | 6 | Create pointer-only branches `test/current`, `prod/claude`, `prod/openai` | Claude | After #5 design approval | Branches point to known SHAs; no unique development commits; documented operating rule |
 | 7 | Repurpose `ccfmc-dev` as shared test harness | Claude | After #4/#5 | Stable short test origin TBD serves `test/current`; both ChatGPT and Claude test connectors use the same URL |
 | 8 | Controlled auto-deploy reliability test after isolation | Claude + ChatGPT verification | After #5/#7 | Two deliberate trigger cycles; only intended project reacts; correct target/SHA; record whether prior intermittent behavior persists |
-| 9 | Prepare minimal V2 description/schema wording redline | ChatGPT | **NEXT CONTENT/CONTRACT TASK** | Exact before/after wording for only identified sensitive areas; rationale tied to Anthropic feedback and V1→V2 equivalence requirements |
-| 10 | Implement approved V2 wording-only change | Claude | After #9 approval; V2 release line only | Exact diff, no unrelated code changes, deterministic schema/contract tests pass |
+| 9 | Prepare minimal V2 description/schema wording redline | ChatGPT | ✅ **COMPLETE Sep 10 — AWAITING ANDRÉ REVIEW** | `REVIEW_CARCLEVER_V1_V2_TOOL_DESCRIPTION_REDLINE_20260910.md`; exact minimal replacements plus no-regression host test plan |
+| 10 | Implement approved V2 wording-only change | Claude | After André approves #9; V2 release line only | Exact diff, no unrelated code changes, deterministic schema/contract tests pass |
 | 11 | Re-run V1↔V2 same-window A/B plus full ChatGPT and Claude acceptance pack | ChatGPT + Claude + André where UI needed | After #7/#10 | Release ledger populated with exact endpoint, SHA, host arguments, deviations, UI behavior, latency |
-| 12 | Anthropic pending-submission Edit-flow inspection | André + ChatGPT/Claude | 🟡 **PARTIALLY COMPLETE Sep 10** | Confirmed: URL not self-service editable; Rescan Tools available; listing fields editable; still need final save/resubmit warning text and queue impact if exposed — do not save merely to discover it |
+| 12 | Anthropic pending-submission Edit-flow inspection | André + ChatGPT/Claude | 🟡 **PARTIALLY COMPLETE / SUPPORT QUESTION SENT Sep 10** | Confirmed URL not self-service editable, Rescan Tools available, listing fields editable. Support asked what Rescan refreshes, queue impact, URL change process, and whether active assessment has started |
 | 13 | Affiliate/sponsored-content consistency watch | ChatGPT | 🟢 **NOT A CURRENT BLOCKER** | Prior CarClever Anthropic review disclosed affiliate arrangement and did not flag it; historical blockers were descriptions/icon/docs. Keep implementation/disclosure consistent and reopen only on new evidence or Anthropic feedback |
 | 14 | Decide Anthropic V1 disposition | André | After #3/#9/#11/#12 | Explicit choice: wait for V1 review, controlled V2 upgrade behind same submitted origin + rescan/edit, or Anthropic-assisted move to owned origin + V2 |
 | 15 | Configure final OpenAI owned origin and submission prerequisites | Claude | After #2/#11 | Exact owned host, OpenAI challenge endpoint, Scan Tools, domain/CSP/link checks, exact SHA |
@@ -66,6 +66,7 @@
 
 ## Primary references
 
+- `REVIEW_CARCLEVER_V1_V2_TOOL_DESCRIPTION_REDLINE_20260910.md`
 - `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`
 - `RESEARCH_ANTHROPIC_V1_V2_REVIEW_AND_MCP_ORIGIN_DECISION_20260910.md`
 - `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`
