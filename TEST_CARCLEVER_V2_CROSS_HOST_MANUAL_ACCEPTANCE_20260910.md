@@ -95,7 +95,7 @@ No regression identified in large-SUV intent resolution, strict budget handling,
 
 ## Test #2 — hybrid SUV + approximate budget + city location
 
-**Status:** DESIGNED — next test to execute
+**Status:** IN PROGRESS — ChatGPT V2 captured; Claude V2 next
 
 **Prompt:** `Find me a hybrid SUV around $35k in Austin.`
 
@@ -107,11 +107,58 @@ Investigation triggers: gas-only candidates under a required-hybrid interpretati
 
 ### Test #2 record
 
-#### ChatGPT
-- Response: PENDING
-- Actual Desktop Request JSON: PENDING
-- Screenshot/widget: PENDING
-- Notes: PENDING
+#### ChatGPT V2
+
+Observed response:
+
+- Host chose Austin ZIP `78701`, 50-mile radius, required hybrid, SUV, flexible `$30k–$37k` range, `best_for_budget`, and automatic transmission.
+- Reported 79 matches.
+- Shortlist shown: 2026 Hyundai Tucson Hybrid SEL ($36,250, AWD, 20 mi), 2026 Kia Sportage Hybrid EX ($36,343, AWD, 10 mi), 2026 Honda CR-V Hybrid Sport ($36,563, FWD, 2 mi), another 2026 Kia Sportage Hybrid EX ($36,465, AWD, 11 mi), and 2027 Kia Sportage Hybrid EX ($36,791, AWD, 6 mi).
+- Host stated all five were VIN-verified as hybrids and correctly disclosed that advertised prices may exclude tax/registration/dealer fees/accessories.
+- Host appropriately noted that a hard $35,000 ceiling would be a different search and suggested used/CPO as a possible next search rather than silently treating the approximate budget as strict.
+
+Actual Desktop request JSON supplied by André:
+
+```json
+{
+  "bodyType": "SUV",
+  "electrificationRequirement": "required",
+  "electrificationTypes": [
+    "hybrid"
+  ],
+  "model": "Toyota RAV4 Hybrid, Honda CR-V Hybrid, Hyundai Tucson Hybrid, Kia Sportage Hybrid, Ford Escape Hybrid",
+  "priceMin": 30000,
+  "priceMax": 37000,
+  "priceFlexibility": "flexible",
+  "priorityAxis": "best_for_budget",
+  "radiusMiles": 50,
+  "state": "TX",
+  "zip": "78701",
+  "vehicleNeeds": [
+    "hybrid SUV around $35,000 in Austin"
+  ],
+  "transmission": "Automatic"
+}
+```
+
+ChatGPT-side assessment:
+
+- **PASS:** `bodyType: "SUV"` correctly reflects the explicit body style.
+- **PASS:** `electrificationRequirement: "required"` plus `electrificationTypes: ["hybrid"]` correctly preserves the user's hybrid requirement.
+- **PASS:** a real hybrid-SUV candidate list was resolved before the call, as required by the V2 tool contract.
+- **PASS:** `priceMin: 30000`, `priceMax: 37000`, and `priceFlexibility: "flexible"` preserve approximate-budget semantics rather than silently hardening `$35k` into a strict ceiling. The exact band is host-selected, but its semantics are consistent with “around.”
+- **PASS:** `priorityAxis: "best_for_budget"` is correct; the host did not misuse `cheapest`.
+- **PASS:** Austin was anchored to ZIP `78701`; `state: "TX"` and `radiusMiles: 50` are redundant but geographically consistent and did not materially change the requested city-local search.
+- **INVESTIGATE:** the actual `model` request used manufacturer-prefixed entries (`Toyota RAV4 Hybrid`, `Honda CR-V Hybrid`, etc.). The V2 model-field contract explicitly requires model names **without** manufacturer prefixes, including cross-brand lists. The host's later statement that the plugin “automatically removed manufacturer prefixes” does not change the primary request evidence: the Desktop request shown above contains the prefixes.
+- **INVESTIGATE:** the host added `transmission: "Automatic"` although the user did not request a transmission. This is an invented hard search constraint. It may have little practical effect on this hybrid-SUV candidate set, but it is still stronger than the stated user intent and should not be normalized as acceptable host behavior without comparison evidence.
+- **PASS:** no unrequested `used`, year, mileage, drivetrain, trim, history, seating, colour, CPO, accident or ownership constraints were added.
+- **RESULT RELEVANCE:** the displayed shortlist is consistent with the required hybrid-SUV request and flexible price band. The fact that the leading listings are new does not itself show an invented condition because `used` was omitted.
+
+**ChatGPT V2 provisional status: INVESTIGATE — request semantics and returned shortlist are broadly correct, but two request-quality issues require cross-host comparison: manufacturer-prefixed `model` values and invented `Automatic` transmission.**
+
+Do not recommend code or description changes from the ChatGPT half alone. Run the identical prompt through Claude V2 and compare its Request → Response → Widget evidence before assigning the Test #2 verdict.
+
+- Screenshot/widget: user-provided response evidence captured in conversation; dedicated widget screenshot not yet independently recorded in this document.
 
 #### Claude
 - Request: PENDING
