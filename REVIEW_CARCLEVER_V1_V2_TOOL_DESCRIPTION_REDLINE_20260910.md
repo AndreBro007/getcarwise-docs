@@ -1,12 +1,12 @@
-# CarClever V1→V2 Tool Description Review and Minimal Redline — 2026-09-10
+# CarClever V1→V2 Tool Description Review — 2026-09-10
 
-**Status:** REVISED PROPOSAL — no application code changed  
-**Purpose:** Compare Anthropic's actual prior CarClever feedback with current V1/V2 MCP descriptions and define the smallest wording change that removes forceful assistant-directed imperatives without weakening host routing.  
-**Owners:** ChatGPT = review/redline/test design; Claude = implementation only after André approves; André = final approval and manual host testing where required.
+**Status:** REVISED — DESCRIPTION CHANGES DEFERRED; no application code changed  
+**Purpose:** Compare Anthropic's actual prior CarClever feedback with current V1/V2 MCP descriptions and determine whether any change is actually necessary before final V2 testing.  
+**Owners:** ChatGPT = review/test design; Claude = implementation only after an explicit approved change; André = final approval and manual host testing where required.
 
 ## 1. Exact context of Anthropic's prior objection
 
-The archived 2026-08-01 Anthropic MCP Directory email was re-read directly. Anthropic had re-tested the previous CarClever server and said the server itself was in good shape. Their wording objection was specifically to descriptions that **instruct the assistant in a way that can force unwanted invocation/behavior**.
+The archived 2026-08-01 Anthropic MCP Directory email was re-read directly. Anthropic had re-tested the previous CarClever server and said the server itself was in good shape. Their wording objection was specifically to descriptions that **instruct the assistant in a way that can force unwanted invocation or override normal host judgment**.
 
 Their examples were:
 
@@ -18,137 +18,105 @@ Anthropic's explanation was that descriptions should describe what a tool does a
 
 ### Revised interpretation
 
-This is more specific than a blanket rule that every word such as `use`, `when`, or ordinary enum-selection guidance is prohibited. The primary risk is **coercive/mandatory host behavior language**, especially `must`, `always`, `never refuse`, `before calling`, `every time`, and equivalent commands directed at the model.
+This is materially narrower than a blanket prohibition on clear usage guidance. Ordinary schema/contract instructions are not automatically equivalent to `MUST`, `always invoke`, or `never refuse` language.
 
-That distinction matters because CarClever needs enough semantic guidance for the host to build the right structured search. We should remove coercive phrasing, not strip useful contract semantics.
+That distinction matters for CarClever because the host must understand several non-obvious contract requirements — especially practical-needs candidate-model resolution and broad electrification searches. Removing or making these instructions vague can create a real search regression.
 
 ## 2. Current V1 risk
 
-Current V1 (`main`) is still high-risk against that exact prior-feedback pattern. Its main `find_matching_vehicle` description contains many assistant-directed commands, including `don't retry ... yourself`, `Before calling`, `Do not invent`, `resolve ... every time`, `Never rely`, `Use trimRequired`, `Never translate a VIN`, repeated `never`/`must`/`do not`, and answer-presentation instructions.
+Current V1 (`main`) still contains substantially more assistant-directed mandatory language than V2, including `don't retry ... yourself`, `Before calling`, repeated `Never`, `Do not`, `every time`, and multiple answer-presentation instructions.
 
-**Conclusion:** waiting for V1 review is not risk-free. V1 contains substantially more assistant-directed mandatory language than the older CarClever descriptions Anthropic already asked us to rewrite.
+**Conclusion:** V1 remains more likely than V2 to attract the same category of review feedback Anthropic previously raised. That does not prove V1 will be rejected, but the risk is credible.
 
-## 3. Current V2 risk — narrower than V1
+## 3. Current V2 risk — revised down
 
-V2 is dramatically better. Most of its description is capability/contract language and should remain untouched.
+V2 is dramatically shorter and more capability-led than V1. The previously flagged phrases — for example `resolve ... yourself`, `before calling this tool`, `every time`, and `do not use ... alone` — are directive, but they are used to explain a genuine schema/host contract rather than to force tool invocation, suppress refusal, or override user intent.
 
-The remaining concern is concentrated in four places:
+The proposed neutralized alternatives were also judged by André to be less clear and more vague. That is a serious downside because these instructions exist specifically to prevent known host-routing/search failures.
 
-1. a small section of the main `find_matching_vehicle` description;
-2. the `model` field description;
-3. the `vehicleNeeds` field description;
-4. the `electrificationTypes` field description.
+### Current recommendation
 
-The phrases of concern are specifically constructions such as `resolve ... yourself`, `before calling this tool`, `every time`, and `do not use ... alone`.
+**Do not change the V2 tool or field descriptions before the next testing phase.**
 
-### `priorityAxis` revised verdict
+Treat the earlier redline as a contingency only. Re-open wording changes only if one of the following occurs:
 
-**Leave unchanged in this pass.** `Use lower_risk for requests such as ...` is ordinary enum/intention mapping and does not force the tool to be invoked or tell the host to override/refuse user intent. Changing it provides little compliance benefit and adds avoidable regression surface.
+1. Anthropic explicitly flags the current V2 wording or gives a narrower rule that clearly applies to it;
+2. testing shows a specific description-induced host failure that can be improved safely;
+3. a final compliance review identifies genuinely coercive language equivalent to the old `MUST` / `always invoke` / `never refuse` problem.
 
-## 4. Revised minimal redline — exact changed text
+Do not change wording merely to make it less imperative if the replacement becomes harder for the host or humans to understand.
 
-The goal is now **surgical neutralization**, not paragraph rewriting.
+## 4. Why testing now has priority
 
-### 4.1 Main tool description — sensitive sentences only
+V2 has already undergone extensive contract and equivalence work. The highest-value remaining evidence is whether the current V2 description/schema produces the right behavior in both ChatGPT and Claude across real host calls.
 
-**Current:**
+The testing phase should therefore use **current V2 wording unchanged** as the candidate unless a concrete defect appears.
 
-> When a practical need implies a vehicle class, **resolve it into real matching model names yourself and include them in model before calling this tool** (...) **every time**, alongside the related need stated in vehicleNeeds. For a broad hybrid, plug-in hybrid, or electric request, **likewise resolve suitable real model or variant names and include them in model before calling the tool**. For required hybrid or plug-in hybrid searches, **use electrified variants only**; for preferred searches, acceptable base-model alternatives may also be included.
+Key checks:
 
-**Proposed:**
+- practical-needs requests still resolve to sensible real model candidates;
+- broad hybrid/PHEV/EV requests include appropriate model/variant scope;
+- required vs preferred electrification is preserved;
+- manufacturer names are excluded from `model` values where expected;
+- hard user constraints are preserved;
+- no invented constraints appear;
+- `best in my budget` does not collapse to `cheapest`;
+- exact VIN, trim-required/preferred, lower-risk, radius/location and other high-value paths behave correctly;
+- both hosts produce materially equivalent structured intent even if their prose differs.
 
-> When a practical need implies a vehicle class, **real matching model names are supplied in `model`** (...) **alongside the related need stated in `vehicleNeeds`**. Broad hybrid, plug-in hybrid, or electric searches **similarly use suitable real model or variant names in `model`**. For required hybrid or plug-in hybrid searches, **candidate model scope contains electrified variants only**; for preferred searches, acceptable base-model alternatives may also be included.
+## 5. Manual host test plan
 
-**Effect:** same examples and candidate-model/electrification contract; removes `yourself`, `before calling`, `every time`, and direct `use ... only` command.
+Manual testing will be run in a fresh ChatGPT session because the current Claude session is token-constrained. Use a stable candidate endpoint and the current V2 wording. At minimum test:
 
-### 4.2 `model`
+1. family SUV with no named model;
+2. reliable teen-driver car with no named model;
+3. commuter car with no named model;
+4. towing vehicle with no named model;
+5. broad hybrid request with no named model;
+6. hybrid required;
+7. hybrid preferred;
+8. PHEV required;
+9. broad EV request;
+10. explicit cheapest intent;
+11. `best in my budget`;
+12. lower-risk request;
+13. required vs preferred trim;
+14. exact VIN;
+15. cross-brand multi-model request.
 
-**Current risky portion:**
+Record endpoint, exact deployed SHA, host/model, host-generated arguments where visible, results, UI/card behavior, latency, and any divergence.
 
-> When a practical need implies a vehicle class (...) **resolve it into real matching model names yourself, using your own knowledge, before calling this tool** (...) **every time**, alongside the related need stated in vehicleNeeds. For broad hybrid, plug-in hybrid, or electric requests, **also resolve suitable real electrified model or variant names and include them here**.
+## 6. Separate endpoint/hostname test
 
-**Proposed full field description:**
+Before approving a permanent shared-test hostname, perform the clean A/B/C endpoint experiment using the same application SHA/configuration:
 
-> One or more real vehicle model names, without the manufacturer (for example, `E-Class` rather than `Mercedes-Benz E-Class`). This applies even in a cross-brand list: `CR-V, RAV4, Outback` is correct; `Honda CR-V, Toyota RAV4, Subaru Outback` is not. Comma-separated for multiple models. **For a practical need that implies a vehicle class, this field carries the real matching model candidates** (for example, CR-V, RAV4, Highlander for a family SUV), **alongside the related need in `vehicleNeeds`**. Broad hybrid, plug-in hybrid, or electric searches **similarly use suitable real electrified model or variant names here**.
+- A: long Vercel Preview/branch alias with Vercel Authentication confirmed off;
+- B: short existing `ccfmc-dev` hostname;
+- C: short temporary owned `getcarwise.app` hostname.
 
-### 4.3 `vehicleNeeds`
+Test connector creation, tool discovery, MCP calls, widget/resource loading, and CSP/origin behavior in ChatGPT. This determines whether the historical Preview-hostname issue still exists and whether a custom short domain actually improves reliability.
 
-**Current risky portion:**
+## 7. Anthropic V1→V2 path — current leaning
 
-> When a listed need implies a vehicle class, **also resolve it into real matching model names yourself and include them in `model` alongside it** (...).
+After V2 passes the testing gates, the current preferred operational path is:
 
-**Proposed full field description:**
+1. keep the **currently submitted Anthropic MCP URL** rather than attempting an immediate hostname change;
+2. deliberately deploy the exact final tested V2 SHA behind that submitted URL;
+3. immediately use the Anthropic submission UI's **Rescan tools** action and save/submit the listing update as one controlled operation;
+4. record the exact before/after server SHA, tool scan state, submission state and any warning/queue text;
+5. run a production smoke test against the same submitted URL;
+6. treat any later move to an owned Anthropic hostname as a separate Anthropic-managed migration decision, informed by the support email already sent.
 
-> Short, capped list of listing-relevant practical needs (for example, a large family SUV or a commuter vehicle); not a transcript or broad profile. When a listed need implies a vehicle class, **corresponding real matching model candidates are represented separately in `model`** (for example, CR-V, RAV4, Highlander for a large family SUV).
+Important: do not silently replace the server while the review is active. If this path is chosen, deploy + rescan + save + verification are one controlled cutover.
 
-### 4.4 `electrificationTypes`
+Because the MCP URL is not self-service editable, saving an ordinary listing/tool rescan update should not be expected to trigger a URL-change discussion by itself. If Anthropic does not respond to the support email, the safest near-term choice is to leave the submitted URL unchanged through this V2 upgrade and revisit hostname ownership separately.
 
-**Current risky portion:**
-
-> For a broad request without a named model, **pair this field with resolved model/variant names in model; do not use electrification fields alone** for a generic body-style search.
-
-**Proposed full field description:**
-
-> One or more accepted electrified powertrain types: hybrid (including conventional and mild hybrids), plug_in_hybrid, and/or electric. For a broad request without a named model, **corresponding real model or variant candidates are represented in `model`; the electrification fields alone do not define a generic body-style candidate universe**.
-
-## 5. Length impact
-
-The revised proposal is **shorter overall**, not longer.
-
-| Area | Current | Proposed | Change |
-|---|---:|---:|---:|
-| Main sensitive sentences | 673 chars / 103 words | 590 chars / 86 words | **-83 chars / -17 words** |
-| `model` | 758 chars / 115 words | 613 chars / 90 words | **-145 chars / -25 words** |
-| `vehicleNeeds` | 379 chars / 63 words | 335 chars / 51 words | **-44 chars / -12 words** |
-| `electrificationTypes` | 309 chars / 44 words | 339 chars / 46 words | **+30 chars / +2 words** |
-| **Total changed text** | **2,119 chars / 325 words** | **1,877 chars / 273 words** | **-242 chars / -52 words** |
-
-Only `electrificationTypes` becomes slightly longer because the direct prohibition is converted into an explicit statement of what the field does *not* define. The total MCP description surface becomes smaller.
-
-## 6. What does NOT change
-
-This proposal does not change:
-
-- tool behavior or search/ranking code;
-- schema fields or enum values;
-- candidate-model requirement for practical needs;
-- required/preferred electrification semantics;
-- VIN behavior;
-- price flexibility;
-- trim required/preferred behavior;
-- ZIP/radius handling;
-- history/CPO semantics;
-- `resolve_dealer_url`;
-- annotations/tool names;
-- `priorityAxis` wording in this revised pass.
-
-## 7. No-regression gate
-
-Treat even these wording changes as behavioral until tested. Baseline the existing V2 description and exact SHA, implement only the approved text diff on a test/release branch, then run the high-risk prompt suite in both ChatGPT and Claude.
-
-Compare host-generated arguments, not just final prose. Critical checks: practical-needs model resolution, hybrid/PHEV/EV candidate scope, required vs preferred behavior, model values without manufacturer prefixes, hard-filter preservation, priority-axis mapping, and no invented constraints.
-
-Reject/revise the redline if either host materially worsens.
-
-## 8. Anthropic V1→V2 implication
-
-The precise old-review context strengthens two conclusions simultaneously:
-
-1. V1 has credible risk because it contains large amounts of exactly the kind of forceful assistant-directed language Anthropic previously objected to.
-2. We should **not over-correct V2**. The current V2 issue is limited and can be addressed with a small neutralization pass that is shorter overall and preserves the semantic cues needed for correct searches.
-
-Pending Anthropic submission remains unchanged until André explicitly chooses the path after testing and any Anthropic support response.
-
-## 9. Manual host test plan
-
-Manual testing will be run in a fresh ChatGPT session because the current Claude session is token-constrained. Use a stable candidate endpoint and compare current V2 wording with candidate wording against at least: family SUV, teen driver, commuter, towing, broad hybrid, hybrid required, hybrid preferred, PHEV required, broad EV, cheapest, best-in-budget, lower-risk, required/preferred trim, exact VIN, and cross-brand multi-model requests.
-
-The separate A/B/C endpoint test remains required before approving the permanent test hostname: long Vercel Preview alias with Vercel Authentication off vs short `ccfmc-dev` vs short owned-domain candidate, all on the same application SHA/configuration.
-
-## 10. Decision status
+## 8. Decision status
 
 - Exact production/test hostnames: **NOT APPROVED**.
-- Revised V2 description redline: **PROPOSED for André review**.
-- Application implementation: **NOT STARTED**.
+- V2 description redline: **DEFERRED / contingency only**.
+- Current V2 wording: **PREFERRED for next testing round**.
+- Application implementation: **NO DESCRIPTION CHANGE REQUESTED**.
 - Anthropic pending submission: **UNCHANGED / IN REVIEW**.
+- Anthropic likely next path after testing: **same submitted URL + exact tested V2 SHA + Rescan Tools + controlled save**, pending André's final explicit approval.
 - V3: **HARD PAUSED pending final V2 baseline/rebaseline work**.
