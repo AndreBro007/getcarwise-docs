@@ -95,7 +95,7 @@ No regression identified in large-SUV intent resolution, strict budget handling,
 
 ## Test #2 — hybrid SUV + approximate budget + city location
 
-**Status:** IN PROGRESS — ChatGPT V2 captured; Claude V2 next
+**Status:** IN PROGRESS — V2 cross-host evidence captured; same-prompt V1 comparison next
 
 **Prompt:** `Find me a hybrid SUV around $35k in Austin.`
 
@@ -150,24 +150,77 @@ ChatGPT-side assessment:
 - **PASS:** `priorityAxis: "best_for_budget"` is correct; the host did not misuse `cheapest`.
 - **PASS:** Austin was anchored to ZIP `78701`; `state: "TX"` and `radiusMiles: 50` are redundant but geographically consistent and did not materially change the requested city-local search.
 - **INVESTIGATE:** the actual `model` request used manufacturer-prefixed entries (`Toyota RAV4 Hybrid`, `Honda CR-V Hybrid`, etc.). The V2 model-field contract explicitly requires model names **without** manufacturer prefixes, including cross-brand lists. The host's later statement that the plugin “automatically removed manufacturer prefixes” does not change the primary request evidence: the Desktop request shown above contains the prefixes.
-- **INVESTIGATE:** the host added `transmission: "Automatic"` although the user did not request a transmission. This is an invented hard search constraint. It may have little practical effect on this hybrid-SUV candidate set, but it is still stronger than the stated user intent and should not be normalized as acceptable host behavior without comparison evidence.
+- **INVESTIGATE:** the host added `transmission: "Automatic"` although the user did not request a transmission. This is an invented hard search constraint. It may have little practical effect on this hybrid-SUV candidate set, but it is still stronger than the stated user intent.
 - **PASS:** no unrequested `used`, year, mileage, drivetrain, trim, history, seating, colour, CPO, accident or ownership constraints were added.
 - **RESULT RELEVANCE:** the displayed shortlist is consistent with the required hybrid-SUV request and flexible price band. The fact that the leading listings are new does not itself show an invented condition because `used` was omitted.
 
-**ChatGPT V2 provisional status: INVESTIGATE — request semantics and returned shortlist are broadly correct, but two request-quality issues require cross-host comparison: manufacturer-prefixed `model` values and invented `Automatic` transmission.**
+**ChatGPT V2 status: INVESTIGATE — request semantics and returned shortlist are broadly correct, but manufacturer-prefixed `model` values and invented `Automatic` transmission are request-quality issues.**
 
-Do not recommend code or description changes from the ChatGPT half alone. Run the identical prompt through Claude V2 and compare its Request → Response → Widget evidence before assigning the Test #2 verdict.
+#### Claude V2
 
-- Screenshot/widget: user-provided response evidence captured in conversation; dedicated widget screenshot not yet independently recorded in this document.
+Actual Request supplied by André:
 
-#### Claude
-- Request: PENDING
-- Response: PENDING
-- Screenshot/widget: PENDING
-- Notes: PENDING
+```json
+{
+  "bodyType": "SUV",
+  "model": "RAV4 Hybrid,Highlander Hybrid,CR-V Hybrid,Venza,Sorento Hybrid,Sportage Hybrid,CX-50 Hybrid",
+  "priceMax": 35000,
+  "priceFlexibility": "flexible",
+  "priorityAxis": "best_for_budget",
+  "zip": "78701"
+}
+```
 
-#### Comparison / backend / UI / verdict / action
-PENDING
+Observed response:
+
+- Claude reported 57 area matches and rendered five closely matching vehicles.
+- Returned examples were all hybrid SUVs/crossovers: 2025 Honda CR-V Hybrid Sport Hybrid ($27,500, used, Austin), 2025 Mazda CX-50 Hybrid Premium ($25,450, used, Sherman), two 2027 Kia Sportage Hybrid S vehicles ($31,776 and $32,165, new, Austin/Round Rock area), and a 2026 Mazda CX-50 Hybrid Hybrid Preferred ($34,876, new, Leander).
+- All five were reported as VIN-verified; one CX-50 carried a disclosed one-accident history warning and Carfax verification direction.
+- Widget rendered successfully and Claude summarized the result set rather than duplicating the widget payload.
+- Claude explicitly flagged its assumption that it searched established hybrid SUV models and noted Venza as a crossover/SUV hybrid candidate.
+
+Claude-side assessment:
+
+- **PASS:** `bodyType: "SUV"` reflects the explicit body style.
+- **PASS:** the `model` field contains real hybrid candidate models **without manufacturer prefixes**, matching the V2 contract better than the ChatGPT request.
+- **PASS:** hybrid intent is preserved through an all-hybrid candidate model set and the returned vehicles are hybrid. Claude did not send the dedicated electrification fields, but no gas-only leakage is shown in this result set.
+- **PASS / WATCH:** `priceMax: 35000` together with `priceFlexibility: "flexible"` expresses an approximate target differently from ChatGPT's explicit `$30k–$37k` band. The returned vehicles stayed at or below $35k. This does not yet demonstrate incorrect hard-ceiling behavior because the flexibility flag is present, but the V1 comparison should clarify whether material approximate-budget capability is preserved.
+- **PASS:** `priorityAxis: "best_for_budget"` is appropriate.
+- **PASS:** ZIP `78701` is a sensible Austin anchor.
+- **PASS:** Claude did not invent transmission, condition, year, mileage, drivetrain, trim, history, seating, colour, CPO, accident or ownership constraints.
+- **INVESTIGATE:** one displayed match is from a dealer in Sherman, TX, which is materially outside the Austin area. The request itself contains no explicit radius, so this may reflect backend default/widening behavior, dealer-location data, or result selection. The supplied evidence does not establish which. Treat this as a geography/result-quality item to compare with V1, not yet as a confirmed server defect.
+
+**Claude V2 status: PASS on request construction, with one result-quality geography item to investigate.**
+
+### V2 cross-host comparison
+
+- Both hosts correctly resolved an Austin ZIP, SUV intent, hybrid candidate models, flexible-price semantics and `best_for_budget` ranking.
+- Both returned useful hybrid inventory without evidence of gas-only contamination.
+- ChatGPT used explicit electrification fields and an explicit flexible band; Claude encoded hybrid primarily through the candidate list and used `priceMax: 35000` plus `priceFlexibility: flexible`.
+- Claude adhered to the model-field naming rule; ChatGPT did not.
+- Claude avoided inventing transmission; ChatGPT added `Automatic` without user instruction.
+- The request-quality problems are therefore **not required by the backend contract**; they are specific to the ChatGPT host request observed in this case.
+- Claude's Sherman listing introduces a separate possible geography/result-quality issue that cannot be attributed from the supplied evidence alone.
+
+### V2 backend assessment
+
+**PROVISIONAL PASS / INVESTIGATE geography.** Both hosts received relevant hybrid-SUV inventory and no backend failure is demonstrated. The strongest unresolved backend/result question is why Claude surfaced a Sherman dealer for an Austin request.
+
+### V2 UI/widget assessment
+
+**PASS based on supplied evidence.** Claude rendered the interactive CarClever widget and its textual summary aligned with the tool response. ChatGPT's response evidence also showed useful matching inventory. No widget defect is demonstrated in Test #2.
+
+### Test #2 V2 verdict
+
+**INVESTIGATE — V2 functionality is materially working, but the case should not close yet.**
+
+Reasons:
+
+1. ChatGPT request construction violated the model naming rule by including manufacturer prefixes.
+2. ChatGPT invented an `Automatic` transmission constraint.
+3. Claude returned one materially non-Austin dealer result (Sherman), requiring same-prompt V1 comparison before deciding whether this is a V2 geography/result-quality regression or ordinary widening/data behavior.
+
+**No code or description change is recommended yet.** The next step is the same Test #2 prompt through V1, following the locked sequence. Do not move to Test #3 until this comparison is recorded and Test #2 receives a final verdict.
 
 ## Remaining coverage
 
