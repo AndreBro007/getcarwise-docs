@@ -112,42 +112,44 @@ The important contract behavior passed on both hosts: the practical phrase was c
 
 Recommended action: record the host interpretation difference as expected cross-host variance and continue regression testing.
 
-## Test #2 — family/practical-needs model resolution without explicit vehicle class
+## Test #2 — hybrid SUV + approximate budget + city location
 
 **Status:** DESIGNED — next test to execute
 
 ### Prompt
 
-`I've got three kids and need something practical for school runs and family trips. Find me something under $35k in 78701.`
+`Find me a hybrid SUV around $35k in Austin.`
 
-### Why this is a different test
+### Why this is a better next test
 
-Test #1 supplied an explicit vehicle class (`SUV`) plus the phrase “large SUV.” Test #2 deliberately supplies **no make, model, body type, drivetrain, fuel, condition, year, mileage, trim or vehicle class**. It tests whether each host can turn ordinary family/practical-needs language into sensible real model candidates without inventing unrelated hard constraints.
+Test #1 already covered a practical size phrase, an explicit SUV body style, a strict ceiling and a ZIP. Test #2 stays simple and natural while changing three meaningful semantics at once: hybrid requirement, approximate-price language, and city-only geography. It is easier to diagnose than a multi-clause family-needs prompt.
 
 ### Expected request behavior
 
 Expected strong signals:
 
-- `priceMax: 35000`
-- `zip: "78701"`
-- `vehicleNeeds` carrying concise family/practical-use intent
-- a sensible comma-separated `model` list containing real model names without manufacturer prefixes
-- priority omitted/default or `best_for_budget`
+- a sensible Austin ZIP supplied by the host, or otherwise correct city handling allowed by the current contract;
+- `bodyType: "SUV"`;
+- hybrid/electrification represented consistently with the current V2 contract;
+- a sensible comma-separated model candidate list where broad electrification requires model/variant candidates;
+- approximate `around $35k` semantics treated as flexible rather than silently hardened into an exact ceiling;
+- priority omitted/default or `best_for_budget`, not `cheapest` merely because a budget is present.
 
 Acceptable host variation:
 
-- Different sensible candidate models across ChatGPT and Claude.
-- Different mixes of sedan, hatchback, SUV or minivan candidates where each is defensible for three children, school runs and family trips.
-- A seating preference if the host interprets three children as a practical seating need, provided it is not represented as stronger than the user actually stated.
+- Different representative Austin ZIPs.
+- Different sensible hybrid-SUV candidate models across ChatGPT and Claude.
+- Different ranking order among genuinely matching inventory.
 
 Potential investigation triggers:
 
-- No model list despite the practical-needs instruction in the current V2 contract.
-- Manufacturer-prefixed entries in `model`.
-- An invented hard body type, drivetrain, fuel type, new/used condition, year, mileage, trim or history requirement with no basis in the prompt.
-- `cheapest` selected merely because the user supplied a price ceiling.
-- Family/practical intent present only as prose while candidate scope remains effectively unconstrained.
-- Returned results materially violating the actual price/location request without a disclosed relaxation.
+- Gas-only candidates included while the request is treated as a required hybrid search without disclosed broadening.
+- No model candidate resolution for the broad hybrid request.
+- Manufacturer-prefixed entries inside the `model` field.
+- `around $35k` incorrectly forced into strict ceiling semantics without reason.
+- Invented hard constraints for condition, year, mileage, drivetrain, trim, history or seating.
+- `cheapest` selected simply because the user stated a budget.
+- Location materially wrong for Austin without disclosure.
 
 ### Test #2 record template
 
@@ -177,6 +179,10 @@ PENDING — PASS / INVESTIGATE / FAIL
 
 #### Recommended action
 PENDING
+
+## Prompt bank
+
+A concise bank of later natural-language cases is maintained in `TEST_CARCLEVER_V2_SAMPLE_PROMPTS_20260910.md`. These are candidates, not a locked sequence. Select only one next case after the current case is fully reviewed.
 
 ## Remaining coverage
 
