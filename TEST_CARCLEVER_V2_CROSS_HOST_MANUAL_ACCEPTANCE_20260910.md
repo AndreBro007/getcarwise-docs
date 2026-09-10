@@ -1,7 +1,7 @@
 # CarClever V2 Cross-Host Manual Acceptance — 2026-09-10
 
 **Status:** ACTIVE — systematic V2 regression testing, one case at a time  
-**Purpose:** Final manual host-level validation of the current V2 code/description contract in ChatGPT and Claude, followed by same-prompt V1 comparison only after the V2 baseline is established.  
+**Purpose:** Final manual host-level validation of the current V2 code/description contract in ChatGPT and Claude, followed by same-prompt V1 comparison after the relevant V2 baseline is established.  
 **Candidate:** current `release/v2`; test current V2 exactly as-is.  
 **Method:** Natural user prompts only. Test like real users. Do not change code or descriptions unless a completed test provides concrete evidence of a defect.
 
@@ -14,11 +14,12 @@
 5. Compare host behavior.
 6. Assess backend behavior separately from host interpretation.
 7. Assess UI/widget behavior separately.
-8. Assign PASS / INVESTIGATE / FAIL.
-9. Record the recommended action.
-10. Only then move to the next test.
+8. Assign PASS / INVESTIGATE / FAIL for the V2 baseline.
+9. Run the same prompt through V1 on the available hosts once the V2 baseline is established.
+10. Record V1↔V2 differences in intent handling, request semantics, result quality, UI and disclosures; do not require identical live VINs.
+11. Only then move to the next test.
 
-Do not compare against V1 until the V2 baseline for the relevant behavior has been established. Do not revisit architecture unless testing exposes a real issue.
+Do not revisit architecture unless testing exposes a real issue.
 
 ## Evidence hierarchy for tool requests
 
@@ -44,7 +45,7 @@ Use the Request view as the primary Claude request evidence, then compare the Re
 
 **Prompt:** `Find me a large SUV under 60k in 90210`
 
-**Status:** **PASS**
+**V2 status:** **PASS**
 
 ### ChatGPT V2
 
@@ -85,17 +86,17 @@ Assessment:
 - The server handled the supplied request correctly.
 - No code or description change is justified by this difference.
 
-### Behavior comparison
+### V2 behavior comparison
 
 ChatGPT's candidate interpretation was narrower and more full-size-oriented. Claude's was broader and included some three-row/midsize family SUVs. Both are defensible interpretations of ordinary user language.
 
 The important contract behavior passed on both hosts: the practical phrase was converted into real model candidates and the backend returned matching inventory without a demonstrated constraint failure.
 
-### Backend assessment
+### V2 backend assessment
 
 **PASS.** No backend defect identified.
 
-### UI/widget assessment
+### V2 UI/widget assessment
 
 **PASS on both platforms.** Verified as working:
 
@@ -106,11 +107,55 @@ The important contract behavior passed on both hosts: the practical phrase was c
 - Affiliate links
 - Layout
 
-### Test #1 verdict
+### V2 Test #1 verdict
 
 **PASS — no code changes and no description changes recommended.**
 
 Recommended action: record the host interpretation difference as expected cross-host variance and continue regression testing.
+
+## Test #1 — V1 comparison
+
+### ChatGPT V1 observed result
+
+The same user request was run through the submitted `CarClever - Find My Car` V1 connector in ChatGPT.
+
+Observed V1 behavior:
+
+- Search reported approximately **3.4 million listings**, **1,118 matches**, within **50 miles** of 90210, with **no constraints relaxed**.
+- Returned eight large/full-size SUV matches, including Nissan Armada, Jeep Wagoneer, Ford Expedition / Expedition MAX and Chevrolet Tahoe.
+- Mix included both new and used inventory.
+- Result prices stayed below the stated $60k ceiling.
+- Host shortlist emphasized the new Armada for value, a 2024 Tahoe for low-mileage 4WD V8 appeal, and an Expedition MAX for cargo capacity.
+- User-facing response surfaced seating, drivetrain, mileage, history/use notes and Carfax/listing links.
+- Widget rendered successfully.
+
+### V1 request evidence
+
+**Raw V1 request JSON was not supplied for this run.** Do not infer exact V1 tool arguments from the prose response alone. If ChatGPT Desktop exposes the original V1 request, capture it later only if doing so is convenient; the visible behavior is sufficient for the current high-level V1↔V2 comparison.
+
+### V1 ↔ V2 comparison
+
+**Intent fidelity:** PASS on both. Both interpreted the query as a search for genuinely large/full-size SUVs under $60k in the 90210 area.
+
+**Candidate/result scope:** broadly equivalent. V1 returned Armada, Wagoneer, Expedition, Expedition MAX and Tahoe; V2 also returned those core full-size nameplates, with some host-specific candidate variation. No material evidence that V2 lost the core V1 practical-need capability.
+
+**Condition handling:** V1 visibly included both new and used inventory, which is consistent with the user not specifying condition. V2's actual ChatGPT request also correctly omitted an invented used/new restriction.
+
+**Budget handling:** both respected the under-$60k ceiling. V2's request evidence additionally confirms `best_for_budget` rather than an incorrect `cheapest` mapping.
+
+**Location:** V1 explicitly reported a 50-mile search radius. V2 actual ChatGPT request omitted a radius and allowed the service default. This is not a regression by itself; exact radius behavior should only be treated as a defect if returned geography becomes materially inconsistent with the request or the contract.
+
+**Result count:** V1 reported 1,118 matches versus the V2 ChatGPT widget's smaller count in the earlier run. Live counts are not expected to match because the host-resolved candidate model sets and timing differ. Count difference alone is not evidence of a regression.
+
+**Presentation:** both produced useful ranked lists and functioning widgets. V1's prose surfaced more per-result detail in this run, while V2's widget passed its visual/interaction checks. This is presentation variance, not a demonstrated capability loss.
+
+### Test #1 V1↔V2 verdict
+
+**PASS — V2 preserves the material V1 behavior for this case.**
+
+No regression identified in practical large-SUV intent resolution, strict budget handling, location use, mixed-condition eligibility, result relevance or widget functionality.
+
+**Action:** no code or description change. Test #1 can be considered closed across V2 baseline + V1 comparison, subject only to optional later capture of V1 raw request JSON if convenient.
 
 ## Test #2 — hybrid SUV + approximate budget + city location
 
@@ -179,10 +224,6 @@ PENDING — PASS / INVESTIGATE / FAIL
 
 #### Recommended action
 PENDING
-
-## Prompt bank
-
-A concise bank of later natural-language cases is maintained in `TEST_CARCLEVER_V2_SAMPLE_PROMPTS_20260910.md`. These are candidates, not a locked sequence. Select only one next case after the current case is fully reviewed.
 
 ## Remaining coverage
 
