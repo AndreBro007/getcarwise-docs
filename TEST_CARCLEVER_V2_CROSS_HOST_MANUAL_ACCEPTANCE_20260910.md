@@ -95,7 +95,7 @@ No regression identified in large-SUV intent resolution, strict budget handling,
 
 ## Test #2 — hybrid SUV + approximate budget + city location
 
-**Status:** IN PROGRESS — V2 cross-host evidence captured; same-prompt V1 comparison next
+**Status:** IN PROGRESS — V2 cross-host evidence and ChatGPT V1 captured; Claude V1 next
 
 **Prompt:** `Find me a hybrid SUV around $35k in Austin.`
 
@@ -210,17 +210,58 @@ Claude-side assessment:
 
 **PASS based on supplied evidence.** Claude rendered the interactive CarClever widget and its textual summary aligned with the tool response. ChatGPT's response evidence also showed useful matching inventory. No widget defect is demonstrated in Test #2.
 
+### ChatGPT V1
+
+Observed V1 response:
+
+- Searched approximately 3.4 million live listings and reported 98 matching hybrid/PHEV SUVs around Austin, anchored to ZIP `78701` within 50 miles.
+- Explicitly stated that no budget or radius relaxation was needed.
+- Shortlist included 2025 Honda CR-V Hybrid Sport Hybrid ($27,500, Austin), 2027 Kia Sportage Hybrid S ($31,776, Austin), 2024 Ford Escape Hybrid ST-Line ($25,785, New Braunfels), 2024 Jeep Wrangler 4xe Sport S ($26,722, New Braunfels), and 2023 Ford Escape Plug-In Hybrid ($20,300, Austin).
+- Widget rendered successfully.
+- Host selected the CR-V Hybrid as the best all-around practical choice and the Sportage Hybrid as the newest/lowest-mileage option.
+
+Actual ChatGPT V1 Desktop request supplied by André:
+
+```json
+{
+  "bodyType": "SUV",
+  "model": "RAV4 Hybrid,RAV4 Prime,CR-V Hybrid,Tucson Hybrid,Tucson Plug-In Hybrid,Sportage Hybrid,Sportage Plug-In Hybrid,Escape Hybrid,Escape Plug-In Hybrid,Corolla Cross Hybrid,Venza,Highlander Hybrid,Santa Fe Hybrid,Sorento Hybrid,Sorento Plug-In Hybrid,Niro,Niro Plug-In Hybrid,Hornet Plug-In Hybrid,Grand Cherokee 4xe,Wrangler 4xe",
+  "priceMax": 35000,
+  "priceFlexibility": "flexible",
+  "priorityAxis": "best_for_budget",
+  "zip": "78701",
+  "radiusMiles": 50,
+  "goals": [
+    "hybrid or plug-in hybrid SUV",
+    "good value around $35k",
+    "Austin-area availability"
+  ]
+}
+```
+
+ChatGPT V1 assessment:
+
+- **PASS:** `bodyType: "SUV"`, Austin ZIP `78701`, `radiusMiles: 50`, flexible price semantics and `best_for_budget` all match the user intent.
+- **PASS:** model values are real candidate names without manufacturer prefixes.
+- **PASS:** V1 did not invent transmission, condition, year, mileage, drivetrain, trim, history, seating, colour, CPO, accident or ownership constraints.
+- **PASS:** returned shortlist stayed within the stated 50-mile Austin search area based on the supplied response; Austin and New Braunfels are consistent with that stated radius.
+- **PASS / WATCH:** V1 broadened plain “hybrid” to include plug-in hybrids/PHEVs (`RAV4 Prime`, plug-in variants, `4xe`, etc.). The host explicitly disclosed that interpretation in both the model list and goals. This is broader than a literal conventional-hybrid-only reading, but it is transparent and still within electrified SUV intent. Compare Claude V1 before deciding whether this is expected V1 behavior or a material semantic difference from V2.
+- **RESULT RELEVANCE:** the returned vehicles are all hybrid/PHEV SUVs and fit the approximate budget. No gas-only contamination is shown.
+
+**ChatGPT V1 status: PASS, with a watch item on broadening “hybrid” to hybrid-or-PHEV.**
+
 ### Test #2 V2 verdict
 
-**INVESTIGATE — V2 functionality is materially working, but the case should not close yet.**
+**INVESTIGATE — not yet closed.**
 
-Reasons:
+Current reasons:
 
-1. ChatGPT request construction violated the model naming rule by including manufacturer prefixes.
-2. ChatGPT invented an `Automatic` transmission constraint.
-3. Claude returned one materially non-Austin dealer result (Sherman), requiring same-prompt V1 comparison before deciding whether this is a V2 geography/result-quality regression or ordinary widening/data behavior.
+1. ChatGPT V2 request construction violated the model naming rule by including manufacturer prefixes.
+2. ChatGPT V2 invented an `Automatic` transmission constraint.
+3. Claude V2 returned one materially non-Austin dealer result (Sherman), requiring comparison against V1 behavior.
+4. ChatGPT V1 avoided both ChatGPT V2 request-quality issues and kept returned examples within the stated 50-mile Austin area, but broadened “hybrid” to include PHEVs transparently.
 
-**No code or description change is recommended yet.** The next step is the same Test #2 prompt through V1, following the locked sequence. Do not move to Test #3 until this comparison is recorded and Test #2 receives a final verdict.
+**No code or description change is recommended yet.** The next step is Claude V1 with the same Test #2 prompt. Do not move to Test #3 until Claude V1 is recorded and Test #2 receives a final verdict.
 
 ## Remaining coverage
 
