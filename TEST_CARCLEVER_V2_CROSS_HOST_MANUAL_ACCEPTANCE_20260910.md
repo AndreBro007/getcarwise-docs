@@ -1,9 +1,38 @@
 # CarClever V2 Cross-Host Manual Acceptance — 2026-09-10
 
 **Status:** ACTIVE — testing one case at a time  
-**Purpose:** Final manual host-level validation of the current V2 code/description contract in ChatGPT and Claude before production/submission decisions.  
+**Purpose:** Final manual host-level validation of the current V2 code/description contract in ChatGPT and Claude, followed by same-prompt V1 comparison, before production/submission decisions.  
 **Candidate:** current `release/v2`; exact deployed SHA and endpoint to be captured with results.  
 **Method:** Natural user prompts only. No prompt engineering or hints that reveal expected tool arguments. After each host answers, a separate short follow-up requests the JSON values used so the structured call can be compared. Results are reviewed before moving to the next case.
+
+## Test sequence — locked
+
+Testing is deliberately split into two phases so V2 is judged on its own before V1 comparison can bias the review.
+
+### Phase 1 — V2 acceptance first
+
+For each case:
+
+1. Run the natural-language prompt in ChatGPT against `CarClever V2 Test`.
+2. Request the JSON values used.
+3. Run the equivalent natural-language prompt in Claude using connector `CarClever V2 Test`.
+4. Request the JSON values used.
+5. Paste both V2 results back for review.
+6. ChatGPT records the V2-only verdict and determines whether more information or a retest is needed.
+
+Do **not** run V1 yet while Phase 1 for that case is under review.
+
+### Phase 2 — V1 comparison after V2 verdict
+
+Once the V2 result for the case is accepted/reviewed:
+
+1. Run the same natural user request through the V1 `CarClever - Find My Car` connector in ChatGPT.
+2. Request the JSON values if available.
+3. Run the same request in Claude explicitly using connector `CarClever - Find My Car`.
+4. Request the JSON values.
+5. Compare V1 vs V2 separately for each host and then compare cross-host behavior.
+
+The V1 comparison is diagnostic, not an instruction that V2 must return identical listings. Live inventory may change; the primary comparison is effective intent, structured arguments, constraint handling, candidate scope, disclosures, ranking behavior and material result quality.
 
 ## Test design rules
 
@@ -16,17 +45,33 @@
 
 ## Case 01 — broad size-class SUV + strict price ceiling + ZIP
 
-**Status:** PENDING USER RUN
+**Status:** PENDING V2 USER RUN
 
-### ChatGPT user prompt
+### Phase 1 — V2 prompts
+
+#### ChatGPT V2 user prompt
 
 `Find me a large SUV under 60k in 90210`
 
-### Claude user prompt
+#### Claude V2 user prompt
 
 `Use connector CarClever V2 Test and find me a large SUV under 60k in 90210`
 
-### JSON follow-up for each host
+#### JSON follow-up for either host
+
+`Give me the JSON values`
+
+### Phase 2 — V1 prompts — HOLD until V2 verdict
+
+#### ChatGPT V1 user prompt
+
+`Find me a large SUV under 60k in 90210`
+
+#### Claude V1 user prompt
+
+`Use connector CarClever - Find My Car and find me a large SUV under 60k in 90210`
+
+#### JSON follow-up for either host
 
 `Give me the JSON values`
 
@@ -49,23 +94,41 @@ Strong evidence of correct interpretation includes:
 
 ### Result capture
 
-#### ChatGPT
+#### ChatGPT V2
 
 - Full answer: PENDING
 - JSON/tool arguments: PENDING
 - UI/card behavior: PENDING
 - Notes: PENDING
 
-#### Claude
+#### Claude V2
 
 - Full answer: PENDING
 - JSON/tool arguments: PENDING
 - UI/card behavior: PENDING
 - Notes: PENDING
 
-### Case verdict
+#### V2-only verdict
 
 PENDING
+
+#### ChatGPT V1 comparison
+
+- Full answer: HOLD
+- JSON/tool arguments: HOLD
+- UI/card behavior: HOLD
+- Notes: HOLD
+
+#### Claude V1 comparison
+
+- Full answer: HOLD
+- JSON/tool arguments: HOLD
+- UI/card behavior: HOLD
+- Notes: HOLD
+
+#### V1↔V2 comparison verdict
+
+HOLD until V2-only verdict completed.
 
 ## Planned coverage after Case 01
 
