@@ -8,36 +8,38 @@
 
 | # | Task | Owner | Gate / status | Completion evidence |
 |---|---|---|---|---|
-| 1 | Anthropic-specific V2 tool-description/schema compliance review | ChatGPT | ✅ **COMPLETE Sep 10** | `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`; minimal wording changes identified plus material affiliate/sponsored-content policy clarification blocker |
-| 2 | Decide permanent MCP origin set | André + ChatGPT | **Decision today** | Approved Claude/OpenAI/test hostnames recorded as confirmed, not proposed |
-| 3 | Validate three owned subdomains technically | Claude | After #2 | DNS/Vercel ownership, TLS, `/mcp`, widget/CSP/origin, exact deployment SHA; no V1 change yet |
-| 4 | Design and implement branch/project isolation | Claude | After architecture confirmation | Each Vercel project reacts only to intended pointer/release branch; unrelated branch fan-out blocked |
-| 5 | Create pointer-only branches `test/current`, `prod/claude`, `prod/openai` | Claude | After #4 design approval | Branches point to known SHAs; no unique development commits; documented operating rule |
-| 6 | Repurpose `ccfmc-dev` as shared test harness | Claude | After #2/#4 | Stable `carclever-test.getcarwise.app/mcp` (or approved equivalent) serves `test/current`; both host test connectors use same URL |
-| 7 | Controlled auto-deploy reliability test after isolation | Claude + ChatGPT verification | After #4/#6 | Two deliberate trigger cycles; only intended project reacts; correct target/SHA; record whether prior intermittent behavior persists |
-| 8 | Re-run V1↔V2 same-window A/B plus full ChatGPT and Claude acceptance pack | ChatGPT + Claude + André where UI needed | After description changes + #6 | Release ledger populated with exact endpoints, SHA, host arguments, deviations, UI behavior, latency |
-| 9 | Inspect Anthropic pending-submission Edit flow **without blindly saving** | André + ChatGPT/Claude | After #3 | Current status captured; edit scope, fresh-tool capture behavior, final button/warnings recorded; queue-reset impact recorded if UI states it |
-| 10 | Resolve Anthropic affiliate/sponsored-content policy classification | André + ChatGPT research | **NEW BLOCKER** | Anthropic confirms whether CJ/Edmunds affiliate outbound links are permitted, how Sponsored Content should be answered, and whether express permission is required |
-| 11 | Decide Anthropic V1 disposition: wait vs amend to final V2 + owned Claude origin | André | After #1/#3/#9/#10 | Explicit confirmed decision and accepted uncertainty about queue timing |
-| 12 | Implement any approved minimal V2 description/schema wording cleanup | Claude | After ChatGPT audit; no V1 mutation | Exact diff + automated tests + both-host re-test; contract semantics preserved |
-| 13 | Configure final OpenAI owned origin and submission prerequisites | Claude | After #2/#8 | Exact host, OpenAI challenge endpoint, Scan Tools, domain/CSP/link checks, exact SHA |
-| 14 | Submit/promote V2 to OpenAI using permanent owned origin only | André + ChatGPT strategy + Claude technical | After #13 | Submission record, exact snapshot/SHA/origin, status recorded |
-| 15 | If #11 chooses amend, update Anthropic pending submission and production channel in one controlled change | André + Claude | After explicit approval | Exact before/after submission fields, refreshed tool snapshot, endpoint, SHA, resulting status, full smoke |
-| 16 | Post-promotion production smoke and monitoring on every platform change | Claude + ChatGPT review | Mandatory | Ledger entry including last known good, production SHA, host tests, errors/latency, rollback |
+| 1 | Anthropic-specific V2 tool-description/schema compliance review | ChatGPT | ✅ **COMPLETE / REVISED Sep 10** | `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`; minimal high-risk wording areas identified, with strict both-host no-regression gate |
+| 2 | Decide permanent MCP origin set | André + ChatGPT | **UNDER DISCUSSION — NO HOSTNAME APPROVED** | Final Claude/OpenAI/test origins recorded as confirmed only after architecture + technical validation |
+| 3 | Determine Anthropic production-origin strategy | André + ChatGPT | **OPEN** | Choose: keep current submitted origin, or ask Anthropic to change to an owned domain; live UI confirms URL/auth are Anthropic-managed, not self-service editable |
+| 4 | Clean retest of historical ChatGPT Preview-domain failure before approving shared test hostname | Claude + ChatGPT verification | **NEXT INFRA TEST DESIGN** | Reproduce/control long-branch-alias case, verify Vercel Authentication state, confirm short `ccfmc-dev` baseline, then test candidate owned short domain in ChatGPT |
+| 5 | Design and implement branch/project isolation | Claude | After architecture confirmation | Each Vercel project reacts only to intended pointer/release branch; unrelated branch fan-out blocked |
+| 6 | Create pointer-only branches `test/current`, `prod/claude`, `prod/openai` | Claude | After #5 design approval | Branches point to known SHAs; no unique development commits; documented operating rule |
+| 7 | Repurpose `ccfmc-dev` as shared test harness | Claude | After #4/#5 | Stable short test origin TBD serves `test/current`; both ChatGPT and Claude test connectors use the same URL |
+| 8 | Controlled auto-deploy reliability test after isolation | Claude + ChatGPT verification | After #5/#7 | Two deliberate trigger cycles; only intended project reacts; correct target/SHA; record whether prior intermittent behavior persists |
+| 9 | Prepare minimal V2 description/schema wording redline | ChatGPT | **NEXT CONTENT/CONTRACT TASK** | Exact before/after wording for only identified sensitive areas; rationale tied to Anthropic feedback and V1→V2 equivalence requirements |
+| 10 | Implement approved V2 wording-only change | Claude | After #9 approval; V2 release line only | Exact diff, no unrelated code changes, deterministic schema/contract tests pass |
+| 11 | Re-run V1↔V2 same-window A/B plus full ChatGPT and Claude acceptance pack | ChatGPT + Claude + André where UI needed | After #7/#10 | Release ledger populated with exact endpoint, SHA, host arguments, deviations, UI behavior, latency |
+| 12 | Anthropic pending-submission Edit-flow inspection | André + ChatGPT/Claude | 🟡 **PARTIALLY COMPLETE Sep 10** | Confirmed: URL not self-service editable; Rescan Tools available; listing fields editable; still need final save/resubmit warning text and queue impact if exposed — do not save merely to discover it |
+| 13 | Affiliate/sponsored-content consistency watch | ChatGPT | 🟢 **NOT A CURRENT BLOCKER** | Prior CarClever Anthropic review disclosed affiliate arrangement and did not flag it; historical blockers were descriptions/icon/docs. Keep implementation/disclosure consistent and reopen only on new evidence or Anthropic feedback |
+| 14 | Decide Anthropic V1 disposition | André | After #3/#9/#11/#12 | Explicit choice: wait for V1 review, controlled V2 upgrade behind same submitted origin + rescan/edit, or Anthropic-assisted move to owned origin + V2 |
+| 15 | Configure final OpenAI owned origin and submission prerequisites | Claude | After #2/#11 | Exact owned host, OpenAI challenge endpoint, Scan Tools, domain/CSP/link checks, exact SHA |
+| 16 | Submit/promote V2 to OpenAI using permanent owned origin only | André + ChatGPT strategy + Claude technical | After #15 | Submission record, exact snapshot/SHA/origin, status recorded |
+| 17 | If #14 chooses Anthropic V2 change, execute it as one controlled operation | André + Claude | After explicit approval | Exact before/after endpoint/server state, Rescan Tools/listing change if applicable, resulting review state, exact SHA, smoke test |
+| 18 | Post-promotion production smoke and monitoring on every platform change | Claude + ChatGPT review | **MANDATORY** | Ledger entry including last known good, production SHA, both-host tests where applicable, errors/latency, rollback |
 
 ## Priority 1 — controlled cleanup
 
 | # | Task | Owner | Status | Completion evidence |
 |---|---|---|---|---|
-| 17 | Inactivate `carclever-v2-schema-probe` | Claude | Approved in principle; do after dependency capture | Disable Git trigger/auto-deploy, remove temp connector if present, preserve research branch/docs; ChatGPT verifies project is inert |
-| 18 | Delete schema-probe Vercel project only after final V2 smoke and zero-dependency verification | Claude + André approval | Deferred safety step | Search shows no domain/connector/config dependency; final V2 smoke complete; deletion confirmed and topology re-audited |
-| 19 | Independent ancestry/supersession check for PR #1 and PR #2 | Claude | Low priority | Claude confirms PR #1 contained in current V2 and PR #2 is stale/diverged; no missing required work |
-| 20 | Close PR #1/#2 as superseded; do not merge | Claude | Low priority, after #19 | PR state closed with superseded note; no application change merged |
-| 21 | Retire version-specific `ccfmc-dev-v3` project after V3 moves to shared release architecture | Claude | Later | V3 uses shared test + platform production channels; no dependency remains |
+| 19 | Inactivate `carclever-v2-schema-probe` | Claude | Approved in principle; do after dependency capture | Disable Git trigger/auto-deploy, remove temp connector if present, preserve research branch/docs; ChatGPT verifies project is inert |
+| 20 | Delete schema-probe Vercel project only after final V2 smoke and zero-dependency verification | Claude + André approval | Deferred safety step | Search shows no domain/connector/config dependency; final V2 smoke complete; deletion confirmed and topology re-audited |
+| 21 | Independent ancestry/supersession check for PR #1 and PR #2 | Claude | Low priority | Claude confirms PR #1 contained in current V2 and PR #2 is stale/diverged; no missing required work |
+| 22 | Close PR #1/#2 as superseded; do not merge | Claude | Low priority, after #21 | PR state closed with superseded note; no application change merged |
+| 23 | Retire version-specific `ccfmc-dev-v3` project after V3 moves to shared release architecture | Claude | Later | V3 uses shared test + platform production channels; no dependency remains |
 
 ## Priority 0 hard gate — V3 before any unpause
 
-**NO further V3 feature work, merge, deployment, or connector repointing until every item below is complete.**
+**NO further V3 feature work, merge, deployment, connector repointing, or new V3 scope until every item below is complete.**
 
 - [ ] Final V2 release SHA frozen and recorded.
 - [ ] Permanent platform/test origin strategy implemented and verified.
@@ -45,20 +47,22 @@
 - [ ] Paused V3 compared against final V2.
 - [ ] V3 port/keep/drop matrix written for every V3-specific change.
 - [ ] Fresh `release/v3` created from final V2/common stable baseline.
-- [ ] Only still-valid V3 work selectively ported; old V3 branch not merged wholesale.
-- [ ] Full V2 regression suite passes on rebased V3 **before any new V3 scope begins**.
+- [ ] Only still-valid V3 work selectively ported; old V3 branch **not merged wholesale**.
+- [ ] Full V2 regression suite passes on rebased V3 **before any new V3 feature work begins**.
 - [ ] ChatGPT and Claude both pass the V3 shared-test acceptance pack.
 - [ ] V3 release entry created in `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`.
 
 ## Standing release rules
 
-1. Preview deployments are builds only; they never merge Git.
+1. **Preview deployments are builds only; they never merge Git.** A merge/promotion occurs only through an explicit Git/release action.
 2. Feature/fix work merges into the active `release/vN`, not directly into platform production pointers.
 3. `test/current`, `prod/claude`, and `prod/openai` are pointer-only branches; no unique code is developed on them.
-4. Both platforms should serve the same tested SHA whenever external review gates allow it; any temporary skew must be explicit in the ledger.
-5. Every platform release or server-only production fix requires both-host regression/smoke evidence, even where the platform does not require a new reviewed version.
-6. No cleanup deletion happens merely because a project looks unused: first capture dependencies, inactivate, verify, then delete after an explicit safety gate.
-7. `getcarwise-app` / website application work remains a separate workstream and is not part of this task list unless a critical dependency is discovered.
+4. Both platforms should serve the same tested SHA whenever external review gates allow it; any temporary skew must be explicit in the release ledger.
+5. Every material release, production hotfix, or server-only behavior change requires the defined validation/smoke process even where an AI platform does not require a new reviewed version.
+6. Any change to tool/field descriptions is treated as behavioral until both Claude and ChatGPT show no routing regression.
+7. No cleanup deletion happens merely because a project looks unused: first capture dependencies, inactivate, verify, then delete after an explicit safety gate.
+8. `getcarwise-app` / website application work remains a separate workstream and is not part of this task list unless a critical dependency is discovered.
+9. Exact MCP hostnames remain **unapproved** until André confirms them. Existing strategy-document hostname examples are proposals only.
 
 ## Primary references
 
