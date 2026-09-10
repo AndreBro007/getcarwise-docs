@@ -141,27 +141,43 @@ Existing recorded evidence from `V2_CONNECTOR_TEST_RECORD_20260909.md`:
 - typecheck: one pre-existing unrelated baseline error recorded;
 - exercised in both ChatGPT and Claude across practical model resolution, required/preferred hybrid/PHEV, mixed electrification, exact VIN/risk, priority axes, CPO/history and five-card behavior.
 
-This evidence is strong but **does not close the final release gate**. Remaining work includes Anthropic-specific description review, permanent custom-domain validation, controlled branch isolation, exact-host final A/B/host tests and production-channel promotion records.
+This evidence is strong but **does not close the final release gate**. Current work is systematic cross-host V2 regression testing of the unchanged V2 contract. V1 comparison follows only after the relevant V2 baseline is established.
 
 ## 6. Current open validation sequence — V2 finalization
 
 | Step | Owner | Status | Evidence required |
 |---|---|---|---|
-| Anthropic V2 description-compliance review | ChatGPT | NEXT | Written pass/fail against current Anthropic criteria; identify only necessary changes |
-| Any resulting V2 description/code change | Claude | gated | Exact diff + tests; no V1 mutation |
-| Re-run ChatGPT V2 host pack | ChatGPT/André | pending | prompt pack + tool args + outputs + UI notes |
-| Re-run Claude V2 host pack | Claude/André | pending | same pack/version and deviation notes |
+| Anthropic V2 description-compliance review | ChatGPT | COMPLETE for current pass | Review concluded no description change before testing; test current V2 unchanged |
+| Systematic V2 cross-host manual regression | ChatGPT/André + Claude/André | **IN PROGRESS — Test #1 PASS; Test #2 designed** | one natural prompt at a time; actual ChatGPT Desktop request JSON when exposed; Claude Request → Response → Widget; full record and verdict before next test |
+| Any resulting V2 description/code change | Claude | gated by testing evidence | Exact defect evidence + diff + tests; no V1 mutation |
+| V1 comparison | ChatGPT + Claude | HOLD until relevant V2 baseline established | same prompt after V2 verdict; compare semantics/arguments/results rather than identical live VINs |
 | Configure stable shared test host | Claude | pending architecture implementation | `carclever-test.getcarwise.app/mcp` or final approved equivalent; exact SHA verified |
 | Branch/project isolation cleanup | Claude | pending | unrelated push no longer fans out |
 | Controlled Vercel auto-deploy trigger test | Claude + ChatGPT verification | after isolation | two deliberate trigger cycles with exact SHA/target evidence |
-| Validate Claude production custom origin | Claude | pending decision | `carclever-claude.getcarwise.app/mcp` or final approved equivalent |
-| Inspect pending Anthropic Edit workflow | André + ChatGPT/Claude | pending | capture current status, edit fields, final button/warning; do not save blindly |
-| Anthropic V1→V2 decision | André | gated | wait vs amend; queue impact acknowledged as unknown unless UI/support resolves it |
-| Validate OpenAI production custom origin | Claude | pending | `carclever-openai.getcarwise.app/mcp` or final approved equivalent; challenge endpoint + Scan Tools ready |
-| Final same-window V1↔V2 A/B | ChatGPT + Claude | pending | both hosts where possible, exact endpoints/SHA recorded |
+| Anthropic current submitted MCP path | André + Claude | preferred direction pending gate | after final V2 testing, deploy exact tested V2 behind the current submitted URL, rescan tools, then controlled Save Edit only when André authorizes |
+| Anthropic support response | André / Anthropic | **AWAITING RESPONSE** | URL-change-during-review, rescan, edit behavior and queue-status guidance |
+| Anthropic V1→V2 decision | André | gated | no cutover until testing is complete and André confirms crossing the gate |
+| Validate OpenAI production custom origin | Claude | pending | final approved origin; challenge endpoint + Scan Tools ready |
 | OpenAI V2 submission | André/ChatGPT strategy + Claude technical execution | pending | exact permanent origin + final test record |
-| Anthropic change if approved by André | André + Claude | pending | exact submission change/deployment + status after action |
 | Production smoke + monitoring | both lanes | pending | exact production URLs/SHA, pass/fail and rollback |
+
+### Current manual test record
+
+**Test #1 — `Find me a large SUV under 60k in 90210`: PASS.**
+
+- ChatGPT Desktop exposed the actual request JSON. It correctly sent `priceMax: 60000`, `priorityAxis: best_for_budget`, `zip: 90210`, `bodyType: SUV`, a real make-free model list (`Tahoe, Expedition, Sequoia, Yukon, Armada, Wagoneer`), and `vehicleNeeds: ["large SUV"]`.
+- Claude interpreted “large SUV” more broadly than ChatGPT. This is recorded as host interpretation variance, not a server defect.
+- Backend: PASS.
+- Widget/UI on both hosts: PASS for images, buttons, risk badges, dealer links, affiliate links and layout.
+- Recommended action: no code change and no description change.
+
+**Test #2 — designed next case:** family/practical-needs model resolution without an explicit vehicle class. Full prompt, expected behavior and investigation triggers are maintained in `TEST_CARCLEVER_V2_CROSS_HOST_MANUAL_ACCEPTANCE_20260910.md`.
+
+### Request-evidence rule added during manual testing
+
+- ChatGPT Desktop actual request JSON is authoritative when the UI exposes it.
+- ChatGPT Mobile/Web reconstructed JSON is useful diagnostic material but must not be treated as the original MCP request.
+- Claude's Request → Response → Widget surface is the preferred end-to-end MCP debugging view.
 
 ## 7. V3 rebaseline gate — NO UNPAUSE BEFORE COMPLETE
 
@@ -201,3 +217,4 @@ Do not rely on memory such as “it used to work last week.” The purpose of th
 - `AUDIT_CARCLEVER_GITHUB_VERCEL_ENVIRONMENT_MAPPING_20260910.md`
 - `STRATEGY_CARCLEVER_CROSS_PLATFORM_RELEASE_AND_DEPLOYMENT_20260910.md`
 - `RESEARCH_ANTHROPIC_V1_V2_REVIEW_AND_MCP_ORIGIN_DECISION_20260910.md`
+- `TEST_CARCLEVER_V2_CROSS_HOST_MANUAL_ACCEPTANCE_20260910.md`
