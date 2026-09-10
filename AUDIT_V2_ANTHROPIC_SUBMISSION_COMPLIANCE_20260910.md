@@ -1,211 +1,177 @@
 # V2 Anthropic Submission Compliance Audit — 2026-09-10
 
-**Status:** COMPLETE read-only compliance/design audit; one material policy clarification blocker found  
-**Scope:** Current `release/v2` MCP tool descriptions, input-field descriptions, annotations, functional behavior relevant to Anthropic review, and the existing Anthropic V1 submission answers.  
+**Status:** COMPLETE read-only compliance/design audit, revised after live pending-submission UI inspection  
+**Scope:** Current `release/v2` MCP tool descriptions and input-field descriptions, Anthropic review criteria, the live pending-submission Edit flow, previous CarClever Anthropic review precedent, and implications for a V1→V2 decision.  
 **No code, Vercel configuration, domain, connector, branch, PR, deployment, or Anthropic submission was changed.**
 
 ## 1. Executive result
 
-V2 is **materially better positioned than V1** for Anthropic's current tool-description review criteria, but it is **not yet ready to replace the pending V1 submission unchanged**.
+V2 is **materially better positioned than V1** for Anthropic's current tool-description review criteria, but any description/schema wording change is release-sensitive and must be treated as a behavioral change until both Claude and ChatGPT prove otherwise.
 
-Two separate issues exist:
+The live pending-submission UI materially clarifies the V1→V2 options:
 
-1. **Description/schema wording — fixable:** V2 still contains direct instructions to the host model in the main tool description and several field descriptions. Anthropic's current rule is explicit: descriptions should state what the tool does and when to invoke it; "Describe what the tool does. Do not tell Claude how to behave." The current V2 wording can be made more neutral without changing the tested contract.
-2. **Commercial-content classification — potentially blocking and more important:** Anthropic's current Software Directory Policy says directory software may not serve advertisements, sponsored content, paid product placements, or primarily promotional content unless expressly permitted by Anthropic. Current V2 deliberately routes user-facing vehicle links through Edmunds/CJ affiliate URLs, and existing source comments describe the design as providing a path to "Edmunds/CJ revenue." The existing Anthropic submission record simultaneously says "no sponsored content" and says an Edmunds affiliate disclosure was provided. That combination needs clarification before any resubmission/amendment.
+- the submission remains `In review`, `Not live`, created/last updated about two weeks ago;
+- listing details are editable and changes are submitted for review;
+- the current MCP connector URL is **not exposed as a self-service editable field**;
+- the UI explicitly says the connector URL and authentication settings are managed by Anthropic and directs other changes/escalations to `mcp-review@anthropic.com`;
+- the Tools & prompts section has a live **Rescan tools** action which replaces the listed tool names with the server's current list and refreshes the annotation summary reviewers see;
+- the UI does not state whether saving/submitting a voluntary edit preserves or resets review-queue position.
 
-**Release recommendation:** do not amend the Anthropic submission to V2 until (a) the minimal description cleanup has been implemented and re-tested in both hosts, and (b) Anthropic confirms whether CarClever's affiliate-link model is permitted and how the portal's sponsored-content question should be answered. Do not guess or preserve the existing "no sponsored content" answer without clarification.
+Therefore, changing the Anthropic submission to an owned MCP hostname is not a normal self-service edit. If André ultimately wants an owned Claude production origin, that requires Anthropic involvement unless their process changes.
 
-## 2. Current Anthropic criteria used
+The earlier affiliate/sponsored-content concern is **downgraded from a release blocker to a watch item**. André confirms the previous CarClever Anthropic review already included affiliate disclosure and the reviewers did not flag affiliate routing. Repository history independently records the actual prior blockers as assistant-directed imperatives in tool descriptions, a missing listing icon, and a ChatGPT-specific documentation link. That precedent materially reduces the practical likelihood that unchanged, transparently disclosed affiliate behavior is the issue Anthropic will focus on. Current policy language should still be monitored and the disclosure must remain accurate, but no separate Anthropic-policy clarification is required before continuing the description/release analysis unless the commercial behavior or form answer changes.
 
-Current Anthropic documentation says:
+## 2. Current Anthropic description issue
 
-- tool descriptions must narrowly and accurately state what the tool does and when it should be invoked;
-- descriptions must match actual behavior;
-- descriptions are rejected for specified prompt-injection / behavior-instruction patterns;
-- Anthropic's concise rule is: describe the tool's function rather than telling Claude how to behave;
-- all tools need title plus applicable safety annotations;
-- tools must return functional, actionable responses and validate invalid inputs;
-- the MCP server must call first-party APIs or APIs legitimately proxied;
-- directory software may not serve ads, sponsored content, paid product placements, or primarily promotional content unless expressly permitted;
-- submission data handling explicitly asks whether the connector surfaces sponsored content.
+The strongest known review-risk area is the same class of problem Anthropic previously raised on the older CarClever submission: **assistant-directed imperatives inside tool descriptions**.
 
-## 3. `find_matching_vehicle` main description
+Current V2 is dramatically shorter and cleaner than V1, but several phrases still tell the calling model what to do rather than only describing contract semantics. The sensitive areas are:
 
-### Good / retain
+- the main `find_matching_vehicle` description;
+- `model` field description;
+- `vehicleNeeds` field description;
+- `electrificationTypes` field description;
+- a smaller imperative phrase in `priorityAxis`.
 
-The opening and closing purpose statements are substantially improved from V1. They explain:
+Examples include wording such as `resolve ... yourself`, `before calling this tool`, and `every time`.
 
-- the tool searches current US vehicle inventory;
-- it returns a concise shortlist;
-- supported search dimensions and optimization goals;
-- exact VIN behavior;
-- evidence/unknown handling;
-- the tool is for live listing search rather than general automotive education/finance/maintenance.
+These instructions exist for a real reason: V1→V2 equivalence work proved that practical-needs and electrification searches depend on the host supplying suitable real model/variant candidates. Removing those cues carelessly can create a genuine search regression even though the text becomes more policy-compliant.
 
-These are exactly the kinds of "what it does / when to invoke" statements Anthropic asks for.
+**Required principle:** change wording only where the same behavior can be expressed as neutral contract semantics. Never trade away search correctness merely to shorten the description.
 
-### Needs neutralization
+## 3. Safe description-change gate
 
-The following V2 concepts are valid but are expressed as direct model instructions:
+No V2 description/schema wording change should be treated as cosmetic. Before it is eligible for Anthropic or OpenAI production use:
 
-- "resolve it into real matching model names yourself and include them in model before calling this tool ... every time";
-- "For a broad hybrid ... likewise resolve suitable real model or variant names and include them in model before calling the tool";
-- required/preferred instructions are partly phrased as commands to the host rather than contract semantics.
+1. preserve the current V2 source as the baseline and capture the exact description/schema snapshot;
+2. Claude Engineering makes the smallest possible wording-only diff on the V2 release line — no unrelated code change;
+3. deterministic schema/contract tests pass;
+4. the established V1→V2 high-value prompt pack runs against the old and candidate wording;
+5. compare the host-generated arguments, especially model resolution for family/teen/towing/commuter requests and hybrid/PHEV/EV required-vs-preferred requests;
+6. run the same candidate wording through both ChatGPT and Claude;
+7. reject or restore any wording whose removal causes worse tool selection, missing model scope, missing hard fields, or materially worse results;
+8. record the exact accepted SHA and description snapshot in the release validation ledger.
 
-The underlying behavior is important because the V1→V2 equivalence gate proved practical-needs/electrification candidate resolution must survive. The fix should therefore change **wording, not behavior**.
+This is a **no-regression gate**, not a copy-edit exercise.
 
-### Recommended neutral form
+## 4. Input-schema audit summary
 
-Use capability/contract language such as:
+| Area | Verdict | Required treatment |
+|---|---|---|
+| Main `find_matching_vehicle` description | CHANGE CAREFULLY | neutralize direct model instructions without losing routing behavior |
+| `model` | CHANGE CAREFULLY | express candidate-model dependency as contract semantics, not an imperative |
+| `vehicleNeeds` | CHANGE CAREFULLY | preserve that it is soft context and not a substitute for model eligibility |
+| `electrificationTypes` | CHANGE CAREFULLY | describe accepted evidence and candidate-scope dependency neutrally |
+| `priorityAxis` | MINOR WORDING CHANGE | remove direct `Use...` phrasing while keeping intent definitions |
+| Remaining direct input fields | PASS | retain unless testing identifies a real defect |
+| `resolve_dealer_url` description form | PASS | do not change merely for cleanup |
+| Tool names/annotations | PASS | retain |
 
-> Practical-needs searches use `model` for resolved real-world candidate models and `vehicleNeeds` for soft need context. The server does not infer vehicle classes from `vehicleNeeds`; model-scoped eligibility therefore depends on candidate model names supplied with the request. Broad electrification searches similarly use compatible real model/variant candidates together with the structured electrification fields. `required` restricts eligibility to compatible electrification evidence; `preferred` keeps alternatives eligible while ranking compatible results higher.
+## 5. Live Anthropic Edit-flow evidence — Sep 10
 
-This tells Claude how the inputs function without imperative phrases such as "yourself," "before calling," or "every time."
+The pending submission page supplied by André shows:
 
-## 4. Input-schema description audit
+- Review state: `In review`.
+- Health: `Not live` / available after publishing.
+- Last updated: approximately two weeks ago.
+- `Edit server` says listing details can be updated and changes submitted for review.
+- `Tools & prompts` says the listing's tool/prompt names were populated from a live probe at submission time.
+- `Rescan tools` replaces the advertised tool list with the server's current list and refreshes the annotation summary reviewers see.
+- Under `Name`, the page states: **the connector URL and authentication settings are managed by Anthropic; contact `mcp-review@anthropic.com` to change them.**
+- The slug is locked after submission, though the display name can change.
 
-### `model` — CHANGE
+### Implications
 
-Current wording directly instructs the host to "resolve ... yourself ... before calling ... every time." Replace with neutral contract semantics. Preserve:
+1. **We cannot assume the MCP URL can be changed from the Edit page.** The live UI says it cannot.
+2. An owned Claude custom domain remains strategically attractive, but changing to it requires Anthropic coordination unless a different supported flow is provided.
+3. `Rescan tools` provides a supported mechanism to refresh at least the advertised tool names and reviewer annotation summary after a server change.
+4. The UI wording does **not** prove that Rescan Tools refreshes every captured tool description/schema field in the underlying submission snapshot. We should not assume more than the UI states.
+5. The UI also does **not** disclose what happens to queue position when an in-review listing is voluntarily edited and resubmitted.
 
-- real model names;
-- no manufacturer prefix;
-- comma-separated candidates;
-- practical-needs/electrification searches require candidate model scope because the server does not infer it from soft need text.
+## 6. V1→V2 Anthropic options after this finding
 
-### `vehicleNeeds` — CHANGE
+### Option A — leave pending V1 untouched until Anthropic decides
 
-Current wording again tells the host to resolve needs into model names. Keep this field described as soft, capped listing-relevant context and cross-reference that candidate models determine model eligibility. Avoid a direct imperative.
+**Pros:** preserves the existing two-week review state and introduces no submission uncertainty.  
+**Cons:** Anthropic may return exactly the type of description feedback already seen on the older CarClever review; V1 remains behind the better V2 implementation.
 
-### `electrificationTypes` — CHANGE
+### Option B — keep the currently submitted Anthropic MCP origin, deliberately deploy final V2 behind it, then refresh/resubmit the listing metadata/tool capture in one controlled operation
 
-Current wording says to "pair this field" and "do not use ... alone." Rephrase descriptively: electrification fields express acceptable powertrain evidence, while broad/model-agnostic electrification searches require compatible model/variant candidate scope because these fields do not independently create a vehicle-class/model search universe.
+**Pros:** does not require an MCP-origin change; gets Anthropic onto final V2; preserves the current platform channel.  
+**Risks:** the live server and stored submission snapshot must not be allowed to drift; queue impact is unknown; changing the live endpoint while review is active must be coordinated with the Edit/Rescan flow rather than done silently.
 
-### `priorityAxis` — MINOR CHANGE
+**Important:** do not simply deploy V2 behind the submitted URL and walk away. If this option is chosen, the deployment, Rescan Tools, listing review and exact resulting review state must be treated as one controlled release operation.
 
-Most of the description correctly defines semantics, but "Use lower_risk for requests such as..." is a direct instruction. Rephrase as examples of intent represented by the enum: `lower_risk` represents lower-risk/safer-looking/cleaner-history ranking intent. Keep the non-guarantee language.
+### Option C — ask Anthropic to replace the submitted MCP origin with an owned GetCarWise domain and simultaneously move the submission to final V2
 
-### Other input fields — PASS
+**Pros:** strongest long-term infrastructure ownership and consistency.  
+**Risks:** not self-service; could trigger a fresh review or other process; queue impact unknown. Anthropic must tell us how they handle the change.
 
-The remaining fields are generally narrow, factual parameter descriptions: VIN, price, year, make, body type, mileage, ZIP/radius, trim required/preferred, seats, drivetrain, transmission, colors, vehicle type, doors, cylinders, used, CPO, state, no-accidents, one-owner. No material Anthropic behavior-instruction issue was found in them.
+### Current recommendation
 
-## 5. `resolve_dealer_url` description
+Do **not** pick A/B/C solely because of the two weeks already elapsed. First finish the V2 wording/no-regression analysis and determine whether the present V1 description is likely enough to fail that waiting is a poor trade-off. In parallel, preserve the current submission unchanged until André explicitly chooses the Anthropic path.
 
-**Description-form verdict: PASS with optional simplification.**
+## 7. Affiliate/sponsored-content finding — revised
 
-It describes the tool's actual deterministic behavior: inputs, preferred Edmunds link, fallback behavior, and the fact direct dealer URLs are not returned as the user-facing resolved link. It does not materially instruct Claude to modify unrelated behavior.
+Current Anthropic policy/form language remains strict about sponsored/promoted content, so this topic cannot be erased from the compliance record.
 
-However, the description and underlying link behavior are directly relevant to the commercial-content blocker below.
+However, the practical evidence now matters more:
 
-## 6. Tool annotations / structure
+- André confirms the previous CarClever Anthropic review already disclosed the affiliate arrangement and reviewers did not raise it as an issue;
+- repository history records the three actual Anthropic blockers from that review as: assistant-directed imperatives in two tool descriptions, missing listing icon, and ChatGPT-specific documentation;
+- the current Find My Car submission also records an Edmunds affiliate disclosure.
 
-Current V2 registration includes short tool names and the relevant `title`, `readOnlyHint`, `openWorldHint`, and `destructiveHint` annotations. No tool-name-length or obvious read/write annotation defect was found in this audit.
+**Revised risk:** WATCH / consistency check, **not a current V2 release blocker**.
 
-The app is authless and uses Streamable HTTP in the existing submission record. Functional regression tests and custom error handling are already extensive. These areas are not the current blocker.
+Required discipline:
 
-## 7. Critical commercial-content finding
+- do not make ranking/pay-to-play dependent on affiliate economics;
+- keep affiliate disclosure transparent and consistent with the implementation;
+- if the commercial model materially changes, re-open the policy assessment;
+- if Anthropic raises the issue in the current review, treat their direct feedback as authoritative for the next submission step.
 
-### Current Anthropic policy
+## 8. Queue-position uncertainty
 
-Anthropic's Software Directory Policy currently states that, unless expressly permitted in writing, directory software may not serve:
+No authoritative source reviewed so far states whether a voluntary edit/resubmission of an already `In review` server keeps or resets its queue position.
 
-- advertisements;
-- sponsored content;
-- paid product placements;
-- software primarily operating as an advertising/promotional vehicle.
+The live page's `Last updated` field and `submit changes for review` wording show that submission updates are tracked, but they do not answer the queue question.
 
-The current submission portal's data-handling step explicitly asks whether the connector surfaces sponsored content.
+Therefore the operating rule remains:
 
-### What CarClever currently does
+**Never tell André that an edit definitely preserves or definitely loses the existing two weeks. That is unknown unless the UI produces an explicit warning/result or Anthropic confirms it.**
 
-Current V2 source is explicit that link resolution gives each result an Edmunds/CJ revenue path. User-facing result links use `affiliateUrl` / `affiliateFallbackUrl`, while the dealer listing URL is retained only for internal/diagnostic use and deliberately not surfaced as the resolved user-facing destination.
+If we choose to inspect the final save/resubmit step, capture the exact warning/button text before committing any edit. Do not save merely to discover what happens.
 
-This is not a hypothetical future monetization feature; it is current application behavior.
-
-### Existing submission-record inconsistency
-
-The existing Anthropic V1 submission record in `carclever-widget/STATE.md` says:
-
-- Data Handling: proxied Auto.dev API, no health data, **no sponsored content**;
-- Compliance: all seven boxes checked, **Edmunds affiliate disclosure provided**.
-
-Those two statements may be reconcilable if Anthropic does not classify ordinary affiliate links as sponsored/promoted content, but Anthropic's public policy does not define that boundary. We therefore cannot safely assume the current "no" answer is correct.
-
-### Risk assessment
-
-**Material / release-blocking until clarified.**
-
-It would be irresponsible to recommend editing V1 to V2, re-attesting to the current form, and hoping reviewers interpret affiliate routing as outside the sponsored-content prohibition. The risk is at least as important as the tool-description issue and may be more likely to produce a policy rejection.
-
-### Required clarification
-
-Before the Anthropic V1→V2 decision is executed, ask Anthropic review support a narrow factual question:
-
-> CarClever ranks vehicle listings independently from payment and does not sell ranking placement, but its user-facing outbound vehicle links are CJ/Edmunds affiliate links and may generate commission when a user follows/converts. Does Anthropic classify this as prohibited "sponsored, promoted, or advertising content" for a Connectors Directory MCP server? If permitted, should the Data Handling sponsored-content answer be Yes, and is written permission/another disclosure required?
-
-Until answered, treat the Anthropic commercial-content gate as **OPEN**.
-
-## 8. Impact on the V1-vs-V2 decision
-
-The earlier decision research preferred amending the pending Anthropic submission to V2 + a permanent owned Claude origin after description/domain validation.
-
-**This audit adds a new prerequisite and changes that recommendation to CONDITIONAL.**
-
-Do not change the pending Anthropic submission yet. Sequence:
-
-1. perform the minimal V2 description/schema wording cleanup through Claude Engineering;
-2. run both-host regression tests to prove no host-routing loss;
-3. obtain Anthropic clarification on affiliate-link eligibility/sponsored-content classification;
-4. validate the permanent Claude custom origin;
-5. inspect the pending Edit workflow without saving and determine what the UI says about resubmission/review status;
-6. only then choose wait vs amend.
-
-If Anthropic says the affiliate model is not allowed in directory connectors, the Claude production channel will need a compliant link-output policy/configuration before any amended submission. That engineering design must preserve unbiased search/ranking and be re-tested; it should not be improvised in the submission form.
-
-## 9. Queue/edit finding
-
-Anthropic's public docs say review times vary with queue volume and explain that reviewer-requested changes can be addressed and resubmitted from the same submission page. They do **not** state whether a voluntary edit to an already-in-review submission retains or resets its place in the queue.
-
-A current third-party translation of Claude's own UI strings contains text indicating an edit may be reviewed against a previously captured tool list unless the connector is reconnected to attach a fresh capture. This is corroborative, not authoritative. The current Anthropic GitHub issue #828 independently confirms the submission request contains `submission_data.server_snapshot.tools`.
-
-Therefore:
-
-- a tool snapshot exists;
-- a V1→V2 change should intentionally refresh/reconnect the snapshot if the UI supports it;
-- queue position after a voluntary pending edit remains unknown until the actual Edit workflow or Anthropic support says otherwise.
-
-## 10. Final audit verdict
+## 9. Final audit verdict
 
 | Area | Verdict | Action |
 |---|---|---|
-| V2 overall functional design | PASS / already well tested | retain |
-| Main `find_matching_vehicle` description | CHANGE | neutralize direct host instructions |
-| `model` field description | CHANGE | neutral contract semantics |
-| `vehicleNeeds` field description | CHANGE | neutral contract semantics |
-| `electrificationTypes` description | CHANGE | neutral contract semantics |
-| `priorityAxis` description | MINOR CHANGE | remove imperative "Use..." phrasing |
-| Other input descriptions | PASS | retain |
-| `resolve_dealer_url` description form | PASS | optional simplification only |
+| V2 overall functional design | PASS / already extensively tested | retain |
+| V1 Anthropic description risk | MATERIAL | compare against known prior Anthropic description feedback before deciding whether waiting is sensible |
+| V2 description/schema wording | CHANGE CAREFULLY | minimal neutralization + both-host no-regression testing |
 | Tool names/annotations | PASS | retain |
-| Existing Anthropic "no sponsored content" answer | **UNRESOLVED / MATERIAL RISK** | obtain Anthropic clarification before re-attesting |
-| V1→V2 Anthropic amendment | **BLOCKED FOR NOW** | complete description + commercial-content + domain + Edit-flow gates first |
+| Affiliate routing | WATCH, not blocker | preserve disclosure/independent ranking; react only to new evidence or Anthropic feedback |
+| Pending-submission MCP URL | NOT SELF-SERVICE EDITABLE | Anthropic manages URL/auth changes; support contact required |
+| Rescan Tools | AVAILABLE | use only as part of controlled release if server tool surface changes |
+| Queue impact of voluntary edit | UNKNOWN | do not guess; capture UI/support evidence |
+| Exact Claude production custom domain | UNDECIDED | no hostname approved yet |
+| V1→V2 Anthropic amendment | DECISION PENDING | description/no-regression assessment + URL strategy + edit-flow evidence first |
 
-## 11. Ownership
+## 10. Ownership
 
-- ChatGPT: this audit, policy research, wording/design recommendation, release-gate verification.
-- Claude Engineering: any V2 description/schema code edits and all deployment/domain/branch/connector work.
-- André: Anthropic contact/submission decision and final permanent-origin confirmation.
+- **ChatGPT:** policy/review analysis, description redline strategy, cross-platform release gate, independent verification and documentation.
+- **Claude Engineering:** any source description/schema edits, branches, deployments, Vercel/domain changes, test-harness implementation.
+- **André:** Anthropic submission/edit decision and any request to Anthropic to change the MCP origin.
 
 ## References
 
-- Anthropic, `Submitting to the Connectors Directory`.
-- Anthropic, `Pre-submission checklist`.
-- Anthropic, `Manage your listing after publishing`.
-- Anthropic Software Directory Policy, current 2026 policy.
-- Anthropic `anthropics/claude-ai-mcp` issue #828, server-snapshot submission evidence.
+- Live Anthropic pending-submission Edit page supplied Sep 10, 2026.
+- Current Anthropic Connectors Directory submission/review documentation and Software Directory Policy.
+- Anthropic `anthropics/claude-ai-mcp` issue #828 for evidence that submission payloads contain `server_snapshot.tools`.
+- `carclever-widget/TASKS.md` historical prior-review blockers.
+- `carclever-widget/STATE.md` current Find My Car submission record.
 - `carclever-find-my-car/release/v2/app/[transport]/route.ts`.
 - `carclever-find-my-car/release/v2/lib/find-matching-vehicle-input.ts`.
 - `carclever-find-my-car/release/v2/lib/link-resolution.ts`.
-- `carclever-widget/STATE.md` current Anthropic submission record.
-- `RESEARCH_ANTHROPIC_V1_V2_REVIEW_AND_MCP_ORIGIN_DECISION_20260910.md`.
+- `V1_V2_SEARCH_RESULTS_EQUIVALENCE_GATE_20260908.md`.
 - `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`.
