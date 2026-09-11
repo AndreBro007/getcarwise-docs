@@ -50,6 +50,38 @@ André separately tested Claude while logged out and Claude reported that there 
 
 Strategic implication: if CarClever gains public approval/distribution while the automotive live-inventory connector category remains sparse, early category availability could be an important distribution advantage. This remains **provisional** until tested again in a clean eligible account after CarClever approval.
 
+## Claude V2 metadata-cache observation
+
+During the current V2 regression session, Claude continued loading an older V2 tool description/schema snapshot even after the live `release/v2` deployment had moved forward and after the connector had been refreshed, Claude hard-closed, and the account logged out/in. The live MCP endpoint still executed successfully, so treat **host metadata/schema cache state and live server deployment as separate layers**.
+
+This creates a testing risk: a Claude request can be valid evidence of how the older loaded contract behaves, but it is not fair evidence that a newly deployed description change succeeded or failed unless the discovery trace first confirms Claude is actually loading that new wording/schema.
+
+A failed first invocation also showed a host-side routing recovery path: Claude initially tried an incorrect internal-style tool name and string-typed arguments, received a tool-name error, then retried using the exact registered tool name and correct JSON types. Treat that as a host/tool-routing issue unless the exact registered CarClever call itself fails.
+
+### Temporary regression rule
+
+Until a fresh Claude environment proves it is loading the current V2 metadata:
+
+- do not use the primary Claude account as authoritative evidence for newly changed tool-description behavior;
+- older Claude JSON requests may still be useful for backend/result comparisons when the relevant fields are unchanged between versions;
+- label such evidence as coming from a stale/previous metadata snapshot;
+- prefer ChatGPT V2 for current-description regression validation;
+- before resuming Claude as a first-class host, inspect its discovery-loaded V2 description/schema for a known current marker from the latest deployment.
+
+### Clean-account cache check
+
+A second Claude account with a newly created V2 connector is the preferred next diagnostic. This can help distinguish whether the stale metadata is scoped to the original account/connector/session or exists in a broader registry/cache layer.
+
+For that test:
+
+1. create a uniquely named connector pointing to the same current V2 MCP URL;
+2. run one simple inventory prompt;
+3. capture the discovery/tool-definition block before judging behavior;
+4. confirm a known current V2 wording/schema marker is present;
+5. only then treat that account's Claude JSON as evidence for current-description behavior.
+
+If the fresh account immediately loads the current schema, use the fresh account for future Claude regression checks after description changes. If it still loads the older schema, treat the cache as broader than account/session scope and continue ChatGPT-led regression testing until the metadata refreshes.
+
 ## Test-design guidance
 
 A true organic-invocation test should use a clean environment with no prior CarClever conversation context and, ideally, no explicit connector mention. Recommended prompt classes:
@@ -85,3 +117,5 @@ These help measure whether the host interprets recommendation intent as general 
 ## Current conclusion
 
 The observed Claude trace provides a useful future diagnostic framework but does **not** establish organic CarClever discovery because the tested account/session was already CarClever-biased. Preserve these traces for post-approval testing, when the same methodology can measure real discovery and selection in clean environments.
+
+For current regression work, Claude should remain secondary until a fresh environment demonstrably loads the current V2 tool metadata. A newly configured connector on a separate Claude account is the most useful practical cache diagnostic available without changing application code.
