@@ -68,19 +68,43 @@ Until a fresh Claude environment proves it is loading the current V2 metadata:
 - prefer ChatGPT V2 for current-description regression validation;
 - before resuming Claude as a first-class host, inspect its discovery-loaded V2 description/schema for a known current marker from the latest deployment.
 
-### Clean-account cache check
+### Clean-account cache check — CONFIRMED SUCCESS
 
-A second Claude account with a newly created V2 connector is the preferred next diagnostic. This can help distinguish whether the stale metadata is scoped to the original account/connector/session or exists in a broader registry/cache layer.
+A second Claude account was configured with a newly created connector named `CarClever V2 Cleanroom 20260911`, pointing to the same live V2 endpoint. The prompt explicitly named that connector, consistent with the Claude testing convention:
 
-For that test:
+`use connector CarClever V2 Cleanroom 20260911 and Find me an AWD SUV under $45k in Denver.`
 
-1. create a uniquely named connector pointing to the same current V2 MCP URL;
-2. run one simple inventory prompt;
-3. capture the discovery/tool-definition block before judging behavior;
-4. confirm a known current V2 wording/schema marker is present;
-5. only then treat that account's Claude JSON as evidence for current-description behavior.
+The discovery trace loaded only the two tools for the new cleanroom connector and, critically, showed current V2 metadata markers from the latest deployment:
 
-If the fresh account immediately loads the current schema, use the fresh account for future Claude regression checks after description changes. If it still loads the older schema, treat the cache as broader than account/session scope and continue ChatGPT-led regression testing until the metadata refreshes.
+- tool description contained: `Direct filter fields should reflect requirements the user stated or clearly implied; leave unstated restrictions unset.`
+- `transmission` description contained the anti-invention wording: supply only when explicitly stated or clearly implied; do not invent a value.
+- `vehicleType` description used the current narrower examples (`Crossover, Wagon, Hatchback, or Coupe`) and explicitly said not to duplicate `bodyType`.
+
+This proves the live V2 endpoint is serving the current metadata and strongly indicates the stale-definition problem on the original Claude account is scoped to an existing connector/account cache rather than the V2 deployment itself.
+
+The cleanroom Claude request was:
+
+```json
+{
+  "bodyType": "SUV",
+  "drivetrain": "AWD",
+  "priceMax": 45000,
+  "zip": "80202",
+  "priorityAxis": "best_for_budget"
+}
+```
+
+This was a clean current-contract request: no invented `used`, `transmission`, `radiusMiles`, `vehicleType`, year, mileage, make, or model restriction. It returned 13,703 matching vehicles in the area and 8 strong results across both used and new inventory, matching the corrected V2 behavior previously seen in ChatGPT.
+
+### Updated regression rule
+
+For the rest of the current V2 regression cycle:
+
+- the original Claude account/connector remains non-authoritative for newly changed description behavior unless its loaded metadata is re-verified;
+- the second-account `CarClever V2 Cleanroom 20260911` connector **is authoritative for current Claude V2 metadata behavior** as of this check;
+- after any future description/schema change, verify one known current marker in Claude's discovery-loaded tool definition before treating Claude JSON as current-contract evidence;
+- if the cleanroom connector later becomes stale after another deployment, creating a freshly named connector on the second account is an available cache-reset diagnostic/workaround;
+- continue to explicitly name the Claude connector in regression prompts to avoid version-selection ambiguity.
 
 ## Test-design guidance
 
@@ -118,4 +142,4 @@ These help measure whether the host interprets recommendation intent as general 
 
 The observed Claude trace provides a useful future diagnostic framework but does **not** establish organic CarClever discovery because the tested account/session was already CarClever-biased. Preserve these traces for post-approval testing, when the same methodology can measure real discovery and selection in clean environments.
 
-For current regression work, Claude should remain secondary until a fresh environment demonstrably loads the current V2 tool metadata. A newly configured connector on a separate Claude account is the most useful practical cache diagnostic available without changing application code.
+The clean-account experiment successfully established a current-metadata Claude testing path. The original-account stale cache is therefore a host/account-connector state issue for testing purposes, not evidence that the live V2 deployment is stale. Use the cleanroom connector for current Claude regression checks until proven otherwise.
