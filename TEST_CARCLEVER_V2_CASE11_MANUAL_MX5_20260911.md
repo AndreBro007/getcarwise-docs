@@ -1,6 +1,6 @@
 # CarClever V2 Case 11 — Manual Mazda MX-5 — 2026-09-11
 
-**Status:** OPEN — CHATGPT V2/V1 PASS; CLAUDE CLEANROOM ANTI-INVENTION WATCH
+**Status:** CLOSED — CHATGPT V2/V1 PASS; CLAUDE CLEANROOM HOST-SEMANTIC WATCH
 
 ## Prompt
 
@@ -32,7 +32,7 @@ Assessment:
 
 ## Claude V2 Cleanroom
 
-Observed request:
+Initial observed request:
 
 ```json
 {
@@ -48,12 +48,14 @@ Observed request:
 
 Result: no matches, including after automatic radius widening.
 
+Follow-up attempts continued to preserve `used:true` while changing radius, price flexibility, and even removing the transmission restriction. Those Mazda searches still returned no results. Claude then proposed alternative lightweight/manual sports cars and found valid Subaru BRZ and Toyota 86 inventory under $20k using the same general location and `used:true` assumption.
+
 Assessment:
-- `used:true` was not stated or clearly implied and is therefore an anti-invention watch item under the current V2 contract.
-- Claude used `model:"MX-5"`; this is not by itself a problem because V1 demonstrated that the service can normalize `MX-5` to `MX-5 Miata` and still return the expected inventory.
-- Therefore the model-string difference does not explain the zero-result outcome.
-- Working hypothesis: the extra `used:true` materially changed the search and likely caused or contributed to the zero-result outcome.
-- Keep this case OPEN until one fresh-chat Claude rerun confirms whether the behavior is reproducible. If it reproduces, re-check the discovery-loaded tool metadata for the current anti-invention marker before attributing it to current Claude behavior.
+- `used:true` was not stated or clearly implied and remains a host-semantic anti-invention watch item under the current V2 contract.
+- Claude used `model:"MX-5"`; this is not by itself a problem because V1 demonstrated that the service can normalize `MX-5` to `MX-5 Miata` and return the expected inventory.
+- The repeated Mazda attempts make the extra condition the most meaningful observed request difference versus ChatGPT V2/V1, but the exact causal mechanism for the zero-result outcome is not proven.
+- Claude's fallback behavior was useful from a shopper perspective: once the requested Mazda search exhausted, it offered nearby alternatives and successfully found manual BRZ/86 inventory.
+- This is therefore a host interpretation/recovery watch rather than a CarClever backend regression.
 
 ## ChatGPT V1 baseline
 
@@ -76,10 +78,10 @@ Result: same expected five-vehicle inventory set. The service normalized `MX-5` 
 Assessment:
 - Confirms that `MX-5` versus `MX-5 Miata` is not the main issue.
 - Confirms V1 also avoids inventing `used:true` for this prompt.
-- Strongly isolates Claude's extra condition as the current anomaly.
+- Provides a clean baseline against Claude's extra condition.
 
-## Current conclusion
+## Final conclusion
 
-ChatGPT V2 and V1 PASS. Claude Cleanroom remains an OPEN host-specific anti-invention watch because it added `used:true` to an unspecified-condition prompt and then returned zero inventory while the other two environments found the expected five matches.
+CLOSED. ChatGPT V2 and V1 PASS. Claude Cleanroom shows a minor host-semantic quirk by repeatedly inserting `used:true` when condition was unspecified. That behavior is imperfect but not release-blocking in this case, especially because Claude eventually recovered by offering and successfully searching reasonable alternatives.
 
-No CarClever backend regression is established from this evidence. One controlled fresh-chat Claude rerun is the next diagnostic step.
+No CarClever V2 backend regression is established from this case. Preserve the Claude `used:true` behavior as a regression watch for future unspecified-condition prompts, but no additional MX-5 diagnostic is required before continuing the bank.
