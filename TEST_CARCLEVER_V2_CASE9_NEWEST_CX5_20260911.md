@@ -1,6 +1,6 @@
 # CarClever V2 Case 9 — Newest Mazda CX-5 — 2026-09-11
 
-**Status:** CLOSED — CROSS-HOST PASS
+**Status:** CLOSED — CROSS-HOST / CROSS-VERSION PASS
 
 ## Prompt
 
@@ -56,8 +56,19 @@ Assessment:
 - No invented condition or other restrictions.
 - Identical result ordering strongly indicates backend ranking consistency rather than host-specific behavior.
 
+## ChatGPT V1 baseline
+
+V1 returned the same 424-match pool near 98101 and the same five 2026 vehicles in the same order, including the same lowest-priced used CX-5 and the same best new option.
+
+Observed wall-clock time reported by André for this single V1 run: **14 seconds**. The corresponding ChatGPT V2 run was reported at **26 seconds**.
+
+Timing assessment:
+- Record this as a single-run qualitative observation only, not a benchmark.
+- Host latency, tool cold/warm state, network conditions, rendering, and inventory response time can all vary between runs.
+- Do not infer that V1 is generally faster from this one comparison; repeated controlled runs would be needed for a performance conclusion.
+
 ## Conclusion
 
-PASS. The `newest` path behaves consistently across ChatGPT V2 and Claude V2 Cleanroom. Both hosts preserve unspecified condition, correctly search across new and used inventory, and produce the same five-result ordering.
+PASS. The `newest` path behaves consistently across ChatGPT V2, Claude V2 Cleanroom, and ChatGPT V1. All preserve unspecified condition, correctly search across new and used inventory, and produce the same five-result ordering.
 
-No V1 baseline is required for this case because there is no anomaly to isolate. Continue regression testing.
+The one observed V1 timing was faster than V2 (14s vs 26s), but this remains a non-controlled single-run observation rather than evidence of a systematic performance difference.
