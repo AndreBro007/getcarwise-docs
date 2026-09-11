@@ -1,6 +1,6 @@
 # CarClever V2 Case 15 — Interior-Color Toyota Camry — 2026-09-11
 
-**Status:** CLOSED — CROSS-HOST / CROSS-VERSION PASS WITH MINOR PRESENTATION WATCH
+**Status:** CLOSED — CROSS-HOST / CROSS-VERSION PASS
 
 ## Prompt
 
@@ -27,7 +27,7 @@ Result: five local matches with verified black interiors, all under $35,000. Top
 Assessment:
 - Correctly mapped black interior to the dedicated `interiorColor` field.
 - The field operated as a real structured filter rather than a broad search followed by manual post-filtering.
-- No invented condition, mileage, model year, radius, exterior color, or drivetrain restrictions.
+- No invented condition, mileage, model year, radius, exterior color, drivetrain, or powertrain restrictions.
 - Lowercase `"black"` was accepted and worked correctly.
 - Host also surfaced a trim/dealer-page inconsistency on one result rather than silently ignoring it.
 
@@ -70,13 +70,13 @@ Observed request:
 }
 ```
 
-Result: 3.4 million listings searched → 961 matched near 90210. V1 explicitly stated that black interior was enforced as a hard filter.
+Result: 3.4 million listings searched → 961 matched near 90210. V1 explicitly stated that black interior was enforced as a hard filter and noted that all shortlisted vehicles happened to be hybrids.
 
 Assessment:
 - Clean baseline consistent with V2.
 - Confirms case-insensitive color handling (`Black` vs `black`).
 - Match pool aligns with Claude V2 at 961.
-- Minor presentation watch: V1 noted that all shortlisted cars were hybrids even though hybrid powertrain was not part of the user's request. This did not change filtering or eligibility.
+- The hybrid observation is positive rather than a watch item: because the buyer did not specify a powertrain, a general search should remain open to all eligible powertrains rather than silently excluding hybrids or gas vehicles. V1 correctly did not add a hybrid filter; it simply described a characteristic shared by the shortlisted results.
 
 ## Final conclusion
 
@@ -84,4 +84,4 @@ CLOSED — PASS across ChatGPT V2, Claude V2 Cleanroom, and ChatGPT V1.
 
 This case validates the dedicated interior-color path: a stated interior color should be passed through `interiorColor` and enforced by the search rather than approximated with post-search inspection.
 
-Watch only incidental host prose that introduces unrelated characteristics; no backend or mapping defect was observed.
+It also reinforces the general-search principle: when the buyer does not constrain powertrain, the search should not silently exclude otherwise eligible hybrid, gas, or other powertrain variants.
