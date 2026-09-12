@@ -1,64 +1,83 @@
-# CarClever V2 Current State — 2026-09-09
+# CarClever V2 Current State — updated 2026-09-12
 
 ## Purpose
 
-This is the current operational record for the amended V2 shared MCP contract, implementation, validation, and deployment. It supersedes stale “proposed,” “not yet coded,” and pre-cutover status statements in older documents, while preserving those documents as historical design records.
+This is the current operational record for the amended V2 shared MCP contract, implementation, validation, deployment, and platform-review state. It supersedes stale “proposed,” “not yet coded,” V1-production, and pre-cutover status statements in older documents while preserving those documents as historical records.
 
 ## Current source of truth
 
-- Repository: `AndreBro007/carclever-find-my-car`
-- Release branch: `release/v2`
-- Merged correction: `5e8735e`
-- Current deployed release nudge: `a9d6439`
-- V2 production MCP endpoint: `https://ccfmc-dev-v2.vercel.app/mcp`
-- Deployment: READY, production target
-- V1/Anthropic production endpoint remains separate: `https://carclever-find-my-car.vercel.app/mcp`
-- V3 remains excluded from the V2 contract and is not a V2 release target.
+- Repository: `AndreBro007/carclever-find-my-car` (read-only to ChatGPT Business/Strategy lane).
+- Release branch: `release/v2`.
+- Current V2 tip / exact promoted SHA: `b8b07d8542f5d3f2a12e00433e089dde28ae5792`.
+- Parent OpenAI verification-endpoint commit: `abb933cc47aa0f093a7f955ac2ae0507ec7f9b08`.
+- Main remains V1 at `e7c8634fdd631c7bb05c83c02daeb1ab7f7bbb6`; V2 was not merged into main.
+- V3 remains paused at `v3.1-3.3/card-first-check-vehicle`, commit `4032feb`; do not merge or resume as part of V2 release work.
 
-The V2 endpoint is the tested internal release endpoint. A final branded submission URL still requires domain routing/verification work; do not assume that `getcarwise.app` is attached to the V2 Vercel project.
+## Platform production state
+
+### OpenAI / ChatGPT
+
+- Vercel project: `ccfmc-dev-v2`.
+- Submitted MCP URL: `https://carclever-oai.getcarwise.app/mcp`.
+- Production widget origin: `https://carclever-oai.getcarwise.app` via project-specific `NEXT_PUBLIC_WIDGET_ORIGIN`.
+- Domain verification and final Scan Tools checks passed.
+- OpenAI V2 resubmission completed 2026-09-12.
+- Current OpenAI status: **REVIEW**.
+- Submission record: `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md`.
+
+### Anthropic / Claude
+
+- Existing submitted MCP URL retained: `https://carclever-find-my-car.vercel.app/mcp`.
+- Existing Vercel project `carclever-find-my-car` was deliberately promoted to V2 from `release/v2` at exact SHA `b8b07d8` without merging V2 into main.
+- Vercel production deployment is READY and records `release/v2`, exact SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`, target `production`.
+- Anthropic Edit Server flow used **Sync/Rescan from server** and public listing description was updated to the final V2 marketing description used for OpenAI.
+- Anthropic submission update was saved 2026-09-12; directory screen confirmed **In review** and **Updated: just now**.
+- Existing connector initially exposed a stale V1 tool snapshot after production cutover (`goals` still visible) and showed “Unable to reach” despite the endpoint being reachable. Direct browser GET to `/mcp` returned the expected JSON-RPC `Method not allowed`, proving the route/hostname was alive. This is currently treated as a Claude connector/tool-metadata cache issue pending a fresh connector/cache reset and retest.
+- Submission record: `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`.
 
 ## Implemented amended contract
 
-The public input contract now uses:
+The public V2 input contract uses:
 
-- `vehicleNeeds` instead of `goals`; legacy `goals` is rejected through the real MCP registration path.
-- `electrificationTypes`: `hybrid | plug_in_hybrid | electric`.
-- `electrificationRequirement`: `required | preferred`.
-- `hybrid` includes the internal `mild_hybrid` classification; callers cannot submit `mild_hybrid`.
-- Required electrification uses confirmed NHTSA evidence and preserves shortfall disclosure.
-- Preferred electrification changes ranking without excluding non-matches or unknown/ambiguous candidates.
-- Practical needs and broad electrification requests require the host to resolve suitable real model names in `model`, alongside `vehicleNeeds`.
-- The amended main description and all 31 field descriptions are aligned with `FINAL_DESCRIPTION_20260908.md`, including the approved electrification/model-resolution amendments and the concise `priorityAxis` routing hint.
-- `resultsShown` is enforced in code as the final `results.length` and described on the output field, not as procedural narration in the main description.
+- `vehicleNeeds` instead of legacy `goals`;
+- `electrificationTypes`: `hybrid | plug_in_hybrid | electric`;
+- `electrificationRequirement`: `required | preferred`;
+- required/preferred electrification semantics backed by bounded evidence handling;
+- practical-needs/model-resolution guidance;
+- direct-filter anti-invention guardrail;
+- transmission anti-invention wording;
+- `vehicleType` narrowed so it does not duplicate broad `bodyType` intent;
+- exact-VIN behavior that never substitutes another vehicle;
+- unchanged two-tool public set: `find_matching_vehicle`, `resolve_dealer_url`.
 
-## Verification completed
+## Validation completed
 
-- ChatGPT and Claude V2 connector tests passed for practical family-SUV model resolution, hybrid/PHEV required searches, preferred electrification, mixed types, exact VIN/risk flows, priority axes, CPO/AWD/history constraints, legacy-`goals` handling, and the five-card display cap.
-- Production build succeeds.
-- Full suite: 222 custom checks plus 79 node tests, zero failures.
-- One TypeScript error remains in `tests/best-for-budget-ranking.test.ts:105:39`; it was proven pre-existing against the exact `release/v2` baseline and is unrelated to this migration.
-- Live NHTSA evidence confirms BEV and PHEV classification. Mild-hybrid real VINs returned blank NHTSA electrification levels; the mild-hybrid branch remains a documented real-world data-availability limitation. The blank-level/secondary-electric ambiguity fixture remains synthetic-only.
-- `ELECTRIFICATION_POOL_SIZE = 20` remains provisional and unvalidated; it must not be described as empirically justified.
+- Extensive V2 regression and cross-host testing was completed before platform submission; detailed historical cases remain in the `TEST_CARCLEVER_*` documents.
+- Final OpenAI production-origin smoke tests passed on the new custom domain for normal inventory search, exact-VIN Buyer Check, and self-contained listing-presence/availability lookup.
+- Negative non-inventory prompts were included in the OpenAI submission baseline.
+- OpenAI final tool scan confirmed V2 fields (`vehicleNeeds`, electrification fields), no legacy `goals`, read-only/destructive/open-world annotations, and custom widget origin/CSP metadata.
+- Anthropic production infrastructure identity is verified: exact V2 SHA is READY in Production and the existing MCP route responds correctly at the submitted hostname.
+- Remaining Anthropic validation is host-cache/tool-refresh testing after the saved submission update. This is not evidence of a server outage.
 
-## Environment boundary
+## Known follow-up / gates
 
-- V2 production is the current tested release.
-- The Anthropic-reviewed V1 endpoint is untouched.
-- V3 has historically generated preview deployments for V2 branches, but those were preview targets, not proof that V3 production serves V2. V3 branch/deployment filtering should be corrected separately.
-- No connector URL should be changed until the final domain-routing decision is made. The MCP path convention is `https://<host>/mcp`.
+1. **Claude cache reset + fresh connector retest:** confirm the base `CarClever - Find My Car` connector now advertises V2 fields (`vehicleNeeds`, electrification fields) and no `goals`; then run the CR-V baseline and exact-VIN Buyer Check.
+2. **Do not alter V2 code during either platform review** unless OpenAI/Anthropic requests a correction or a concrete regression is reproduced.
+3. **Confirm long-term Vercel production branch/release behavior for the Anthropic project** so a future V1 `main` push cannot silently replace the manually promoted V2 production release.
+4. Keep main/V1 untouched and V3 paused.
+5. Stale draft PRs #1/#2 remain housekeeping only; do not merge them.
 
-## Documentation index
+## Current documentation index
 
-- Public contract: `FINAL_DESCRIPTION_20260908.md`
-- Design ownership and electrification semantics: `ELECTRIFICATION_HANDOFF_DESIGN_20260908.md`
-- Feasibility and equivalence package: `FEASIBILITY_EQUIVALENCE_PACKAGE_20260909.md`
-- Equivalence gate: `V1_V2_SEARCH_RESULTS_EQUIVALENCE_GATE_20260908.md`
-- Live validation record: `VALIDATION_GATES_20260909.md`
-- Three-app/host transition: `HANDOFF_CLAUDE_SEO_AND_THREE_APP_TRANSITION_20260902.md`
+- OpenAI submission: `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md`
+- Anthropic submission update: `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`
+- Release validation ledger: `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`
+- Current app portfolio: `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`
+- Dual-platform deployment feasibility/history: `AUDIT_CARCLEVER_DUAL_PLATFORM_VERCEL_FEASIBILITY_20260911.md`
+- Anthropic compliance audit (historical pre-cutover): `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`
+- OpenAI reconciliation/history: `RECONCILIATION_CARCLEVER_OPENAI_V2_SUBMISSION_20260911.md`
+- Platform-domain naming decision: `DECISION_CARCLEVER_PLATFORM_DOMAIN_NAMING_20260911.md`
 
-## Remaining release work
+## Current release posture
 
-1. Decide and configure the final stable branded MCP domain, including DNS/domain verification and a successful tool scan.
-2. Keep the V1/Anthropic endpoint unchanged unless that submission is deliberately updated.
-3. Correct V3 preview branch filtering separately.
-4. Re-run the final submission smoke test against the exact endpoint submitted to OpenAI.
+V2 is now the active submitted release on **both OpenAI and Anthropic**, using separate production origins but the same tested `release/v2` codebase. Both platform submissions are in review. The code/release lane is frozen except for review-requested corrections or evidence-backed defects. V1/main remains preserved as rollback/history rather than the active submitted behavior behind the Anthropic URL.
