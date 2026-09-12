@@ -1,83 +1,92 @@
-# Fractal legacy CarClever: electrified search and Claude rendering handoff — revised 2026-09-12
+# Fractal legacy CarClever: category search and Claude rendering handoff — corrected 2026-09-12
 
 **Status:** Proposed preview investigation/fix brief. No production deployment or Anthropic submission authorized.
 
-## Assessment of the supplied latest build
+## Corrections from André
 
-The latest build made useful progress, but its report itself confirms unresolved correctness:
+- Auto.dev listing fuel is primary fuel. Gasoline can be correct for an HEV/PHEV; the schema lacks secondary fuel/electrification. Preserve model/trim evidence.
+- The confirmed remaining category defect is body leakage: electric truck searches return crossovers.
+- Inspect the current pair cap rather than assuming it remains fixed at five.
+- Explicit large-luxury searches need a real full-size tier.
+- Rendering investigation must distinguish Fractal's production MCP endpoint, production origin and preview origin.
 
-- strictHybridMode retains gasoline results when zero verified hybrid items survive.
-- A fuel=Gasoline item was accepted because the returned/requested label contained “Hybrid.”
-- electric truck returned only non-trucks; body matching reordered candidates but did not constrain the final set.
-- The F-150/Lightning provider taxonomy was inferred and then described as confirmed without raw provider evidence.
-- The five-pair cap remains order-sensitive.
-- Large luxury taxonomy still mixes midsize models into a query whose explicit word is “large.”
+## Relevant newer-app precedent
 
-The next pass therefore needs constraint enforcement and raw provider validation, not another category-routing-only test.
-
-## Rendering evidence reconciled
-
-The supplied rendering transcript confirms the prior Fractal change from PUBLIC_BASE_URL alone to a fallback on MCP_SERVER_URL. It normalized openai/widgetDomain and embedded serverUrl in preview while leaving tools/list unchanged. It did not include a successful Claude rendering test.
-
-A separate documented Find My Car incident provides a narrower diagnostic lead: omission of optional _meta.ui.domain fixed Claude iOS after successful resource retrieval, while OpenAI-specific domain metadata was retained. This is a hypothesis to verify in this codebase, not permission to copy code between repositories.
+The newer app omitted optional _meta.ui.domain for Claude compatibility, retained OpenAI-specific openai/widgetDomain/CSP, and made the widget origin project/environment-specific through NEXT_PUBLIC_WIDGET_ORIGIN with a runtime fallback. Its OpenAI custom origin and Anthropic Vercel origin were configured separately. The legacy Fractal equivalent must be verified against Fractal's actual MCP_SERVER_URL/PUBLIC_BASE_URL behavior rather than copied mechanically.
 
 ## Copyable prompt
 
-Investigate and fix the remaining electrified-search and Claude widget issues in this repository. Work from current code and live provider evidence. Keep the existing ChatGPT behavior and every tool name, description, schema and annotation unchanged. Do not deploy to production.
+Investigate and fix the remaining category-search and Claude rendering issues in this CarClever repository. Use the current code as source of truth, preserve all working ChatGPT behavior, and stop before production deployment.
 
-TASK 1 — Make combined electrified searches true AND searches
+TASK 1 — Fix body and size constraints for electrified searches
 
-The current build improved category routing and hybrid model names, but its own live evidence still exposes these defects:
+Do not treat Auto.dev fuel_type=Gasoline as proof that a listing is not hybrid. Auto.dev reports the primary fuel and has no secondary/electrification field in its listings schema. Preserve the current model/trim-based HEV/PHEV identification and qualified model-name work. A confirmed hybrid trim may legitimately have Gasoline as primary fuel.
 
-1. Strict hybrid filtering falls back to unfiltered gasoline results when zero verified hybrids survive. Remove that behavior for an explicit/required hybrid or PHEV request. Return an honest no-exact-match result or use an existing explicit relaxation mechanism; never silently return gasoline.
-2. A listing reported as fuel=Gasoline was accepted because its model/title contained “Hybrid.” A requested candidate label is not proof of the listing’s powertrain. For mixed-powertrain nameplates, require trustworthy listing-level evidence. Treat unknown as unknown. Keep HEV, PHEV, BEV and mild hybrid distinct.
-3. Body signals currently reorder candidates but do not constrain final results: “electric truck under $80k” returned only crossovers and was called correct because all were electric. That is incorrect. Explicit truck/SUV/minivan/size requirements must filter candidates and final listings before any cap; if no matching inventory remains, say so rather than filling with another body type.
-4. The claim that Auto.dev stores Lightning as model=F-150, trim=Lightning was not proven with raw provider responses. Compare raw results for Ford/F-150 and Ford/F-150 Lightning, including model, trim, fuel_type, bodyStyle and VIN, before choosing the query representation. Do the same for ambiguous qualified names such as RX 350h, 4xe, PowerBoost and i-FORCE MAX.
-5. Remove the positional failure caused by selecting only the first five pairs. Filter by all detected dimensions first, then apply a documented bounded query strategy. Do not let list order decide whether a valid body/powertrain class is searched.
+The reproducible defect is that “electric truck under $80k” returns electric SUVs/crossovers. Current logic appears to move truck-tagged candidates to the front and then fills the limited candidate set with other EV body types. That violates the explicit truck requirement.
 
-Audit and add missing high-demand U.S. used-market coverage where provider evidence supports it. Prioritize:
-- Hybrid pickups: Ford Maverick Hybrid; Ford F-150 PowerBoost; Toyota Tundra i-FORCE MAX; Toyota Tacoma i-FORCE MAX.
-- Other high-value hybrid gaps: Toyota Grand Highlander Hybrid, Corolla Cross Hybrid, Venza, Sequoia and 4Runner i-FORCE MAX; Ford Escape Hybrid; Kia Niro Hybrid; Mazda CX-50 Hybrid; Lexus NX/UX hybrid variants.
-- PHEV: RAV4 Prime/Plug-in Hybrid, Prius Prime/Plug-in Hybrid, Escape PHEV, Outlander PHEV, Pacifica Hybrid, Wrangler/Grand Cherokee 4xe, Sorento/Sportage/Tucson/Santa Fe PHEV, Mazda CX-70/CX-90 PHEV, BMW X5 xDrive45e/50e, Volvo Recharge/T8 and Lexus “h+” variants.
-- Electric pickups: F-150 Lightning, Rivian R1T, Silverado EV, Sierra EV, GMC Hummer EV Pickup and Cybertruck; also verify large EV SUVs such as EV9, R1S and Model X.
+Trace category detection, bodySignal, model selection, candidate limits, Auto.dev calls, post-filtering, fallback and final display. When the user explicitly asks for a truck, SUV, minivan or size class, apply that as an AND constraint to the candidate models and final results. Do not backfill an electric-truck search with SUVs. If no matching truck inventory exists, return an honest no-exact-match result.
 
-This is an audit list, not a mandatory whitelist. Verify actual Auto.dev naming and U.S. model years. Retain discontinued models for used searches. Do not add announced vehicles with no searchable inventory. Do not infer electrification from ordinary trims such as Limited, XLT, Lariat or TRD. Remember that older Siennas and mixed-year nameplates may be gasoline even if current versions are hybrid-only.
+Before changing F-150 handling, compare raw Auto.dev responses for Ford/F-150 and Ford/F-150 Lightning to confirm the provider’s actual model/trim representation. Do not rely on the prior inference alone.
 
-Acceptance tests must inspect actual returned listings, not category labels:
-- large hybrid SUV under $70k in 90210
-- hybrid pickup under $50k in 90210
-- full-size hybrid truck under $70k in 90210
-- plug-in hybrid SUV under $50k in 90210
-- plug-in hybrid minivan under $45k in 90210
-- electric truck under $80k in 90210
-- large electric SUV under $80k in 90210
-- ordinary gasoline truck control
-- explicit no-match case
+Audit current candidate coverage and add provider-confirmed popular electrified pickups if missing:
+- Ford Maverick Hybrid
+- Ford F-150 PowerBoost
+- Toyota Tacoma i-FORCE MAX
+- Toyota Tundra i-FORCE MAX
+- Ford F-150 Lightning
+- Rivian R1T
+- Chevrolet Silverado EV
+- GMC Sierra EV
+- GMC Hummer EV Pickup
+- Tesla Cybertruck
 
-For every returned item show year/make/model/trim, provider fuel evidence, body/size classification and which hard constraints passed. No gasoline in required HEV/PHEV results, no HEV in required PHEV results, and no crossover/SUV in required truck results. If inventory is absent, the correct result is no exact matches.
+This is an audit list, not a mandatory whitelist. Verify U.S. used inventory, model years and actual Auto.dev make/model/trim strings. Do not add announced vehicles without searchable inventory or classify ordinary trims such as XLT, Lariat, Limited or TRD as electrified by themselves.
 
-TASK 2 — Continue the Claude rendering investigation from the already-attempted fix
+Inspect the current make/model-pair limit. The supplied trace showed selectionCount capped at 5 despite an earlier expectation that it had increased. If it is still 5, explain why. Ensure filtering happens before limiting and that the bounded strategy scales enough to query the relevant matching models rather than silently excluding them by list position.
 
-Do not repeat this completed change as the solution:
+TASK 2 — Correct “large luxury SUV” classification
+
+The current luxury_suv list still mixes sizes. Lexus RX, Acura MDX, BMW X5, Mercedes GLE, Audi Q7/Q8 and similar vehicles can remain candidates for a general “luxury SUV” search, but they must not satisfy an explicit “large luxury SUV” request merely because they are luxurious SUVs.
+
+Implement a separate size-aware route/tag/filter for large luxury SUVs. Verify candidates such as Cadillac Escalade/ESV, Lincoln Navigator/L, Mercedes GLS, BMW X7, Lexus LX, Infiniti QX80, Jeep Grand Wagoneer and full-size Range Rover against provider naming and inventory. Keep midsize and compact luxury SUVs out of the explicit large tier.
+
+Test:
+- large luxury SUV under $80k in 90210
+- luxury SUV under $80k in 90210
+- large SUV under $70k in 90210
+
+For each result show the model and its internal size classification so the difference is auditable.
+
+TASK 3 — Continue the Claude rendering investigation using the correct Fractal origin
+
+Do not repeat the existing fallback as a new fix:
 const publicBaseUrl = process.env.PUBLIC_BASE_URL ?? process.env.MCP_SERVER_URL;
 
-That change already made Skybridge’s resource openai/widgetDomain/serverUrl use the Fractal preview origin instead of localhost, and tools/list stayed byte-identical. It did not by itself prove the widget renders in Claude.
+That change already made preview resources use the Fractal preview origin instead of localhost. It did not prove Claude rendering.
 
-Inspect the exact current resources/read payload and widget HTML served through the real preview/public MCP URL. Compare it with the payload that currently works in ChatGPT. Trace resource URI, MIME type, _meta fields, CSP, asset URLs, embedded serverUrl, postMessage/host handshake and any host-specific metadata.
+The newer CarClever app required three related but separate safeguards:
+1. optional resource _meta.ui.domain was deliberately omitted because a plain application origin caused Claude iOS to fetch the resource but fail to mount it;
+2. OpenAI-specific openai/widgetDomain and CSP resourceDomains were kept and made equal to the actual OpenAI serving origin;
+3. the widget origin was environment/project-specific rather than globally hardcoded.
 
-A relevant independently confirmed precedent from another MCP app: Claude iOS failed after a successful resources/read when the optional resource field _meta.ui.domain contained the app’s plain serving origin; omitting _meta.ui.domain fixed Claude, while the separate OpenAI-specific openai/widgetDomain remained for ChatGPT. Check whether this repository or Skybridge emits _meta.ui.domain. If present, test omitting only that optional field through supported source/configuration—not by editing node_modules. Do not remove or repurpose openai/widgetDomain merely because the names look similar.
+Apply those as diagnostic evidence, not copied code. Inspect what this Skybridge app actually emits.
 
-Also verify whether production would emit its production MCP origin rather than the preview origin; MCP_SERVER_URL may be environment-specific. Do not hardcode either domain.
+For this legacy Fractal app, distinguish:
+- MCP endpoint: https://f5025062-4d61-4160-95a7-1cc05857c622.usefractal.app/mcp
+- serving origin: https://f5025062-4d61-4160-95a7-1cc05857c622.usefractal.app
+- preview origin: the corresponding .preview.usefractal.app origin
 
-Evidence required:
-- current tools/list hash before/after
-- current resources/read metadata and MIME before/after
-- extracted asset/bootstrap URLs and proof they return successfully
-- exact change and why it affects Claude mounting
-- ChatGPT live regression test
-- Claude web, desktop and iOS test where accessible; mark unavailable surfaces NOT TESTED with exact manual steps
-- useful text fallback remains available
+The widget-domain/CSP value must be an origin, not the /mcp endpoint. Preview must not leak into production. Confirm what MCP_SERVER_URL contains in both environments. If Fractal supports an environment-specific PUBLIC_BASE_URL, assess whether explicitly setting that per environment is safer than relying only on the injected fallback.
 
-A schema hash proves tool-contract safety, not widget rendering. If code and resources are correct but only an existing Claude connector remains stale, prove fresh connector/resource behavior before changing code again.
+Inspect the real public resources/read payload, MIME type, resource URI, _meta, CSP, embedded asset/bootstrap URLs, serverUrl and host postMessage handshake. Check specifically whether _meta.ui.domain is emitted. If it is, test omitting only that optional field through supported application configuration/source; do not edit node_modules and do not remove openai/widgetDomain.
 
-Return confirmed findings, raw evidence, changes, tests and remaining risks. Keep search and rendering changes independently reviewable. Stop before production deployment or Anthropic submission.
+Required evidence:
+- tools/list hash before/after
+- resources/read metadata and MIME before/after
+- asset/bootstrap URLs and successful HTTP retrieval
+- confirmation that production values use the production Fractal origin
+- fresh ChatGPT regression test
+- Claude web/desktop/iOS tests where accessible, with unavailable surfaces marked NOT TESTED and exact manual steps
+- text fallback remains usable
+
+A matching schema hash does not prove rendering. Separate fresh-resource behavior from cached connector behavior. Return confirmed findings, minimal changes, test results and remaining risks. Keep the three tasks independently reviewable and stop before production deployment or Anthropic submission.
