@@ -47,3 +47,8 @@ The hybrid-pickup result may indicate missing candidate coverage or provider ava
 ## Further owner preview observation
 
 The electric-truck test returned no results. Changing the prompt to “Full-size truck under $70k in 90210” returned results. Ordinary full-size truck search therefore works, while the electric-plus-truck path remains broken or has no verified matching candidate. This does not validate the previous Fractal claim that electric-truck behavior was complete.
+
+
+## Further owner preview observation — successful electric truck rerun
+
+A rerun of “Electric truck under $80k in 90210” returned Rivian R1T listings. These are valid electric trucks. This shows the electric-truck path can work, although the earlier empty run remains unexplained and should be considered intermittent/provider or parsing variance until repeated deterministically. The compact electric truck failure and missing hybrid-pickup coverage remain open.
