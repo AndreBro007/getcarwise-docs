@@ -42,3 +42,8 @@ André's preview test for “large hybrid SUV under $70k in 90210” returned si
 - Variants adding “truck,” using “hybrid truck,” and using “truck” alone also returned no results.
 
 The hybrid-pickup result may indicate missing candidate coverage or provider availability. The plain “truck” failure is a separate higher-priority regression because the earlier build reported ordinary truck searches returning F-150/Silverado/Ram/Sierra/Tundra results. Fractal must reproduce the plain truck case before assuming this is only an inventory gap. The large-hybrid-size failure remains separately queued because only one Fractal request can be sent per day.
+
+
+## Further owner preview observation
+
+The electric-truck test returned no results. Changing the prompt to “Full-size truck under $70k in 90210” returned results. Ordinary full-size truck search therefore works, while the electric-plus-truck path remains broken or has no verified matching candidate. This does not validate the previous Fractal claim that electric-truck behavior was complete.
