@@ -1,6 +1,6 @@
 # GetCarWise Documentation Repository
 
-**Purpose:** Persistent storage for session documentation, investigations, strategies, and reference materials.
+**Purpose:** Persistent storage for session documentation, investigations, strategies, submission records, testing ledgers, and reference materials.
 
 **Organization:** Root-level files with structured naming for easy search and categorization.
 
@@ -10,105 +10,71 @@
 
 All documentation follows this pattern: `[TYPE]_[TITLE]_[DATE].md`
 
-### TYPE Categories
+Common TYPE categories include:
 
-- **AUDIT_** — Infrastructure audits, system reviews, analysis
-- **PLAN_** — Strategy documents, implementation plans, roadmaps
-- **PROTOCOL_** — Process SOPs, automation procedures, workflows
-- **GUIDE_** — Reference guides, how-tos, user documentation
-- **INVESTIGATION_** — Research findings, competitive analysis, market research
+- **AUDIT_** — infrastructure audits, system reviews, analysis
+- **PLAN_** — strategy documents, implementation plans, roadmaps
+- **PROTOCOL_** — process SOPs, automation procedures, workflows
+- **GUIDE_** — reference guides and how-tos
+- **INVESTIGATION_ / RESEARCH_** — research findings
+- **TEST_** — manual/automated validation records
+- **SUBMISSION_** — platform submission snapshots and status records
+- **STATUS_ / CURRENT_** — current operational state
+- **DECISION_ / STRATEGY_** — approved or proposed strategic records
 
-### TITLE
-
-Descriptive filename in `snake_case` (no spaces, hyphens ok)
-
-### DATE
-
-`YYYYMMDD` format for version control and sorting
-
----
-
-## Examples
-
-```
-AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260826.md
-├─ Type: AUDIT
-├─ Title: Website App Infrastructure
-└─ Date: Aug 26, 2026
-
-PLAN_PRIORITY_3_WEBSITE_REVIEW_20260826.md
-├─ Type: PLAN
-├─ Title: Priority 3 Website Review
-└─ Date: Aug 26, 2026
-
-PROTOCOL_SESSION_END_20260826.md
-├─ Type: PROTOCOL
-├─ Title: Session End
-└─ Date: Aug 26, 2026
-```
+DATE uses `YYYYMMDD`.
 
 ---
 
 ## Cross-Referencing System
 
-All documents are cross-referenced in the **carclever-widget** repository:
+Core administrative state remains in `carclever-widget` (`STATE.md`, `TASKS.md`, `DECISIONS.md`, `PLAYBOOK.md`, `REFERENCE.md`). Session research, audits, testing and submission records live here.
 
-- **STATE.md** — Links to active documents by priority/status item
-- **TASKS.md** — Links to task-related documentation
-- **DECISIONS.md** — Links to decision-supporting documents
-
-**How to find a document:**
-1. Search `carclever-widget` STATE/TASKS/DECISIONS for your item
-2. Find the doc reference with filename
-3. Fetch from `getcarwise-docs` via git
+Older dated documents are historical evidence. When a newer `CURRENT_`, `STATUS_` or `SUBMISSION_` file explicitly supersedes a stale status statement, use the newer file for current operational state while preserving the older file as history.
 
 ---
 
-## Next Session Access
+## Current CarClever / Find My Car state — 2026-09-12
 
-**Every session:**
-1. FILE VERIFICATION fetches state files from `carclever-widget`
-2. FILE VERIFICATION fetches documentation from `getcarwise-docs`
-3. All state files contain cross-references linking to relevant docs
-4. No context loss between sessions
+The active submitted release is **V2** from `AndreBro007/carclever-find-my-car` branch `release/v2`, exact SHA:
 
-**Document versioning:**
-- Latest version only per session (old versions deleted before push)
-- Date in filename = session version
-- Search by type, title, or date
+`b8b07d8542f5d3f2a12e00433e089dde28ae5792`
+
+V2 is now in review on **both platforms** through separate production origins:
+
+- **OpenAI:** `https://carclever-oai.getcarwise.app/mcp` — V2 resubmitted 2026-09-12, status **REVIEW**.
+- **Anthropic:** `https://carclever-find-my-car.vercel.app/mcp` — existing production project deliberately promoted to V2 at the exact SHA above; server rescan/listing update saved 2026-09-12, status **IN REVIEW**.
+
+V1/main remains preserved and V3 remains paused.
+
+### Start here
+
+- `CURRENT_V2_STATE_20260909.md` — current operational source of truth, updated Sep 12.
+- `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md` — living release/test ledger, updated through both Sep 12 submissions.
+- `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md` — final OpenAI V2 submission record.
+- `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md` — Anthropic production cutover, rescan, listing update and current cache-retest item.
+- `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md` — current three-app portfolio companion to the older historical `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md`.
+- `SESSION_CARCLEVER_DUAL_PLATFORM_CLOSEOUT_20260912.md` — Sep 12 session closeout and next-session checklist.
+
+### Current remaining checks
+
+1. Claude connector/cache reset and retest: confirm base connector now advertises V2 (`vehicleNeeds`/electrification fields, no `goals`), then CR-V baseline + exact-VIN Buyer Check.
+2. Confirm long-term Vercel production-branch/release behavior for the Anthropic project so a future V1 `main` push cannot silently supersede the manually promoted V2 production release.
+3. Freeze V2 during both platform reviews except for platform-requested or evidence-backed corrections.
 
 ---
 
-## Session-End Automation
+## Session access / closeout
 
-This repository is populated automatically via the **SESSION_END** protocol:
+At session start, dynamically list this repository root and fetch every returned file; do not maintain a hardcoded filename list. At session close, write material findings here, re-fetch every changed file, and verify expected content before claiming completion.
 
-1. Claude creates documentation during a session
-2. At session end, only latest version kept
-3. Docs pushed to `getcarwise-docs` with cross-references added to state files
-4. Next session: FILE VERIFICATION fetches all docs + state
-
-See `carclever-widget` PLAYBOOK.md → TASK: SESSION_END for full protocol.
+See `carclever-widget/PLAYBOOK.md` and `PROTOCOL_SESSION_END_20260826.md` for the broader operating procedure.
 
 ---
 
 ## Repository Info
 
 - **GitHub:** https://github.com/AndreBro007/getcarwise-docs
-- **Managed by:** Claude Automation (Session-end protocol)
-- **Strategy:** Root-level files, structured naming, cross-referenced in carclever-widget
-- **Last Updated:** Aug 26, 2026
-
----
-
-**First session docs ready to be added:**
-- AUDIT_WEBSITE_APP_INFRASTRUCTURE_20260826.md
-- PLAN_PRIORITY_3_WEBSITE_REVIEW_20260826.md
-- PROTOCOL_SESSION_END_20260826.md
- 
-
-## Current V2 status
-
-The current amended V2 contract and release status are documented in [CURRENT_V2_STATE_20260909.md](CURRENT_V2_STATE_20260909.md). The V2 release is merged into `release/v2` and deployed at `https://ccfmc-dev-v2.vercel.app/mcp`. Historical design and feasibility documents now include dated implementation-status addenda so proposed versus implemented material is distinguishable.
-
-The Anthropic-reviewed V1 endpoint remains separate and untouched.
+- **Managed by:** GetCarWise Business/Strategy + Engineering documentation workflows
+- **Strategy:** root-level dated files, structured naming, cross-referenced from core state/admin records
+- **Last Updated:** 2026-09-12
