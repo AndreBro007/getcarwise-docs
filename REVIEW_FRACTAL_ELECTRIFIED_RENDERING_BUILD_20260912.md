@@ -34,3 +34,11 @@ Ask it to correct or explicitly document compact/midsize/full-size truck classif
 ## Owner preview test result — large hybrid SUV
 
 André's preview test for “large hybrid SUV under $70k in 90210” returned six Lexus RX 350h listings. The hybrid identification is plausible, but the size constraint failed: RX is a midsize luxury SUV, not a large SUV. This demonstrates that the hybrid body filter is working only at the broad SUV level; the large-size signal is still being discarded on the hybrid category path. The result must be treated as a reproducible defect requiring another Fractal correction before production deployment.
+
+
+## Additional owner preview observations
+
+- “Hybrid pickup under $70k in 90210” returned no results.
+- Variants adding “truck,” using “hybrid truck,” and using “truck” alone also returned no results.
+
+The hybrid-pickup result may indicate missing candidate coverage or provider availability. The plain “truck” failure is a separate higher-priority regression because the earlier build reported ordinary truck searches returning F-150/Silverado/Ram/Sierra/Tundra results. Fractal must reproduce the plain truck case before assuming this is only an inventory gap. The large-hybrid-size failure remains separately queued because only one Fractal request can be sent per day.
