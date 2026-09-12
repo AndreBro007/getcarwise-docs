@@ -29,3 +29,8 @@ Rivian’s own site identifies R1T as an electric truck, while independent vehic
 ## Required next response from Fractal
 
 Ask it to correct or explicitly document compact/midsize/full-size truck classification, run hybrid pickup/full-size hybrid tests, and report exact current category tables and provider evidence. Treat Claude rendering as preview-ready only until production resources/read and real ChatGPT/Claude tests are completed.
+
+
+## Owner preview test result — large hybrid SUV
+
+André's preview test for “large hybrid SUV under $70k in 90210” returned six Lexus RX 350h listings. The hybrid identification is plausible, but the size constraint failed: RX is a midsize luxury SUV, not a large SUV. This demonstrates that the hybrid body filter is working only at the broad SUV level; the large-size signal is still being discarded on the hybrid category path. The result must be treated as a reproducible defect requiring another Fractal correction before production deployment.
