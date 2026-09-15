@@ -2,15 +2,17 @@
 
 ## Why this doc exists
 
-Edmunds moved its affiliate program from CJ Affiliate to Impact.com (as of this
-session, exact cutover date not yet confirmed with Edmunds/Impact directly).
-André has not received a migration email from Impact — only the original
-account-approval email. This doc is a first-pass reconnaissance of the Impact
-dashboard (Claude Team Engineering lane, via Claude-in-Chrome against an
-already-authenticated `app.impact.com` session) to establish what's actually
-available before any code changes are made. **No code has been touched yet.**
-No credentials were entered anywhere; no API tokens were generated (confirmed
-none exist yet — see API Access section).
+Edmunds moved its affiliate program from CJ Affiliate to Impact.com. André
+has not received a migration email from Impact — only the original
+account-approval email — but confirmed directly (Sep 16) that **CJ is still
+live**, so this is a planned transition, not an emergency one: **target is
+fully moved over before end of September 2026.** This doc is a first-pass
+reconnaissance of the Impact dashboard (Claude Team Engineering lane, via
+Claude-in-Chrome against an already-authenticated `app.impact.com` session)
+to establish what's actually available before any code changes are made.
+**No code has been touched yet.** No credentials were entered anywhere; no
+API tokens were generated (confirmed none exist yet — see API Access
+section).
 
 Companion technical doc (code-side findings, CJ implementation detail): see
 `lib/edmunds-cj.ts` / `lib/link-resolution.ts` in `carclever-find-my-car`,
@@ -159,24 +161,63 @@ not something to pursue unilaterally. Flagging clearly as its own item.
   Bonus Progress, plus a "More" submenu (not expanded this session). All will
   read $0 until real traffic flows through Impact links.
 
+## CJ status — confirmed live (André, Sep 16)
+
+**CJ is still live as far as André can see.** This is not a hard cutover —
+both programs can run in parallel. André's plan: **transition from CJ to
+Impact before end of month (Sep 2026)**, not urgently/immediately. This
+changes the priority of the migration from "urgent, might already be broken"
+to "planned, has a few weeks of runway." Worth still spot-checking a live CJ
+link on the site periodically before end of month, but this is no longer the
+most time-sensitive open item.
+
+## Context: three app submissions currently in review (André, Sep 16)
+
+Relevant background for sequencing this migration against other in-flight
+work — three separate app review processes are open at once:
+
+1. **ChatGPT — old CarClever** (the original/legacy app)
+2. **ChatGPT — new CarClever** (the OpenAI resubmission candidate, see
+   `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md` and related)
+3. **Claude — new CarClever** (this is `carclever-find-my-car`, V1 in
+   `STATE.md` terminology — the Anthropic review referenced throughout
+   `STATE.md` as "pending, confirm each session")
+
+Any CJ→Impact code change to `lib/edmunds-cj.ts` touches the live V1 app that
+is *itself* mid-review with Anthropic. Given V1 is frozen per repeated
+`STATE.md` entries ("V1 is frozen... do not alter its code"), this affiliate
+migration likely needs to land on a non-`main` branch first (V2/dev) and
+only reach `main`/production once a decision is made about whether touching
+V1 mid-review is acceptable — that's André's call, not assumed here.
+
+## Trackonomics Essentials (seen in Impact dashboard, not yet evaluated)
+
+`Content` area also surfaces an upsell page for **Trackonomics Essentials**
+(`app.impact.com/secure/mediapartner/fr/trackonomics-essentials-upgrade.ihtml`)
+— an Impact **add-on product**, not a feature already active on this account.
+Marketing framing: "Grow your entire affiliate channel in one platform... create
+links and track performance across all your networks in one place," with
+multi-network link generation as a headline feature. This is relevant only if
+GetCarWise ends up running Edmunds-via-Impact alongside other affiliate
+programs on *different* networks simultaneously (i.e. a genuine multi-network
+management need) — not needed for a straight CJ→Impact swap of a single
+program. Flagging for awareness, not recommending action; it's a paid upgrade
+and the page's full feature/pricing detail wasn't fully read this session
+(page did not scroll further via automation — worth a direct look if this
+becomes relevant).
+
 ## Open questions / things this session could NOT confirm
 
-1. **Exact CJ→Impact cutover date and whether the old CJ links
-   (`anrdoezrs.net/click-101637236-...`) are still live/paying, or already
-   dead.** André hasn't received migration paperwork beyond the original
-   approval email — it's possible documentation exists in a menu/tab not yet
-   found, or hasn't been sent yet. Worth checking directly with Edmunds/CJ
-   support if this isn't resolved soon, since a live site currently pointing
-   at dead CJ links would silently lose all commission — this is the most
-   time-sensitive open item.
-2. Master Program Agreement — not read in full.
-3. Reports → More submenu — not expanded.
-4. Product Catalog schema — not inspected (no sample row pulled; the
+1. Master Program Agreement — not read in full.
+2. Reports → More submenu — not expanded.
+3. Product Catalog schema — not inspected (no sample row pulled; the
    752 GB figure needs a sanity check).
-5. Whether Impact's program record (via the `GET /Mediapartners/{AccountSID}/Campaigns`
+4. Whether Impact's program record (via the `GET /Mediapartners/{AccountSID}/Campaigns`
    API) exposes deep-linking permissions/allowed domains the way the public
    docs suggest other Impact programs do — not checked for the Edmunds
    program specifically.
+5. Full Trackonomics Essentials feature/pricing detail — page didn't scroll
+   past the hero section via automation this session.
 
 ## Explicitly NOT done this session (needs sign-off first)
 
@@ -190,15 +231,21 @@ not something to pursue unilaterally. Flagging clearly as its own item.
 
 ## Recommended next steps (for André's decision, not pre-committed)
 
-1. Confirm with Edmunds/Impact support (or find it doesn't need confirming)
-   whether the old CJ link is still tracking — this determines urgency.
-2. Decide: pursue Impact API access (create AccountSID/AuthToken) now, or
+1. **Target: CJ→Impact fully transitioned before end of September 2026**
+   (André's stated timeline, Sep 16). CJ confirmed still live, so no
+   emergency cutover needed — this can be sequenced deliberately.
+2. Decide how to sequence this against the three in-review app submissions
+   (ChatGPT old CarClever, ChatGPT new CarClever, Claude new CarClever/V1) —
+   in particular whether an affiliate-link code change should touch `main`
+   while V1 is under Anthropic review, or land on a dev branch until that
+   resolves.
+3. Decide: pursue Impact API access (create AccountSID/AuthToken) now, or
    continue with manual dashboard-generated Vanity Links short-term while
    evaluating.
-3. Decide whether the Edmunds Product Catalog feed is worth a proper
+4. Decide whether the Edmunds Product Catalog feed is worth a proper
    evaluation against Auto.dev — separate workstream, not blocking the
    tracking-link migration.
-4. Once API access exists, Engineering lane can scope the actual
+5. Once API access exists, Engineering lane can scope the actual
    `lib/edmunds-cj.ts` → Impact replacement as a real implementation task
    (new module, new tests, live-tested before merge — same discipline as the
    original CJ integration).
