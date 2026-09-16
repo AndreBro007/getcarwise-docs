@@ -229,23 +229,147 @@ becomes relevant).
 - The 4 test Vanity Links created during this session's exploration were not
   deleted (harmless, but flagging for cleanup if desired).
 
+## Session 2 (Sep 16, later) — deep-linking confirmed, API token created, agreement NOT yet read
+
+### Terminology correction from earlier in this session
+
+André's "catalog options" question turned out to mean the **API token
+scope picker** (Accounts, Actions, Ads, Catalogs, Clicks, Contracts,
+Tracking Links, Programs, etc.) — not the Product Catalog itself. Recorded
+here so the earlier confusion in this doc/conversation doesn't get
+misread later. Separately: **before creating this token, the available
+scope options and the reasoning for picking specific ones were not
+explained to André first** — a real process miss, corrected going forward:
+scope/credential choices get laid out for a decision before being created,
+not after.
+
+### API token created
+
+One token exists: **"GetCarWise Engineering - Read Access"**, API Version
+16, status Enabled. Scopes granted: **Catalogs only** (two GET endpoints —
+`Retrieve catalogs` and `Retrieve catalog`). All other scope categories were
+explicitly cleared. This token **cannot** create tracking links or read
+program/deep-linking settings (no Tracking Links or Programs scope) — those
+would need a separate scope grant, deliberately not added yet pending a
+clearer sense of what the app vs. the website actually each need (likely
+two separate purpose-built tokens rather than one shared one — not decided).
+
+**The actual secret (AccountSID + AuthToken) was never viewed, copied, or
+transcribed by Claude** — per credential-handling rules, that value must
+come from André directly from the dashboard, never through this chat.
+
+### Priority 1 — Edmunds VIN/deep-linking — CONFIRMED WORKING AT THE PERMISSION LEVEL
+
+This was flagged as the single most important open question: can we point
+a tracking link at a specific vehicle (VIN) page, since VIN-level linking is
+the most direct path to the two highest-value commissionable events (new
+and used vehicle leads, $10 each)?
+
+**Confirmed via the Assets screen's own "Deeplinking" filter** (Content →
+Assets → filter sidebar → Deeplinking: Supported / Not Supported):
+- Filtering to **Supported** → all 12/12 Edmunds assets shown.
+- Filtering to **Not Supported** → 0/12 shown.
+
+This proves Edmunds has deep linking enabled for our program, with no
+assets excluded. Mechanically (per Impact's public Help Center docs, not
+this account specifically): a tracking link is deep-linked by appending
+`u={percent-encoded destination URL}` to it — e.g.
+`https://edmunds.sjv.io/xyz?u=https%3A%2F%2Fwww.edmunds.com%2F...%2Fvin%2F...`.
+This is functionally the same shape as CJ's `?url=` wrapper, which is good
+news for reusing `lib/edmunds-cj.ts`'s existing URL-building logic once the
+base domain/format changes to Impact's.
+
+**Still NOT confirmed — two real gaps before this is production-ready:**
+1. **Permitted domains/paths for deep linking specifically.** The general
+   capability is on, but Impact's docs describe a separate, more granular
+   allow-list (domains, with wildcard support) that a brand can restrict
+   deep links to. No dashboard location was found this session that shows
+   *our* Edmunds program's specific permitted-domains list (the "Details"
+   tab / "Discover → My Brands" path described in Impact's own docs isn't
+   reachable in this account's current single-brand dashboard layout — it
+   may require the broader marketplace view, not yet located).
+2. **A real, live click-through test has not been done.** Confirming the
+   permission is on is not the same as confirming an actual Edmunds
+   VIN-specific URL, wrapped as a `u=` deep link, resolves correctly through
+   Impact's redirect rather than erroring or falling back to a generic page.
+   This is the next concrete task — build one real test link from an
+   existing VIN URL shape the app already generates, and manually verify it
+   lands correctly.
+
+### Master Program Agreement — NOT YET READ, flagged honestly
+
+André asked directly whether this had been read before touching anything
+further, specifically to avoid inadvertently breaking Impact's rules
+(e.g. around scraping the catalog, deep-linking limits, or link
+cloaking/obscuring — a known common clause in affiliate agreements
+generally). **Honest answer: no, not read in full, and here's exactly why:**
+the PDF (`https://impact.com/legal/impact.com_Master_Program_Agreement.pdf`)
+blocks automated fetching via its own robots.txt, and web-search snippets
+only surface fragmentary sections (indemnification, confidentiality,
+liability caps — standard boilerplate, nothing found yet about deep-linking
+or catalog-use restrictions specifically). A related but distinct public
+document, Impact's "Partner User Agreement" (found via a third-party SEC
+filing, not impact.com directly), has a "Restrictions" section that
+explicitly prohibits "cookie stuffing or other means" of manipulating
+attribution — relevant in spirit but not the same document, and the
+available snippet cuts off before the full restriction list.
+
+**This is a real, acknowledged gap, not a checked-off task.** The only
+reliable path forward: André reads the PDF directly (already open in an
+account-authenticated tab this session), or shares the actual text so
+Claude can search it properly. Nothing that could plausibly conflict with
+this agreement (API automation beyond read-only research, catalog scraping,
+building the actual Impact link-replacement code) should proceed until this
+is genuinely resolved — not assumed clear.
+
+### Overall plan status — still being built, not finalized
+
+There is not yet a finished, written step-by-step plan — this doc is
+presently a running record of the *investigation* phase, which is exactly
+where things should stay until: (1) the Master Program Agreement is
+confirmed clear, (2) the deep-link click-through test passes, (3) André has
+decided on the token/scope structure for app vs. website use. Once those
+three land, the next version of this doc should convert from "investigation
+notes" into an actual phased plan with concrete tasks, owners, and
+sequencing — deliberately not written yet, to avoid planning around
+unconfirmed assumptions.
+
 ## Recommended next steps (for André's decision, not pre-committed)
 
-1. **Target: CJ→Impact fully transitioned before end of September 2026**
+1. **Immediate:** Read the Master Program Agreement (André, directly) —
+   blocking gate before any further API/link automation.
+2. **Immediate:** Build and manually verify one real VIN deep-link test
+   through Impact (Engineering) — confirms Priority 1 end-to-end, not just
+   at the permission level.
+3. **Target: CJ→Impact fully transitioned before end of September 2026**
    (André's stated timeline, Sep 16). CJ confirmed still live, so no
    emergency cutover needed — this can be sequenced deliberately.
-2. Decide how to sequence this against the three in-review app submissions
-   (ChatGPT old CarClever, ChatGPT new CarClever, Claude new CarClever/V1) —
-   in particular whether an affiliate-link code change should touch `main`
-   while V1 is under Anthropic review, or land on a dev branch until that
-   resolves.
-3. Decide: pursue Impact API access (create AccountSID/AuthToken) now, or
-   continue with manual dashboard-generated Vanity Links short-term while
-   evaluating.
-4. Decide whether the Edmunds Product Catalog feed is worth a proper
+4. Decide how to sequence this against the three in-review app submissions
+   — corrected understanding (see Session 2 notes elsewhere in
+   `getcarwise-docs`): the ChatGPT resubmission and the Claude review are
+   **the same V2 codebase** (`release/v2`, SHA `b8b07d8`), not separate
+   code. `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`'s own rule is to
+   freeze `release/v2` during review absent a platform-requested fix — an
+   Impact migration touching `lib/edmunds-cj.ts` should build/test on its
+   own branch and hold there, not merge into `release/v2` or `main` while
+   review is open.
+5. Decide token/scope structure: likely separate purpose-built tokens for
+   app (server-side, Tracking Links scope) vs. any future website API use,
+   rather than one shared broad token — not yet built.
+6. Decide whether the Edmunds Product Catalog feed is worth a proper
    evaluation against Auto.dev — separate workstream, not blocking the
-   tracking-link migration.
-5. Once API access exists, Engineering lane can scope the actual
-   `lib/edmunds-cj.ts` → Impact replacement as a real implementation task
-   (new module, new tests, live-tested before merge — same discipline as the
-   original CJ integration).
+   tracking-link migration. One specific idea raised: use catalog data as a
+   pre-check to confirm a VIN exists in Edmunds' feed before building the
+   Check-avail/Similar-options links, improving link reliability rather than
+   replacing Auto.dev's live-inventory role.
+7. Investigate the Impact marketplace for other relevant affiliate programs
+   (vehicle inspection services, auto finance/lending — CJ's LendingTree
+   application was never approved/heard back on) — website-first candidate,
+   raised by André, not yet started.
+8. Look into the Publisher Tag for the website (auto-converts plain Edmunds
+   links into tracked ones + impression tracking) — André wants this
+   explored now, in parallel with current website/marketing work.
+9. Once (1) and (2) above are resolved, Engineering lane can scope the
+   actual `lib/edmunds-cj.ts` → Impact replacement as a real implementation
+   task (new module, new tests, live-tested before merge — same discipline
+   as the original CJ integration, built on its own branch per point 4).
