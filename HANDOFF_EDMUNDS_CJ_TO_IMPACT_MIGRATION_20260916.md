@@ -185,7 +185,7 @@ research or testing.
 | Product Catalog API | **Confirmed live, works for general search** (dealer, model, category) — does NOT support VIN lookup (confirmed by Impact support). Possible website use, not an app-side VIN solution — see above |
 | Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
-| App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based. Plan confirmed: same static-formula swap as old CarClever, no API/catalog dependency |
+| App code (`lib/edmunds-cj.ts`) | **Implemented and tested** on branch `edmunds-impact-swap` (79/79 tests pass, clean build on both Anthropic and OpenAI Vercel projects — shared codebase). Not yet promoted to production on either platform. |
 | Target completion | End of September 2026 |
 
 ## Full detail
