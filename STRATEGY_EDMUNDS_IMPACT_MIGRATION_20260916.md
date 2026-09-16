@@ -381,12 +381,55 @@ not:
 Catalog API reads, or the plan as currently scoped. The live click-through
 test (next item below) can proceed.
 
+### Live VIN deep-link test — PASSED (Sep 16, later)
+
+André manually clicked the test link (not Claude — deliberately, to avoid
+looking like automated/bot traffic to Edmunds/Impact, consistent with
+Section 4.2's prohibition on non-genuine End User actions).
+
+**Test setup:** Real, currently-live Edmunds listing — 2026 Honda CR-V
+EX-L, VIN `2HKRS3H79TH322650`, AutoNation Honda Valencia, $34,985. André
+supplied a real CJ tracking link to this same listing as the comparison
+baseline. Claude built the Impact equivalent by entering the clean
+(CJ-params-stripped) Edmunds URL into the dashboard's "Create a link" tool:
+`https://www.edmunds.com/honda/cr-v/2026/vin/2HKRS3H79TH322650/featured-listing/`
+→ Impact returned `https://edmunds.sjv.io/k4vqR0`.
+
+**Result:** André clicked `edmunds.sjv.io/k4vqR0` manually. It resolved to:
+```
+https://www.edmunds.com/honda/cr-v/2026/vin/2HKRS3H79TH322650/featured-listing/
+  ?afsrc=1&im_ref=3b41-OT1MxyZRMh1dFUhBUHkUkr26YUgxRROx80&irgwc=1
+  &irpid=7765200&sharedid=&utm_account=edmunds_affiliate
+  &utm_adgroup=3880547&utm_campaign=edmunds_affiliate&utm_content=7765200
+  &utm_medium=affiliate&utm_source=impact
+```
+Confirmed: `irpid=7765200` and `utm_content=7765200` both match our Impact
+account ID; `utm_source=impact` (not `commission_junction`) confirms this
+is genuinely Impact's tracking, not a leftover CJ redirect. The page shown
+was the correct, exact VIN listing — same price, same dealer, same photo as
+the CJ-link comparison. **VIN-specific deep linking through Impact is
+confirmed working end-to-end, not just enabled at the permission-setting
+level.** This is the single most important open question for the entire
+migration, and it's now answered: yes, this works.
+
+One near-miss worth recording: André initially pasted a link that still
+carried CJ's tracking parameters (`AID`, `PID`, `cjdata`, `cjevent`,
+`utm_source=commission_junction`) rather than the resolved Impact one,
+which looked like a same-page result and briefly suggested the test might
+have failed to differentiate. Re-confirmed with the correct link — real
+pass, not a false positive from two links coincidentally landing on the
+same page (they're the same VIN by design, so that alone wasn't proof of
+which mechanism was used; the query parameters were the actual tell).
+
+**Priority 1 — CLOSED.** VIN deep-linking via Impact works, is permitted
+under the Master Program Agreement, and has been live-verified against a
+real listing.
+
 ## Recommended next steps (for André's decision, not pre-committed)
 
-1. **Immediate:** Build and manually verify one real VIN deep-link test
-   through Impact (Engineering) — confirms Priority 1 end-to-end, not just
-   at the permission level. **Master Program Agreement gate cleared —
-   this can proceed now.**
+1. **DONE.** ~~Build and manually verify one real VIN deep-link test
+   through Impact~~ — passed Sep 16, see "Live VIN deep-link test" above.
+   Priority 1 closed.
 2. **Target: CJ→Impact fully transitioned before end of September 2026**
    (André's stated timeline, Sep 16). CJ confirmed still live, so no
    emergency cutover needed — this can be sequenced deliberately.
