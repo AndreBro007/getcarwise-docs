@@ -545,6 +545,76 @@ specifically for it and should work following their documented steps.
 Likely a better long-term integration path than manual curl/Python calls,
 once set up.
 
+### Track A investigation — VIN lookup explored, not resolved (Sep 16, later)
+
+Following the catalog-schema finding above, investigated whether a
+VIN-based lookup could work for Track A's design (look up VIN in
+catalog → use pre-tracked `Url` if found → fall back to constructed
+`?u=` link otherwise, same formula as old CarClever).
+
+**Confirmed, directly, not inferred: VIN cannot be searched or filtered
+by, in any way, through this API.**
+- `Query=Mpn='{vin}'` → `400 "Unknown search field name: Mpn"` (tested
+  live, exact error)
+- `Keyword={vin}` (free-text search) → empty result, no match (tested
+  live)
+- `Mpn` (the field VIN is stored in) is not on Impact's documented
+  `Query`-eligible-fields list (`CatalogItemId, Name, Description,
+  Labels, Manufacturer, CurrentPrice, StockAvailability, Gtin, Category,
+  DiscountPercentage, Gender, Color, Size`)
+
+**A workaround was tested and partially works, but is NOT yet a
+validated solution — this needs to be stated carefully, an earlier
+draft of this section overstated it as "validated" before being
+corrected:**
+- `Manufacturer` (confirmed to actually store *dealer name*, not car
+  make) IS queryable — confirmed live, `Query=Manufacturer='AutoNation
+  Honda Valencia'` returned 161 items for that one dealer
+- Scanning that 161-item set client-side found an exact VIN match for
+  one specific real car (`2HKRS3H79TH322650`) — same VIN tested earlier
+  in this session's live deep-link click-through test
+- The app's own dealer-name string for that same car (confirmed from a
+  real `carclever-find-my-car` result card, screenshot) matched
+  Impact's `Manufacturer` value exactly, byte-for-byte
+
+**Real, unresolved problems with this workaround — why it is NOT
+recommended as the design yet:**
+1. **Unverified match rate.** One dealer matching exactly proves
+   nothing about the hundreds/thousands of other dealers — independent
+   dealers, abbreviations, franchise-naming differences could easily
+   cause Auto.dev's dealer string and Impact's `Manufacturer` field to
+   diverge. Not tested across a real sample.
+2. **Latency.** A live query returning up to ~100s of items, then a
+   client-side scan, adds real request time to what should presumably
+   feel instant — not measured.
+3. **Rate limits.** Catalogs endpoint: 3,600 requests/hour (confirmed
+   from docs). Calling this per-listing, per-search, at request time
+   could exhaust this under real traffic — not modeled against actual
+   expected volume.
+4. **Also discovered: Impact's documented `Query`-eligible-fields list
+   is itself unreliable** — `Text1` (model) worked despite not being
+   listed as eligible; `Numeric1` (year) failed with the same "Unknown
+   search field name" error as `Mpn`. This means nothing about this API
+   can be assumed correct from docs alone going forward — only
+   live-tested.
+
+**Decision: an Impact support ticket was opened** (#882346, "Catalog
+Items API: Is VIN (Mpn field) searchable/filterable?", CC'd to
+info@getcarwise.app) asking directly whether VIN lookup is possible by
+any supported means. **Awaiting their response before concluding
+anything further on Track A's design** — this is now blocked on an
+external answer, not on further internal investigation.
+
+**Where this leaves Track A, honestly:** the simple, proven,
+already-working static-formula approach (same as old CarClever —
+`https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}`)
+remains the only fully validated option. The catalog-lookup idea is
+real but unproven — not something to build on yet. Recommendation for
+next session: if Impact's support response doesn't unlock a clean VIN
+lookup, proceed with the static-formula approach for
+`carclever-find-my-car` (same as old CarClever) and treat catalog
+lookup as a possible future enhancement, not a blocker.
+
 ## Recommended next steps (for André's decision, not pre-committed)
 
 1. **DONE.** ~~Build and manually verify one real VIN deep-link test
