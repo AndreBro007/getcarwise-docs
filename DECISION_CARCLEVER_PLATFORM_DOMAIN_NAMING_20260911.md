@@ -1,6 +1,6 @@
-# CarClever Platform Domain Naming Decision — 2026-09-11
+# CarClever Platform Domain Naming Decision — 2026-09-11, implementation updated 2026-09-16
 
-**Status:** CONFIRMED BY ANDRÉ
+**Status:** CONFIRMED BY ANDRÉ — platform naming implemented; Anthropic support-side listing URL replacement pending confirmation
 
 ## Decision
 
@@ -10,32 +10,79 @@ Use this naming convention for branded GetCarWise MCP production front doors:
 
 For CarClever:
 
-- OpenAI target: `https://carclever-oai.getcarwise.app/mcp`
-- Future Anthropic branded target: `https://carclever-anth.getcarwise.app/mcp`
+- OpenAI: `https://carclever-oai.getcarwise.app/mcp`
+- Anthropic: `https://carclever-anth.getcarwise.app/mcp`
 
-## Current Anthropic exception
+The two platform front doors intentionally serve the same approved CarClever V2 release from the shared repository while remaining on separate Vercel production projects. This keeps platform review/deployment lifecycles from silently coupling.
 
-Anthropic must remain on the MCP URL already used for its current submission until the Anthropic review/change gate is explicitly cleared:
+## Implementation state
+
+### OpenAI
+
+Implemented before the 2026-09-12 resubmission:
+
+- branded MCP: `https://carclever-oai.getcarwise.app/mcp`;
+- Vercel project: `ccfmc-dev-v2`;
+- exact approved V2 SHA: `b8b07d8542f5d3f2a12e00433e089dde28ae5792`;
+- production widget origin and Scan Tools/domain verification completed;
+- OpenAI submission remains in REVIEW.
+
+### Anthropic
+
+The earlier temporary exception—keeping the existing submitted Vercel URL while the review/change gate was unresolved—has now been operationally superseded.
+
+On 2026-09-16:
+
+- Anthropic support confirmed the pending listing MCP URL may be changed while review is still pending;
+- `carclever-anth.getcarwise.app` was added to Vercel project `carclever-find-my-car`;
+- Porkbun DNS was configured;
+- Vercel shows Valid Configuration;
+- HTTPS/TLS and MCP transport reachability passed;
+- the new hostname resolves to exact approved V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`;
+- André completed a successful functional MCP-client test using `CarClever - Find My Car`;
+- André emailed Marco/Anthropic support requesting replacement of the pending listing's current MCP URL with `https://carclever-anth.getcarwise.app/mcp`.
+
+The old submitted endpoint remains live during migration:
 
 `https://carclever-find-my-car.vercel.app/mcp`
 
-When/if a future Anthropic migration to the branded domain is approved, `carclever-anth.getcarwise.app` is the intended naming target. No Anthropic domain/deployment change is authorized by this decision alone.
+The neutral alias `https://carclever.getcarwise.app/mcp` also remains live during transition.
 
-## OpenAI implementation sequence
+**Directory-record gate:** do not state that Anthropic's stored listing URL has changed until support confirms the replacement.
 
-The OpenAI branded target is now confirmed as `carclever-oai.getcarwise.app`. Before it is placed into the resubmission, Claude Engineering must:
+## Production release controls
 
-1. map/configure the branded hostname in the appropriate Vercel production channel;
-2. configure the required DNS record under `getcarwise.app`;
-3. serve the exact tested V2 release behind the new origin;
-4. verify the deployed SHA and MCP metadata, not merely URL reachability;
-5. run a production-origin smoke covering MCP initialize/tools, widget/resource/CSP loading, representative live search, exact-VIN Buyer Check, link resolution, and at least one negative-invocation check;
-6. complete any OpenAI domain-verification / Scan Tools checks required by the resubmission flow.
+As of 2026-09-16 both platform production Vercel projects have **Auto-assign Custom Production Domains disabled** and therefore require deliberate manual promotion for production-domain movement.
 
-Only after those checks pass should the OpenAI resubmission MCP URL be changed to:
+Standing policy:
 
-`https://carclever-oai.getcarwise.app/mcp`
+1. verify intended release branch and exact SHA before promotion;
+2. use deliberate **Promote to Production** rather than allowing a routine Git push to take over a branded domain;
+3. verify the branded MCP endpoint and exact production SHA after promotion.
+
+This policy was introduced after a Sep 14 `main` deployment silently replaced the manually promoted Anthropic V2 production deployment. The incident was recovered and the approved V2 SHA restored.
+
+## Vercel project display names
+
+Current display names remain historical:
+
+- OpenAI: `ccfmc-dev-v2`
+- Anthropic: `carclever-find-my-car`
+
+Proposed later housekeeping, after Anthropic confirms the support-side URL replacement and current reviews stabilize:
+
+- `ccfmc-dev-v2` -> `carclever-openai`
+- `carclever-find-my-car` -> `carclever-anthropic`
+
+These are display-name cleanups only; the public branded MCP URLs above remain the production contracts. No rename has been performed yet.
 
 ## Scope boundary
 
-This decision records naming and release architecture only. Application code, Vercel/DNS implementation, production deployment, and connector changes remain Claude Engineering work. The existing OpenAI resubmission reconciliation document should not be treated as updated until the new origin is actually configured and verified.
+This document records the confirmed naming/release architecture and its implementation status. It does not authorize application-code changes, project deletion, branch cleanup, or review-critical submission changes beyond the already-requested Anthropic URL replacement.
+
+Detailed current records:
+
+- `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`
+- `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`
+- `UPDATE_ANTHROPIC_DNS_VERIFICATION_AND_RECOVERY_20260916.md`
+- `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`
