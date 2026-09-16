@@ -425,6 +425,126 @@ which mechanism was used; the query parameters were the actual tell).
 under the Master Program Agreement, and has been live-verified against a
 real listing.
 
+### Product Catalog schema — CONFIRMED LIVE, major finding (Sep 16, later)
+
+After extensive troubleshooting (network egress, token scopes, persona path,
+session conflicts — all resolved; see "API access troubleshooting log"
+below), a real, successful `GET /Mediapartners/{AccountSID}/Catalogs/34070/Items`
+call returned live data. **This is a significantly bigger finding than
+originally expected — it changes the recommended implementation approach.**
+
+**Per-item fields confirmed present** (sample: a 2026 Toyota Corolla Cross,
+a 2024 Mazda CX-90, a 2024 Subaru Outback — three real, in-stock listings):
+- **VIN** (in the `Mpn` field)
+- **A complete, pre-built, already-tracked Impact URL** in the `Url` field —
+  e.g.
+  `https://edmunds.sjv.io/c/7765200/3913681/52125?prodsku=...&u=https%3A%2F%2Fwww.edmunds.com%2Ftoyota%2Fcorolla-cross%2F2026%2Fvin%2F7MUDAABG8TV206611%2Ffeatured-listing%2F...&intsrc=APIG_34070`.
+  This already contains our account ID, the Edmunds campaign ID, a per-item
+  `prodsku`, and a `u=` deep link to the exact VIN listing page — fully
+  formed and ready to use as-is.
+- Dealer name (`Manufacturer`) and dealer street address (`Text3`)
+- Real-time price (`CurrentPrice`) and stock status
+  (`StockAvailability`: confirmed `InStock` on all three sampled)
+- Photo URL (`ImageUrl`)
+- Year / Make / Model / Trim, split across `Category`, `SubCategory`,
+  `Text1`, `Text2`, `Numeric1`
+- **1,334,554 total items** — confirmed via the real API response
+  (`@total`), not just the earlier unverified dashboard figure
+
+**Why this matters more than originally scoped:** the original plan was to
+build `lib/edmunds-impact.ts` to call Impact's Tracking Links API and
+construct a `u=` deep link per listing at request time (mirroring
+`wrapWithCJ()`'s current CJ-era logic). **This catalog data makes that
+unnecessary in cases where the VIN already exists in Edmunds' feed** — the
+`Url` field is already a complete, pre-tracked, ready-to-use affiliate link.
+The revised, simpler design worth evaluating: look up the VIN in this
+catalog (via `Query=Mpn='{vin}'` or similar on the Items endpoint) and use
+its `Url` field directly, falling back to constructing a deep link
+ourselves only for VINs not present in the feed. This is both simpler and
+more robust than always constructing links client-side, since Edmunds'
+own feed is the authoritative source for which listings are actually live
+right now (the `StockAvailability` field alone solves the "is this VIN
+still for sale" problem that motivated the app's existing deterministic
+CJ-fallback logic).
+
+**Not yet done:** no code changes reflecting this have been made. This is a
+design-shifting finding to bring to the actual implementation task, not
+something to build unilaterally mid-investigation.
+
+### API access troubleshooting log (Sep 16, later) — for future sessions
+
+This took considerably longer than expected and is recorded in detail so a
+future session doesn't repeat the same dead ends:
+
+1. **Network egress**: this environment's own sandboxed bash tool cannot
+   reach `api.impact.com` even after `api.impact.com` was added to the
+   account's Additional Allowed Domains in Claude's Capabilities settings —
+   the block persisted in-session regardless (a known class of platform
+   issue per public bug reports, not something fixable mid-session). **All
+   further API calls in this investigation were run directly by André**, on
+   his own machine, outside Claude's sandbox — this is the durable
+   workaround until/unless the egress setting reliably applies.
+2. **Credential handling**: the first credential file uploaded as a `.txt`
+   attachment was inadvertently exposed in full, in plain text, in this
+   chat's transcript — Claude's assumption that a `.txt` upload stays
+   file-path-only (as other file types do) was wrong; **`.txt` and other
+   text-like uploads are inlined directly into the conversation as visible
+   document content.** This is an important lesson for this project:
+   **never upload credential files as chat attachments, in any format** —
+   share only command output/responses, never the credential itself,
+   copy-pasted directly between the dashboard and a local terminal.
+3. **403 "Access Denied" (first occurrence)**: caused by calling
+   `/Advertisers/{AccountSID}/Catalogs/.../Items` — the **Brand-persona**
+   endpoint (for Edmunds to manage their own catalog), not the
+   **Partner-persona** endpoint we needed
+   (`/Mediapartners/{AccountSID}/Catalogs/.../Items`). Impact publishes
+   fully separate "Brand API Reference" and "Partner API Reference" docs;
+   easy to conflate since both exist for "Catalogs."
+4. **403 "Access Denied" (second occurrence, correct persona path)**:
+   caused by the token missing the specific "Retrieve catalog items" scope
+   — a distinct checkbox from "Retrieve catalogs"/"Retrieve catalog," which
+   the original token-creation session enabled without realizing "Items"
+   was a separate, unchecked endpoint.
+5. **"You are already authenticated as another user" (XML error)**:
+   occurred consistently regardless of credential correctness while calling
+   from André's machine with `curl.exe -u`. Root cause not fully confirmed,
+   but resolved by switching to Python's `requests` library with credentials
+   passed as environment variables (matching Impact's own documented Python
+   example) rather than curl with inline `-u` — possibly a
+   curl/PowerShell/corporate-proxy session-cookie interaction specific to
+   that machine, not an Impact-side account issue. If this recurs, try
+   Python/requests first before assuming it's a token problem.
+6. **401 Unauthorized**: occurred once when the `AccountSID` environment
+   variable held the plain numeric account ID (`7765200`) rather than the
+   token's actual full Account SID value
+   (`IRjibDkYVJPf7765200xMYBSd2WBDBPtF1`). **The numeric ID and the full
+   Account SID are not interchangeable** — always copy the exact Account
+   SID string from the token's card, not the number visible in dashboard
+   URLs.
+7. Final working call, confirmed 200:
+   ```
+   GET https://api.impact.com/Mediapartners/IRjibDkYVJPf7765200xMYBSd2WBDBPtF1/Catalogs/34070/Items?PageSize=3
+   -u {full AccountSID}:{current AuthToken}
+   ```
+
+### MCP connector — attempted, not currently viable from claude.ai web
+
+Impact.com has a hosted MCP server (`https://mcp.impact.com/mcp`, OAuth 2.1)
+that would eliminate credential-handling entirely (Impact issues tokens
+straight to the connecting AI client, never exposing them in chat). MCP
+access is already enabled on this Impact account. **Attempted to connect it
+as a custom connector from claude.ai web — failed**: Impact's server
+returned "Automatic client registration isn't supported by Impact,"
+meaning it doesn't support the auto-registration handshake claude.ai web's
+custom-connector flow uses. Impact's own documentation confirms only three
+specific clients are supported: **Cursor, VS Code, and Claude Desktop /
+Claude Code** — not claude.ai's web browser interface. **This is worth
+revisiting via Claude Desktop specifically** (a different application from
+claude.ai web) in a future session, since Impact's guide is written
+specifically for it and should work following their documented steps.
+Likely a better long-term integration path than manual curl/Python calls,
+once set up.
+
 ## Recommended next steps (for André's decision, not pre-committed)
 
 1. **DONE.** ~~Build and manually verify one real VIN deep-link test
@@ -445,12 +565,16 @@ real listing.
 4. Decide token/scope structure: likely separate purpose-built tokens for
    app (server-side, Tracking Links scope) vs. any future website API use,
    rather than one shared broad token — not yet built.
-5. Decide whether the Edmunds Product Catalog feed is worth a proper
-   evaluation against Auto.dev — separate workstream, not blocking the
-   tracking-link migration. One specific idea raised: use catalog data as a
-   pre-check to confirm a VIN exists in Edmunds' feed before building the
-   Check-avail/Similar-options links, improving link reliability rather than
-   replacing Auto.dev's live-inventory role.
+5. **Revised based on today's live catalog finding:** the Edmunds Product
+   Catalog isn't just a side data source — the Items endpoint returns
+   fully pre-tracked Impact affiliate URLs per VIN, already containing the
+   correct deep link, plus real-time stock status and price. Next
+   engineering step should evaluate using catalog lookups as the primary
+   link-generation mechanism (VIN → catalog `Url` field), with constructed
+   deep-linking as the fallback for VINs not present in the feed — the
+   reverse of the original plan. Separately still worth comparing against
+   Auto.dev for inventory-sourcing purposes, but that's now a secondary
+   question to the link-generation one.
 6. Investigate the Impact marketplace for other relevant affiliate programs
    (vehicle inspection services, auto finance/lending — CJ's LendingTree
    application was never approved/heard back on) — website-first candidate,
