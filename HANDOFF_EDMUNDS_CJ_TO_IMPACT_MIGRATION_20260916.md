@@ -109,16 +109,18 @@ to deep-link to (a separate, more granular setting than the general
 capability), and a real live click-through test of an actual VIN URL. Both
 are the immediate next engineering steps, gated on the item below.
 
-## Blocking gate: Master Program Agreement not yet read
+## Blocking gate: Master Program Agreement — READ, CLEARED
 
-Before any further Impact API automation or code changes, the Impact
-Master Program Agreement needs to be read and confirmed clear — specifically
-around deep-linking limits, catalog-use restrictions, and link-cloaking
-rules (a common clause in affiliate agreements generally). This has **not**
-been done yet — the PDF blocks automated fetching, so André is retrieving
-it directly. Nothing website- or app-side that goes beyond what's already
-described here (i.e., beyond using the pre-made assets and reading
-documentation) should be built until this is confirmed.
+Update (Sep 16, later): André supplied the agreement PDF directly; it has
+now been read in full. **Gate cleared — nothing in it blocks the plan.**
+The one relevant clause (Section 4.2, "Promotional Methods") prohibits
+fake/automated actions, scraped or user-submitted-on-their-behalf leads,
+and **incentivizing users to complete an Edmunds lead** — worth keeping in
+mind for any future marketing idea (e.g. never offer a reward specifically
+for filling out an Edmunds form). VIN deep-linking and using the Product
+Catalog API to verify listings are both clearly fine — real users clicking
+real links, no fabrication or incentive involved. Full clause-by-clause
+detail in the companion research doc.
 
 ## Current status snapshot
 
@@ -127,7 +129,7 @@ documentation) should be built until this is confirmed.
 | CJ links (website + app) | Still live, unchanged, still the production mechanism |
 | Impact account | Approved, one API token created (Engineering research only, read-only, Catalogs scope) |
 | VIN deep-linking | Permission confirmed enabled; live test not yet done |
-| Master Program Agreement | Not yet read — blocking gate |
+| Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
 | App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based |
 | Target completion | End of September 2026 |
