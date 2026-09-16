@@ -598,22 +598,34 @@ recommended as the design yet:**
    can be assumed correct from docs alone going forward — only
    live-tested.
 
-**Decision: an Impact support ticket was opened** (#882346, "Catalog
-Items API: Is VIN (Mpn field) searchable/filterable?", CC'd to
-info@getcarwise.app) asking directly whether VIN lookup is possible by
-any supported means. **Awaiting their response before concluding
-anything further on Track A's design** — this is now blocked on an
-external answer, not on further internal investigation.
+**RESOLVED — Impact support confirmed (Sep 17), ticket #882346 closed.**
+Reply from Emma, Impact support: *"filtering or searching directly by
+Mpn (or VIN) is unfortunately not supported via the Catalog Items API
+search endpoint. Only specific predefined fields are supported."*
+Confirms exactly what our own live testing found — not a gap in our
+testing, a genuine platform limitation. Their suggested workaround:
+download the full product catalog and search the file locally by VIN —
+noted as a heavier option, not pursued now (see Track C addition below).
 
-**Where this leaves Track A, honestly:** the simple, proven,
-already-working static-formula approach (same as old CarClever —
-`https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}`)
-remains the only fully validated option. The catalog-lookup idea is
-real but unproven — not something to build on yet. Recommendation for
-next session: if Impact's support response doesn't unlock a clean VIN
-lookup, proceed with the static-formula approach for
-`carclever-find-my-car` (same as old CarClever) and treat catalog
-lookup as a possible future enhancement, not a blocker.
+**Decision, final: Track A uses the static-formula approach, same as
+old CarClever.** No catalog lookup, no live API dependency for link
+generation:
+```
+https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}
+```
+The dealer-name workaround explored earlier this session is shelved —
+not disproven, just unnecessary complexity for an unproven, marginal
+benefit once the "proper" API-based lookup was confirmed unsupported by
+Impact directly.
+
+**Real underlying issue, worth stating plainly:** the actual limiting
+factor for how many listings get a working Edmunds link was never really
+the search mechanism — it's the **coverage gap between Edmunds' catalog
+(1.3M) and Auto.dev's inventory (source of the app's ~3-4M listings)**.
+No amount of clever API querying fixes a listing that simply isn't in
+Edmunds' catalog at all. This is not something to solve via engineering
+against Impact's API — see Track C addition below for the real lever
+(exploring other affiliate programs/data sources beyond Edmunds alone).
 
 ## Recommended next steps (for André's decision, not pre-committed)
 
@@ -648,7 +660,13 @@ lookup as a possible future enhancement, not a blocker.
 6. Investigate the Impact marketplace for other relevant affiliate programs
    (vehicle inspection services, auto finance/lending — CJ's LendingTree
    application was never approved/heard back on) — website-first candidate,
-   raised by André, not yet started.
+   raised by André, not yet started. **New (Sep 17): given the confirmed
+   Edmunds (1.3M) vs. Auto.dev (~3-4M) coverage gap, and that this gap is
+   the real limiting factor on affiliate revenue (not a technical/search
+   problem), explore other automotive affiliate programs or data sources
+   beyond Edmunds alone that might cover listings Edmunds doesn't have —
+   this is the actual lever for improving coverage, not further Impact API
+   work.**
 7. Look into the Publisher Tag for the website (auto-converts plain Edmunds
    links into tracked ones + impression tracking) — André wants this
    explored now, in parallel with current website/marketing work.
