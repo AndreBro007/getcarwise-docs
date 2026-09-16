@@ -334,17 +334,63 @@ notes" into an actual phased plan with concrete tasks, owners, and
 sequencing — deliberately not written yet, to avoid planning around
 unconfirmed assumptions.
 
+### Master Program Agreement — READ IN FULL, GATE CLEARED (Sep 16, later)
+
+André supplied the actual PDF directly (uploaded to chat) after the earlier
+robots.txt block prevented automated fetching. Full document read.
+
+**The one clause that actually constrains what we build — Section 4.2,
+"Promotional Methods".** Unless Edmunds authorizes in writing, Partner must
+not:
+- (a) provide leads obtained other than through genuine End User action
+  (e.g. scraping End User info, or submitting End User data on their
+  behalf instead of the End User doing so personally);
+- (b) use fake redirects, automated software, or other mechanisms to
+  generate Actions;
+- (c) generate Actions not in good faith — automated devices, robots,
+  iframes, hidden frames, or interference with another Partner's referrals;
+- (d) incentivize End Users to procure Actions (e.g. offering a reward for
+  completing an Edmunds lead form).
+
+**How this maps to the plan:**
+- VIN deep-linking — **clear.** A real user clicking a real link to a real
+  page is exactly the intended use; nothing restricts destination-URL
+  specificity, only fabricated/automated/incentivized actions.
+- Using the Product Catalog API to verify a VIN exists in Edmunds' own feed
+  before constructing a link — **clear.** This is reading data to build a
+  better link, not generating or submitting a lead on anyone's behalf.
+- **Hard lines to remember for any future feature/marketing idea:** never
+  auto-submit any Edmunds form on a user's behalf; never fire an Action
+  without a real person actually completing it themselves; never offer an
+  incentive (discount, reward, etc.) specifically for completing an Edmunds
+  lead — this would violate 4.2(d) directly regardless of good intent.
+
+**Other clauses of note, not blocking:**
+- 4.1 (IP license): ad creative use is revocable, non-exclusive, and
+  limited to "solely to the extent necessary to perform the Services" —
+  fine for using Edmunds' provided banners/text links as intended, not a
+  license to repurpose their assets elsewhere.
+- 6.3 (Audit rights): either party can request compliance records for up
+  to 1 year after the agreement ends — supports keeping this documentation
+  trail as a matter of practice, not just convenience.
+- No clause found restricting Product Catalog data use, deep-link
+  destination domains, or link formatting/cloaking beyond what 4.2(b)/(c)
+  already cover.
+
+**Gate status: CLEARED.** Nothing in the agreement blocks VIN deep-linking,
+Catalog API reads, or the plan as currently scoped. The live click-through
+test (next item below) can proceed.
+
 ## Recommended next steps (for André's decision, not pre-committed)
 
-1. **Immediate:** Read the Master Program Agreement (André, directly) —
-   blocking gate before any further API/link automation.
-2. **Immediate:** Build and manually verify one real VIN deep-link test
+1. **Immediate:** Build and manually verify one real VIN deep-link test
    through Impact (Engineering) — confirms Priority 1 end-to-end, not just
-   at the permission level.
-3. **Target: CJ→Impact fully transitioned before end of September 2026**
+   at the permission level. **Master Program Agreement gate cleared —
+   this can proceed now.**
+2. **Target: CJ→Impact fully transitioned before end of September 2026**
    (André's stated timeline, Sep 16). CJ confirmed still live, so no
    emergency cutover needed — this can be sequenced deliberately.
-4. Decide how to sequence this against the three in-review app submissions
+3. Decide how to sequence this against the three in-review app submissions
    — corrected understanding (see Session 2 notes elsewhere in
    `getcarwise-docs`): the ChatGPT resubmission and the Claude review are
    **the same V2 codebase** (`release/v2`, SHA `b8b07d8`), not separate
@@ -353,23 +399,24 @@ unconfirmed assumptions.
    Impact migration touching `lib/edmunds-cj.ts` should build/test on its
    own branch and hold there, not merge into `release/v2` or `main` while
    review is open.
-5. Decide token/scope structure: likely separate purpose-built tokens for
+4. Decide token/scope structure: likely separate purpose-built tokens for
    app (server-side, Tracking Links scope) vs. any future website API use,
    rather than one shared broad token — not yet built.
-6. Decide whether the Edmunds Product Catalog feed is worth a proper
+5. Decide whether the Edmunds Product Catalog feed is worth a proper
    evaluation against Auto.dev — separate workstream, not blocking the
    tracking-link migration. One specific idea raised: use catalog data as a
    pre-check to confirm a VIN exists in Edmunds' feed before building the
    Check-avail/Similar-options links, improving link reliability rather than
    replacing Auto.dev's live-inventory role.
-7. Investigate the Impact marketplace for other relevant affiliate programs
+6. Investigate the Impact marketplace for other relevant affiliate programs
    (vehicle inspection services, auto finance/lending — CJ's LendingTree
    application was never approved/heard back on) — website-first candidate,
    raised by André, not yet started.
-8. Look into the Publisher Tag for the website (auto-converts plain Edmunds
+7. Look into the Publisher Tag for the website (auto-converts plain Edmunds
    links into tracked ones + impression tracking) — André wants this
    explored now, in parallel with current website/marketing work.
-9. Once (1) and (2) above are resolved, Engineering lane can scope the
-   actual `lib/edmunds-cj.ts` → Impact replacement as a real implementation
+8. Now that the agreement gate is cleared and item 1 (live deep-link test)
+   is done, Engineering lane can scope the actual `lib/edmunds-cj.ts` →
+   Impact replacement as a real implementation
    task (new module, new tests, live-tested before merge — same discipline
    as the original CJ integration, built on its own branch per point 4).
