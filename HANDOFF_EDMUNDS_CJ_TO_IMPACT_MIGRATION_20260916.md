@@ -125,6 +125,19 @@ Catalog API to verify listings are both clearly fine — real users clicking
 real links, no fabrication or incentive involved. Full clause-by-clause
 detail in the companion research doc.
 
+## Major update: Product Catalog returns pre-tracked per-VIN links
+
+The biggest finding from today's session: Impact's Product Catalog API
+(1,334,554 Edmunds listings) doesn't just hold inventory data — each item
+already includes a **complete, ready-to-use, pre-tracked affiliate URL**
+pointing at that exact VIN's listing page, plus real-time price and stock
+status. This is materially better than the originally planned approach
+(constructing tracking links ourselves via the Tracking Links API) — it
+means looking up a VIN in this catalog can hand back a working affiliate
+link directly, with our own link-construction logic only needed as a
+fallback for VINs not yet in Edmunds' feed. Full technical detail in the
+companion research doc.
+
 ## Current status snapshot
 
 | Area | Status |
@@ -132,6 +145,7 @@ detail in the companion research doc.
 | CJ links (website + app) | Still live, unchanged, still the production mechanism |
 | Impact account | Approved, one API token created (Engineering research only, read-only, Catalogs scope) |
 | VIN deep-linking | **Confirmed working end-to-end** — live-tested by André against a real listing, resolved correctly through Impact's tracking |
+| Product Catalog API | **Confirmed live, 200 OK** — returns pre-tracked per-VIN URLs, real-time price/stock. Major positive finding — see above |
 | Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
 | App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based |
