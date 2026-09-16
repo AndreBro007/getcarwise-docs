@@ -15,15 +15,30 @@ disrupting the two live app-store submissions in review.
   ```
   https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}
   ```
-- **Exact code change identified:** `lib/edmunds-cj.ts` — replace 3
-  constants (`CJ_CLICK_DOMAIN`, `CJ_PUBLISHER_ID`,
-  `CJ_EDMUNDS_PRODUCT_AD_ID`) and `wrapWithCJ()`'s one-line body. Only
-  caller: `lib/link-resolution.ts` (2 call sites, both go through
-  `wrapWithCJ()`). **No other file needs touching** — confirmed this app
-  has no CSP/domain-allowlist config anywhere (`vercel.json` checked,
-  empty of any such config) — architecturally different from old
-  CarClever's Fractal/Skybridge setup, which needed 4-5 separate CSP
-  array updates. This is a smaller, lower-footprint change here.
+- **Exact code change made** (branch: `edmunds-impact-swap`, off exact
+  reviewed SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`):
+  - `lib/edmunds-cj.ts` — 3 old CJ constants replaced with 1 generic
+    constant (`AFFILIATE_BASE_LINK`); function renamed
+    `wrapWithCJ()` → `wrapWithAffiliateNetwork()`, body updated to new
+    URL format. Naming deliberately made network-generic (no "CJ" or
+    "Impact" anywhere in code) after review discussion — see Session 3
+    notes below for the reasoning.
+  - `lib/link-resolution.ts` — import + **3 call sites** (not 2 as
+    originally scoped — this file has richer New/Used/Carvana logic than
+    first assumed, confirmed by direct inspection against the reviewed
+    SHA) updated to new function name.
+  - `tests/stable-boundaries.test.ts` — domain constant renamed/updated;
+    **6 places required a functional fix** (`url=` → `u=`, since
+    Impact's deep-link param name differs from CJ's — this was not
+    optional/cosmetic); wording genericized.
+  - Total diff: 3 files, ~44 lines. No CSP/manifest/schema file touched —
+    confirmed via full-repo sweep, zero matches for
+    `anrdoezrs`/`CJ_CLICK_DOMAIN`/`wrapWithCJ` anywhere outside this
+    branch's own edits.
+  - **No other file needs touching** — confirmed this app has no
+    CSP/domain-allowlist config anywhere (`vercel.json` checked, empty of
+    any such config) — architecturally different from old CarClever's
+    Fractal/Skybridge setup, which needed 4-5 separate CSP array updates.
 - **Timing decision, deliberate exception to the standing "freeze during
   review" rule** (see `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`):
   André's reasoning, agreed — (1) the Anthropic review may already be
@@ -35,22 +50,20 @@ disrupting the two live app-store submissions in review.
   invisible to any automated review scan, confirmed by direct code
   inspection. This is a considered, recorded exception — not a reversal
   of the freeze policy in general.
-- **Chosen implementation method (agreed, in progress):**
-  1. Branch off the *exact reviewed SHA* (`b8b07d8542f5d3f2a12e00433e089dde28ae5792`),
-     not off `main`
-  2. Make the 4-line edit
-  3. Run existing test suite + production build, confirm clean
-  4. Push branch → Vercel auto-generates an isolated **preview
-     deployment** (zero effect on live production)
-  5. Manually test the preview deployment with a real search, confirm a
-     working Impact-wrapped link end-to-end
-  6. **Separately**, decide production-promotion timing — considering
-     doing this during US overnight hours as a low-cost precaution
-     (acknowledged: this reduces live-traffic disruption risk, not
-     "review risk" in any meaningful sense, since a reviewer checking the
-     listing later would see the same result regardless of deploy time)
-- **Status as of this update: about to create the branch and make the
-  edit.** Nothing merged, nothing deployed to production yet.
+- **Chosen implementation method:**
+  1. ✅ Branch off the *exact reviewed SHA*, not off `main` — done
+  2. ✅ Make the edit — done, verified byte-identical after every push
+  3. ⬜ Run existing test suite + production build, confirm clean — NOT
+     YET DONE
+  4. ⬜ Push branch → Vercel preview deployment — NOT YET DONE (branch is
+     pushed, but no preview deployment has been triggered/confirmed yet)
+  5. ⬜ Manually test the preview deployment with a real search — NOT YET
+     DONE
+  6. ⬜ Separately, decide production-promotion timing (considering US
+     overnight hours as a low-cost precaution, not a review-risk
+     mitigation) — NOT YET DONE
+- **Status as of this update: code edits complete and pushed to the
+  branch. Testing/build/deploy has not started.**
 
 ### Track B — Website (ChatGPT's lane)
 - Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
@@ -716,6 +729,85 @@ No amount of clever API querying fixes a listing that simply isn't in
 Edmunds' catalog at all. This is not something to solve via engineering
 against Impact's API — see Track C addition below for the real lever
 (exploring other affiliate programs/data sources beyond Edmunds alone).
+
+## Session 3 (Sep 17) — implementation: branch created, edits made, naming genericized
+
+Following the plan agreed above, work began on `carclever-find-my-car`.
+
+**Branch created:** `edmunds-impact-swap`, off the exact reviewed SHA
+`b8b07d8542f5d3f2a12e00433e089dde28ae5792` (not off `main` — deliberate,
+so the diff is measured against precisely what's live in review).
+
+**Edits made, then revised once, based on real-time review discussion:**
+
+*First pass:* renamed `wrapWithCJ()` → `wrapWithImpact()`, consolidated
+3 CJ constants into 1 Impact-named constant, added explanatory comments
+referencing the CJ→Impact migration by name. Diff: +26/−24 across 3
+files.
+
+*André's review, mid-session:* flagged that this exceeded the originally
+agreed scope ("3 constants + 1 function body") — a fair, correct catch.
+Assessment done before deciding what to do about it:
+- Measured actual diff size precisely (git compare, not estimated)
+- Confirmed: renaming carries no additional *review* risk (no schema/
+  CSP/manifest footprint either way; TypeScript compiler catches any
+  missed call site, so no silent-bug risk)
+- Real issue was process (scope not confirmed before acting), not the
+  code itself
+
+**Second pass, informed by André's further observation:** naming the
+function/constants after "Impact" specifically was itself worth
+reconsidering — if the network changes again in future, generic naming
+means zero renames needed next time, only value updates. Also noted:
+`edmunds.sjv.io` (the new domain) is arguably *more* recognizable/
+legitimate-looking than CJ's old `anrdoezrs.net`, softening any
+"suspicious domain" concern in the *good* direction regardless of naming.
+
+**Final naming, applied:**
+- `wrapWithAffiliateNetwork()` (generic, was briefly `wrapWithImpact()`,
+  originally `wrapWithCJ()`)
+- `AFFILIATE_BASE_LINK` (generic, replaces all 3 old CJ constants)
+- `AFFILIATE_PREFIX` in the test file (same pattern)
+- Zero occurrences of "CJ" or "Impact" remain in any code this session
+  touched, confirmed via full-file grep sweep after each change
+
+**Comments:** reduced to the minimum useful. One purely cosmetic label
+comment deleted entirely (no functional value). One file-purpose comment
+kept but genericized (was "Edmunds/CJ revenue," now "Edmunds/affiliate
+revenue") since it explains what the file does, not which network is
+used. No migration-history comments left in code — that context lives in
+this doc, not inline.
+
+**Filename `lib/edmunds-cj.ts` deliberately left unchanged** — contains
+"cj" but renaming it would require updating every import across the repo
+(confirmed: at least `link-resolution.ts` + 3 test files reference it by
+path), a meaningfully larger and riskier change than the value/name swap
+already done, for a marginal accuracy gain. Decision: leave as-is.
+
+**Final diff, confirmed via `git compare` against the reviewed SHA:**
+
+| File | Lines changed |
+|---|---|
+| `lib/edmunds-cj.ts` | +5 −7 |
+| `lib/link-resolution.ts` | +4 −4 |
+| `tests/stable-boundaries.test.ts` | +13 −13 |
+| **Total** | **46 lines, 3 files** |
+
+**A genuine, non-optional fix found along the way:** while editing the
+test file, discovered it hardcodes parsing on `url=` (CJ's param name) in
+6 separate places. Impact's deep-link parameter is `u=`, not `url=` — had
+this not been caught, the test suite would have failed after the swap
+even though production code itself would have worked correctly. Also
+discovered `link-resolution.ts` has 3 real call sites to `wrapWithCJ()`,
+not the 2 originally assumed from an earlier, now-stale reading of the
+file — corrected by re-fetching and diffing directly against the reviewed
+SHA before editing, rather than trusting memory from earlier in the
+session.
+
+**Status: all edits pushed to the branch, verified byte-identical against
+what was intended. Test suite has not been run. No build has been run. No
+Vercel preview deployment has been triggered. No production-promotion
+decision made.**
 
 ## Recommended next steps (for André's decision, not pre-committed)
 
