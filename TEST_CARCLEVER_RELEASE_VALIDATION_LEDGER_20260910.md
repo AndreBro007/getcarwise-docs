@@ -15,7 +15,8 @@ Terms:
 - **Preview:** Vercel build only; never a Git merge.
 - **Release candidate:** exact SHA on `release/vN` accepted for host testing.
 - **Platform production:** exact release SHA deliberately deployed/promoted behind the platform's submitted MCP origin.
-- **Canonical merge:** optional later merge into `main`; not required for the current V2 platform releases and explicitly not done in the Sep 12 cutover.
+- **Canonical merge:** optional later merge into `main`; not required for the current V2 platform releases.
+- **Production-domain promotion:** deliberate assignment of a branded/custom production domain to a verified deployment. As of 2026-09-16 this is manual on both OpenAI and Anthropic production projects.
 
 ## 2. Mandatory release record fields
 
@@ -47,6 +48,15 @@ Run critical checks against the exact hostname submitted to each platform.
 
 Verify production SHA, positive/negative behavior, widget rendering, external links, runtime health, rollback point and any first-seen regression.
 
+### Layer G — production-domain control
+
+For each production platform project:
+
+- verify intended tracked branch;
+- ensure branded custom domains cannot silently auto-move to an unrelated build;
+- require deliberate promotion for a production-domain cutover;
+- verify branch/SHA before promotion and endpoint/SHA after promotion.
+
 ## 4. Prompt-pack baseline
 
 The current release pack covers exact make/model/budget/location; practical-needs model resolution; hybrid/PHEV/electric required/preferred; exact VIN; best-for-budget/cheapest/newest/lowest-mileage/lower-risk; direct fields including AWD/transmission/color/cylinders; trim required/preferred; location variants; CPO/history evidence; thin-result widening; widget/link actions; and negative non-inventory questions.
@@ -56,7 +66,7 @@ The current release pack covers exact make/model/budget/location; practical-need
 - Branch: `release/v2`.
 - Exact release/submission SHA: `b8b07d8542f5d3f2a12e00433e089dde28ae5792`.
 - Parent: `abb933cc47aa0f093a7f955ac2ae0507ec7f9b08`.
-- V1/main remains `e7c8634fdd631c7bb05c83c02daeb1ab7f7bbb6` and was not merged with V2.
+- `main` remains the historical V1 lineage and was not merged with V2 merely to support platform production.
 - V3 remains paused at `v3.1-3.3/card-first-check-vehicle` commit `4032feb`.
 - Public V2 tools: `find_matching_vehicle`, `resolve_dealer_url`.
 - V2 contract includes `vehicleNeeds`, `electrificationTypes`, `electrificationRequirement`; legacy `goals` is not part of the V2 schema.
@@ -66,6 +76,7 @@ The current release pack covers exact make/model/budget/location; practical-need
 ### Production identity
 
 - Vercel project: `ccfmc-dev-v2`.
+- Project ID: `prj_EJRR8xftf6TEIA3QS7jFXjBPr2aX`.
 - MCP URL: `https://carclever-oai.getcarwise.app/mcp`.
 - Production widget origin: `https://carclever-oai.getcarwise.app` via `NEXT_PUBLIC_WIDGET_ORIGIN`.
 - Exact submitted code: `b8b07d8`.
@@ -108,7 +119,8 @@ A prior natural VIN run wandered into host web search and failed to render a car
 PASS:
 
 - Existing Vercel project: `carclever-find-my-car`.
-- Existing submitted MCP retained: `https://carclever-find-my-car.vercel.app/mcp`.
+- Project ID: `prj_AGtLT6n36FwfIida35UUKCYIB3zS`.
+- Existing submitted MCP retained at that time: `https://carclever-find-my-car.vercel.app/mcp`.
 - Exact promoted source: branch `release/v2`, SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`.
 - Vercel deployment ID observed: `dpl_9vP17yqXx5fdfV2uTWfAenvfYFD2`.
 - State: READY.
@@ -126,9 +138,9 @@ Opening `https://carclever-find-my-car.vercel.app/mcp` in a normal browser retur
 
 **INCONCLUSIVE / CACHE MISMATCH, not a server failure.**
 
-A new/recreated Claude connector still exposed a stale base-connector `find_matching_vehicle` tool snapshot containing legacy V1 `goals`, while the separately visible `CarClever V2 Test` tool exposed the correct V2 fields (`vehicleNeeds`, electrification fields). Claude displayed `Unable to reach CarClever - Find My Car` around the invocation even though the endpoint was demonstrably reachable and tool discovery could see the connector. This strongly indicates stale host connector/tool metadata after replacing the code behind the existing submitted URL.
+A new/recreated Claude connector still exposed a stale base-connector `find_matching_vehicle` tool snapshot containing legacy V1 `goals`, while the separately visible `CarClever V2 Test` tool exposed the correct V2 fields (`vehicleNeeds`, electrification fields). Claude displayed `Unable to reach CarClever - Find My Car` around the invocation even though the endpoint was demonstrably reachable and tool discovery could see the connector. This indicated stale host connector/tool metadata after replacing the code behind the existing submitted URL.
 
-No code change was made in response. The historical Claude rendering fix — omission of `_meta.ui.domain` for cross-host compatibility — remains present in V2 and is not the current failure mode.
+No code change was made in response. The historical Claude rendering fix — omission of `_meta.ui.domain` for cross-host compatibility — remained present in V2 and was not the failure mode.
 
 ### Anthropic listing update
 
@@ -143,44 +155,97 @@ PASS:
 - Directory screen confirmed `In review` and `Updated: just now` on 2026-09-12.
 - Full record: `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`.
 
-### Remaining Claude post-update smoke
+## 8. 2026-09-16 — Anthropic production drift, recovery and branded-domain validation
 
-PENDING USER RETEST after cache reset/fresh connector:
+### Drift incident
 
-1. Confirm base `CarClever - Find My Car` tool schema now shows V2 fields (`vehicleNeeds`, electrification fields) and no `goals`.
-2. Baseline: `Find a used Honda CR-V under $25,000 with less than 60,000 miles near 90210.`
-3. Exact VIN: `Check VIN 4T1DAACK6SU582551 for red flags before I buy it.`
+FAIL detected and corrected:
 
-Do not interpret changing live VIN status as a regression by itself.
+- Sep 14 deployment SHA `1514ab42dd2d4afe20109f02c9cc3930a3ee0789` from `main` became the live Anthropic production deployment.
+- Git comparison established that this was on the older `main` lineage rather than the approved V2 release.
+- Root cause of silent domain takeover: **Auto-assign Custom Production Domains** was enabled on the Anthropic Production environment.
+- Source of the Sep 14 documentation/test-log commit itself remains unidentified; no attribution is recorded without evidence.
 
-## 8. Current review/release gates
+### Recovery
+
+PASS:
+
+- Exact approved V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` manually promoted back to Production.
+- Active aliases verified on deployment `dpl_9vP17yqXx5fdfV2uTWfAenvfYFD2`.
+- **Auto-assign Custom Production Domains disabled and saved** on Anthropic.
+- Vercel UI confirms Production deployments require manual promotion.
+
+### New Anthropic branded production origin
+
+PASS:
+
+- Added custom domain `carclever-anth.getcarwise.app`.
+- Porkbun DNS: `CNAME carclever-anth -> c6a2c23ef4265088.vercel-dns-017.com.`.
+- Vercel status: **Valid Configuration**.
+- HTTPS/TLS: PASS.
+- Direct GET `https://carclever-anth.getcarwise.app/mcp`: expected HTTP 405 JSON-RPC `Method not allowed` response — PASS for transport reachability.
+- Exact deployed identity: branch `release/v2`, SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` — PASS.
+- Functional MCP-client test using `CarClever - Find My Car` on the new branded endpoint: PASS, confirmed by André.
+
+### Anthropic support-side URL migration
+
+PENDING EXTERNAL CONFIRMATION:
+
+- André cannot edit the pending listing's MCP URL directly in the portal.
+- Marco/Anthropic support confirmed the pending URL may be changed while in review.
+- On 2026-09-16 André emailed support requesting replacement of the pending listing URL with `https://carclever-anth.getcarwise.app/mcp` and asked politely whether the current listing could be flagged with the review team given the submission history dating back to April.
+- Existing submitted endpoint and neutral alias remain live during transition.
+- Do not mark the new URL as the directory's stored URL until Anthropic confirms the support-side update.
+
+## 9. 2026-09-16 — OpenAI release-control safeguard
+
+PASS / USER-CONFIRMED DASHBOARD SETTING:
+
+- Project: `ccfmc-dev-v2`.
+- Production branch tracking: `release/v2`.
+- `carclever-oai.getcarwise.app` remains attached to Production.
+- **Auto-assign Custom Production Domains: Disabled** and setting saved.
+- Vercel UI states that Production deployments require manual promotion.
+- OpenAI custom domain had been independently verified before this settings change to remain on exact approved V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`.
+- No submitted URL, code, widget origin or release was changed by this safety setting.
+
+Result: both platform production projects now use deliberate manual production-domain promotion.
+
+## 10. Current review/release gates
 
 | Gate | State |
 |---|---|
 | V2 contract/code candidate frozen | PASS — `b8b07d8` |
 | OpenAI exact production origin | PASS |
 | OpenAI final production smoke | PASS |
+| OpenAI manual production-domain promotion | PASS |
 | OpenAI submission | REVIEW |
 | Anthropic exact production SHA | PASS |
-| Anthropic endpoint reachability | PASS |
-| Anthropic listing rescan/update | PASS / IN REVIEW |
-| Claude refreshed-schema smoke | PENDING cache reset/retest |
-| Long-term Anthropic Vercel production-branch safety | PENDING confirmation |
-| V1/main protection | PASS — untouched |
+| Anthropic new branded endpoint DNS/TLS/transport | PASS |
+| Anthropic branded endpoint functional MCP-client test | PASS |
+| Anthropic manual production-domain promotion | PASS |
+| Anthropic support-side listing URL replacement | PENDING CONFIRMATION |
+| Anthropic listing review | IN REVIEW |
+| V1/main protection | PASS — not used as V2 release path |
 | V3 pause | PASS |
 
-## 9. Known issues / follow-up
+## 11. Known issues / follow-up
 
-- Claude can cache connector/tool metadata across a backend cutover. A stale schema must not be mistaken for proof that the production endpoint is serving V1.
-- Confirm the Anthropic Vercel project's long-term production branch/release behavior so a future `main` push cannot silently replace the manually promoted V2 production deployment.
+- Historical Claude connector/tool metadata caching across the Sep 12 backend cutover should not be treated as a current server failure; the Sep 16 branded endpoint passed functional MCP-client testing.
 - Do not change V2 during either review except for platform-requested corrections or a reproduced evidence-backed defect.
+- Keep old Anthropic aliases live until support confirms the new branded URL is recorded and no dependency remains.
 - PR #1/#2 remain stale draft housekeeping and must not be merged.
+- Proposed later Vercel display-name cleanup is deferred until the Anthropic support-side transition is confirmed:
+  - `ccfmc-dev-v2` -> `carclever-openai`;
+  - `carclever-find-my-car` -> `carclever-anthropic`.
+- Audit old Vercel projects and stale GitHub branches later; verify current dependencies before any deletion/retirement.
 
-## 10. Rollback / preservation
+## 12. Rollback / preservation
 
-- V1 main remains preserved at `e7c8634...`.
-- The previous Anthropic V1 production deployment remains a rollback candidate through Vercel deployment history.
-- V2 release history remains on `release/v2`; no forced mainline merge was used for this cutover.
+- Historical V1/main lineage remains preserved.
+- Previous Anthropic production deployments remain rollback candidates through Vercel deployment history.
+- V2 release history remains on `release/v2`; no forced mainline merge was used for the cross-platform production releases.
+- Existing Anthropic aliases remain available during the support-side URL migration.
 
 ## References
 
@@ -188,6 +253,9 @@ Do not interpret changing live VIN status as a regression by itself.
 - `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md`
 - `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`
 - `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`
+- `UPDATE_ANTHROPIC_MCP_URL_AND_PRODUCTION_DRIFT_20260916.md`
+- `UPDATE_ANTHROPIC_DNS_VERIFICATION_AND_RECOVERY_20260916.md`
+- `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`
 - `AUDIT_CARCLEVER_DUAL_PLATFORM_VERCEL_FEASIBILITY_20260911.md`
 - `AUDIT_V2_ANTHROPIC_SUBMISSION_COMPLIANCE_20260910.md`
 - `TEST_CARCLEVER_SUBMISSION_BASELINE_20260911.md`
