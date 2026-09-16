@@ -1,150 +1,163 @@
 # Anthropic MCP URL Update and Production Drift — 2026-09-16
 
 **Owner lane:** ChatGPT — Business/Strategy  
-**Status:** FACTUAL UPDATE — Anthropic URL-change process gate cleared; production-safety gate BLOCKED pending Engineering restoration and verification
+**Status:** FACTUAL UPDATE — incident recovered; branded Anthropic MCP live and verified; support-side listing URL replacement pending confirmation
 
 ## Executive conclusion
 
-Anthropic support has now confirmed that the MCP URL for the currently pending CarClever listing should be updated **while review is still pending** rather than waiting for approval. This clears the previous process uncertainty around whether an in-review URL change would be disruptive.
+Anthropic support confirmed that the MCP URL for the currently pending CarClever listing should be updated while review is still pending rather than waiting for approval.
 
-It does **not** change the confirmed GetCarWise architecture decision from 2026-09-11: OpenAI and Anthropic use the **same CarClever V2 code/release**, but with **separate stable platform production origins**.
+The confirmed GetCarWise architecture remains:
 
-The confirmed naming decision remains:
+- same CarClever V2 code/release on both platforms;
+- separate platform production projects/front doors;
+- OpenAI: `https://carclever-oai.getcarwise.app/mcp`;
+- Anthropic: `https://carclever-anth.getcarwise.app/mcp`.
 
-- OpenAI: `https://carclever-oai.getcarwise.app/mcp`
-- Intended Anthropic branded origin: `https://carclever-anth.getcarwise.app/mcp`
+A Sep 14 automatic Anthropic production replacement was discovered on 2026-09-16, recovered, and its release-control cause corrected. The new Anthropic branded MCP endpoint has now been created and verified. André has sent the replacement URL to Marco/Anthropic support.
 
-The current Anthropic submission still records:
+The only remaining Anthropic URL gate is external: **wait for support to confirm that the pending directory listing has been changed to the new branded URL.**
 
-- `https://carclever-find-my-car.vercel.app/mcp`
+## Anthropic support guidance
 
-A live Vercel inspection on 2026-09-16 found a material release-control regression on the Anthropic production project: the deliberate 2026-09-12 V2 production promotion at exact SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` was subsequently replaced by a 2026-09-14 automatic production deployment from `main` at SHA `1514ab42dd2d4afe20109f02c9cc3930a3ee0789`.
-
-A GitHub compare confirms that this Sep 14 `main` head is on the V1/main lineage and is 101 commits behind the V2 release head, rather than being V2 plus a harmless documentation-only change. This is the exact production-overwrite risk previously recorded in the Sep 12 release closeout and validation ledger.
-
-Therefore, **do not send Anthropic a replacement MCP URL until Engineering restores and verifies the correct V2 production release behind the Anthropic project.**
-
-## New Anthropic support guidance
-
-Andre received direct support guidance from Marco at Anthropic confirming:
+Marco at Anthropic confirmed:
 
 1. The April submission made through the old form is not in Anthropic's current review queue and requires no retirement action.
-2. Two submissions for the same connector do not conflict; the older entry is treated as superseded.
-3. The MCP URL should be updated now while the current listing is pending. Anthropic support stated that a pending-listing URL update has no review-cost penalty.
-4. Once a listing is approved, the recommended sequence is to **publish first**, then make any later edits. Editing after approval but before Publish would send the listing back to review.
+2. Multiple historical submissions for the same connector do not create a conflict; the older path is superseded by the current submission process.
+3. The MCP URL may be updated now while the current listing is pending, without a review-cost penalty.
+4. Once a listing is approved, the recommended later-edit sequence is to publish first and then edit; editing after approval but before Publish would return it to review.
 
-This guidance clears the **review-process/timing gate** for a pending MCP URL update.
+## Confirmed domain architecture
 
-## Existing confirmed domain architecture
+The 2026-09-11 decision `DECISION_CARCLEVER_PLATFORM_DOMAIN_NAMING_20260911.md` is confirmed by André and sets:
 
-The 2026-09-11 decision `DECISION_CARCLEVER_PLATFORM_DOMAIN_NAMING_20260911.md` is marked **CONFIRMED BY ANDRÉ** and sets the platform-separated naming convention:
+- OpenAI: `carclever-oai.getcarwise.app`;
+- Anthropic: `carclever-anth.getcarwise.app`.
 
-- OpenAI: `carclever-oai.getcarwise.app`
-- Anthropic: `carclever-anth.getcarwise.app`
+The rationale is one product and one tested release line, but separate stable production origins so OpenAI and Anthropic review/deployment lifecycles are not silently coupled.
 
-The rationale is one product and one tested release line, but separate stable front doors so OpenAI and Anthropic review/deployment lifecycles are not coupled.
+The older neutral Anthropic alias `carclever.getcarwise.app` remains available during migration but is not the final platform-specific naming target.
 
-The Sep 12 submission records follow this architecture:
-
-- OpenAI was submitted on `https://carclever-oai.getcarwise.app/mcp` at exact V2 SHA `b8b07d8...`.
-- Anthropic retained `https://carclever-find-my-car.vercel.app/mcp` while the same exact V2 SHA was manually promoted into the Anthropic Vercel project.
-
-There is no later documented confirmed decision that both platforms should share one identical MCP URL.
-
-## Existing neutral Anthropic alias
-
-The Anthropic Vercel project currently has both of these domains attached:
-
-- `carclever-find-my-car.vercel.app`
-- `carclever.getcarwise.app`
-
-`carclever.getcarwise.app` is an older neutral branded alias associated with the Anthropic/legacy project history. It is **not** OpenAI's current submitted URL, so using it for Anthropic would not place OpenAI and Anthropic on the same URL.
-
-It is also not the Sep 11 confirmed future Anthropic naming target. Choosing `carclever.getcarwise.app` as the permanent Anthropic endpoint would therefore be a **new André decision that supersedes the Sep 11 naming decision**.
-
-At the time of inspection, `carclever-anth.getcarwise.app` is not attached to the Anthropic Vercel project.
-
-## Live production drift found 2026-09-16
+## Production drift found on 2026-09-16
 
 ### Anthropic project
 
-Project: `carclever-find-my-car`
+Project: `carclever-find-my-car`  
+Project ID: `prj_AGtLT6n36FwfIida35UUKCYIB3zS`
 
-Expected submitted/reviewed V2 release after Sep 12 promotion:
+Expected V2 release after the Sep 12 controlled promotion:
 
 - Branch: `release/v2`
 - Exact SHA: `b8b07d8542f5d3f2a12e00433e089dde28ae5792`
 
-Current production deployment observed on Sep 16:
+Unexpected production deployment found on Sep 16:
 
-- Deployment created: 2026-09-14
+- Deployment created Sep 14
 - Branch: `main`
 - SHA: `1514ab42dd2d4afe20109f02c9cc3930a3ee0789`
 - Commit message: `Sep 14: add Test Run Log entry for old-CarClever verification round`
 
-GitHub comparison:
+GitHub comparison established that this Sep 14 head was on the older `main` lineage, not V2 plus a harmless documentation-only change.
 
-- V2 and current main are diverged.
-- Current main is ahead by 1 commit on its own lineage and **101 commits behind** V2.
-- The shared merge-base is on the preserved V1/main line.
+Root cause of the silent production takeover: Vercel Production had **Auto-assign Custom Production Domains** enabled.
 
-This means the Anthropic production project has materially drifted back to the V1/main release line.
+The source of the Sep 14 documentation/test-log commit itself remains unidentified and should not be attributed to a person or AI without evidence.
 
-### OpenAI project
+## Recovery — COMPLETE
 
-Project: `ccfmc-dev-v2`
+1. Exact approved V2 deployment at SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` was manually promoted back to Anthropic Production.
+2. Active Anthropic aliases were verified on production deployment `dpl_9vP17yqXx5fdfV2uTWfAenvfYFD2`.
+3. André disabled **Auto-assign Custom Production Domains** on the Anthropic Production environment and saved the setting.
+4. Vercel now states that Production deployments require manual promotion.
 
-Current production remains the exact V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` behind `carclever-oai.getcarwise.app`.
+This closes the production-overwrite safety gate.
 
-The Sep 14 `main` build appeared only as a non-production preview in the OpenAI V2 project, so the OpenAI submitted endpoint has not suffered the same production overwrite.
+## New Anthropic branded endpoint — COMPLETE
 
-## Decision implications
-
-### What has changed
-
-- Anthropic's process gate for changing a pending MCP URL is now clear: **send the change while pending**.
-- A previously documented operational risk has become an actual production incident: a V1 `main` push replaced the manually promoted Anthropic V2 production deployment.
-
-### What has not changed
-
-- The confirmed architecture remains same V2 code/release, separate platform production origins.
-- There is no confirmed decision to share `carclever-oai.getcarwise.app` between OpenAI and Anthropic.
-- The intended branded Anthropic origin remains `carclever-anth.getcarwise.app` unless André explicitly supersedes that naming decision.
-
-## Required Engineering gate before sending the new URL
-
-Claude/Engineering owns these actions on `AndreBro007/carclever-find-my-car` and Vercel:
-
-1. Restore the Anthropic production project to the approved V2 release and verify the exact deployed SHA.
-2. Correct the Vercel production-branch/release behavior so a future V1 `main` push cannot silently replace the manually promoted V2 production release.
-3. If retaining the confirmed Sep 11 naming decision, attach/configure `carclever-anth.getcarwise.app` to the Anthropic production project.
-4. Verify the chosen branded `/mcp` endpoint is reachable and serves the V2 contract, including current V2 schema markers such as `vehicleNeeds` and the V2 electrification fields rather than the legacy V1 `goals` contract.
-5. Report the exact verified production URL and SHA before Andre sends the replacement endpoint to Anthropic.
-
-No application-code or deployment changes are authorized or performed by ChatGPT in this record.
-
-## Recommended Anthropic URL after Engineering verification
-
-If the existing confirmed naming decision is retained:
+New production MCP:
 
 `https://carclever-anth.getcarwise.app/mcp`
 
-Do **not** use `https://carclever-oai.getcarwise.app/mcp` for Anthropic unless André explicitly decides to abandon the separate-platform-origin architecture.
+Setup/validation:
 
-Do **not** send `https://carclever.getcarwise.app/mcp` as the permanent endpoint merely because it is already attached; using that older neutral alias would be a new naming decision and it currently points at the drifted Anthropic production project until Engineering restores V2.
+- custom domain added to Vercel project `carclever-find-my-car`;
+- Porkbun DNS added: `CNAME carclever-anth -> c6a2c23ef4265088.vercel-dns-017.com.`;
+- Vercel: **Valid Configuration**;
+- HTTPS/TLS: valid;
+- direct GET `/mcp`: expected HTTP 405 JSON-RPC `Method not allowed` response;
+- deployed identity: exact V2 branch `release/v2`, SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`;
+- functional MCP-client test using `CarClever - Find My Car`: PASS, confirmed by André.
 
-## Source records reviewed
+The old submitted endpoint and neutral alias remain live during transition:
+
+- `https://carclever-find-my-car.vercel.app/mcp`
+- `https://carclever.getcarwise.app/mcp`
+
+## Support email — SENT
+
+On 2026-09-16 André replied to Marco requesting that Anthropic replace the pending listing's MCP URL with:
+
+`https://carclever-anth.getcarwise.app/mcp`
+
+The message stated that the new endpoint is live and tested, that the existing endpoint remains active during the transition, and politely asked whether the current listing could be flagged with the review team given the submission history dating back to April.
+
+**Do not mark the directory's stored MCP URL as changed until Anthropic confirms the support-side update.**
+
+## OpenAI production safeguard — COMPLETE
+
+Project: `ccfmc-dev-v2`  
+Project ID: `prj_EJRR8xftf6TEIA3QS7jFXjBPr2aX`
+
+OpenAI remained on exact approved V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` throughout the Anthropic incident.
+
+After Anthropic recovery, André checked the OpenAI Production environment and confirmed:
+
+- tracked branch: `release/v2`;
+- **Auto-assign Custom Production Domains: Disabled**;
+- setting saved;
+- `carclever-oai.getcarwise.app` remains attached to Production.
+
+Both platform production projects now require deliberate manual production-domain promotion.
+
+## Standing release policy
+
+For both platform production projects:
+
+1. Git pushes may create deployments but must not silently take over branded production domains.
+2. Production-domain movement requires deliberate **Promote to Production**.
+3. Verify intended branch and exact SHA before promotion.
+4. Verify branded MCP endpoint and exact production SHA after promotion.
+5. Do not use routine documentation/test-log pushes as release mechanisms.
+
+## Deferred housekeeping
+
+After Anthropic confirms the pending listing uses the new branded endpoint and both reviews are stable:
+
+- proposed Vercel display-name cleanup:
+  - `ccfmc-dev-v2` -> `carclever-openai`;
+  - `carclever-find-my-car` -> `carclever-anthropic`;
+- audit old CarClever-related Vercel projects before any retirement;
+- re-audit stale GitHub branches before bulk deletion;
+- do not rename the shared `AndreBro007/carclever-find-my-car` repository merely to match Vercel display names.
+
+Detailed plan: `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`.
+
+## Current gate
+
+**PENDING ANTHROPIC CONFIRMATION ONLY:** support-side replacement of the pending listing's MCP URL with `https://carclever-anth.getcarwise.app/mcp`.
+
+No application-code or deployment changes were performed by ChatGPT in producing this record.
+
+## Source records
 
 - `DECISION_CARCLEVER_PLATFORM_DOMAIN_NAMING_20260911.md`
-- `AUDIT_CARCLEVER_DUAL_PLATFORM_VERCEL_FEASIBILITY_20260911.md`
 - `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md`
 - `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`
-- `SESSION_CARCLEVER_DUAL_PLATFORM_CLOSEOUT_20260912.md`
-- `CURRENT_V2_STATE_20260909.md` (updated through Sep 12)
+- `CURRENT_V2_STATE_20260909.md`
 - `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`
-- `ADMIN_RECORD_ANTHROPIC_SUBMISSIONS.md`
-- `TEST_LOG_OLDCARCLEVER_20260914.md`
-- Full dynamically listed root of `getcarwise-docs` as of 2026-09-16
-- Live Vercel project/deployment inspection on 2026-09-16
-- Read-only GitHub compare of V2 SHA `b8b07d8...` to current `main` SHA `1514ab42...`
-- Direct Anthropic support email supplied by André on 2026-09-16
+- `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`
+- `UPDATE_ANTHROPIC_DNS_VERIFICATION_AND_RECOVERY_20260916.md`
+- `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`
+- `carclever-widget/ADMIN_RECORD_ANTHROPIC_SUBMISSIONS.md`
+- `carclever-widget/ADMIN_RECORD_OPENAI_SUBMISSIONS.md`
+- live Vercel/GitHub verification performed 2026-09-16
