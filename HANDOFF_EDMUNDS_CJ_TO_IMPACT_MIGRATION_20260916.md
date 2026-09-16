@@ -92,7 +92,7 @@ is deciding or building:
   content (e.g. real inventory-backed pages) is an open idea, not yet
   scoped — would need its schema inspected first.
 
-## Engineering finding: VIN deep-linking confirmed possible
+## Engineering finding: VIN deep-linking confirmed working, end-to-end
 
 For the app side specifically: Impact's Assets screen has a "Deeplinking"
 filter (Supported / Not Supported). Filtering our Edmunds assets to
@@ -104,10 +104,13 @@ wraps URLs today (`lib/edmunds-cj.ts` / `lib/link-resolution.ts` in
 `carclever-find-my-car`), which is encouraging for reusing that logic once
 the base link format changes.
 
-**Not yet confirmed:** the specific list of domains/paths Edmunds permits us
-to deep-link to (a separate, more granular setting than the general
-capability), and a real live click-through test of an actual VIN URL. Both
-are the immediate next engineering steps, gated on the item below.
+**Update: live-tested and confirmed, Sep 16.** André manually clicked a
+real Impact tracking link built for a genuine, currently-live Edmunds
+listing (2026 Honda CR-V, a real VIN). It resolved correctly to the exact
+VIN-specific page, with Impact's own tracking parameters attached — not a
+generic fallback, not an error. This is the single most important open
+question for the whole migration, and it's now answered conclusively: yes,
+VIN-level deep linking works through Impact.
 
 ## Blocking gate: Master Program Agreement — READ, CLEARED
 
@@ -128,7 +131,7 @@ detail in the companion research doc.
 |---|---|
 | CJ links (website + app) | Still live, unchanged, still the production mechanism |
 | Impact account | Approved, one API token created (Engineering research only, read-only, Catalogs scope) |
-| VIN deep-linking | Permission confirmed enabled; live test not yet done |
+| VIN deep-linking | **Confirmed working end-to-end** — live-tested by André against a real listing, resolved correctly through Impact's tracking |
 | Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
 | App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based |
