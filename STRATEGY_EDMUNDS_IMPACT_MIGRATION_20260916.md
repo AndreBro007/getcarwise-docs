@@ -1,5 +1,95 @@
 # Edmunds Affiliate Program — CJ → Impact.com Migration & Channel Reference — 2026-09-16
 
+## PLAN & STATUS — read this first, everything else is supporting detail
+
+**Objective:** migrate Edmunds affiliate links from CJ to Impact across all
+channels (apps + website) before end of September 2026, safely, without
+disrupting the two live app-store submissions in review.
+
+### Track A — `carclever-find-my-car` (this app)
+- **Decision made:** use the same static-formula link swap as old
+  CarClever — no catalog/API dependency for link generation. Confirmed
+  via Impact support (ticket #882346): VIN cannot be looked up via the
+  API, ruling out the more ambitious "catalog lookup" design.
+- **Formula, live-tested and confirmed working:**
+  ```
+  https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}
+  ```
+- **Exact code change identified:** `lib/edmunds-cj.ts` — replace 3
+  constants (`CJ_CLICK_DOMAIN`, `CJ_PUBLISHER_ID`,
+  `CJ_EDMUNDS_PRODUCT_AD_ID`) and `wrapWithCJ()`'s one-line body. Only
+  caller: `lib/link-resolution.ts` (2 call sites, both go through
+  `wrapWithCJ()`). **No other file needs touching** — confirmed this app
+  has no CSP/domain-allowlist config anywhere (`vercel.json` checked,
+  empty of any such config) — architecturally different from old
+  CarClever's Fractal/Skybridge setup, which needed 4-5 separate CSP
+  array updates. This is a smaller, lower-footprint change here.
+- **Timing decision, deliberate exception to the standing "freeze during
+  review" rule** (see `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`):
+  André's reasoning, agreed — (1) the Anthropic review may already be
+  "disturbed" by the open Marco/support thread requesting an MCP URL
+  change, so this edit doesn't introduce a new disturbance where none
+  existed; (2) end-of-September is a hard deadline that doesn't move for
+  either platform's review timeline; (3) the edit itself has no schema/
+  tool-description footprint and no CSP footprint — structurally
+  invisible to any automated review scan, confirmed by direct code
+  inspection. This is a considered, recorded exception — not a reversal
+  of the freeze policy in general.
+- **Chosen implementation method (agreed, in progress):**
+  1. Branch off the *exact reviewed SHA* (`b8b07d8542f5d3f2a12e00433e089dde28ae5792`),
+     not off `main`
+  2. Make the 4-line edit
+  3. Run existing test suite + production build, confirm clean
+  4. Push branch → Vercel auto-generates an isolated **preview
+     deployment** (zero effect on live production)
+  5. Manually test the preview deployment with a real search, confirm a
+     working Impact-wrapped link end-to-end
+  6. **Separately**, decide production-promotion timing — considering
+     doing this during US overnight hours as a low-cost precaution
+     (acknowledged: this reduces live-traffic disruption risk, not
+     "review risk" in any meaningful sense, since a reviewer checking the
+     listing later would see the same result regardless of deploy time)
+- **Status as of this update: about to create the branch and make the
+  edit.** Nothing merged, nothing deployed to production yet.
+
+### Track B — Website (ChatGPT's lane)
+- Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
+  covering: Publisher Tag, ready-made Assets, general catalog search
+  (dealer/model/category — NOT VIN) as a possible inventory-display
+  feature, corrected after an earlier overstated VIN-lookup claim.
+- ChatGPT has its own funnel strategy doc
+  (`STRATEGY_DISCOVERY_MCP_EDMUNDS_REVENUE_FUNNEL_20260916.md`) — pending
+  André's approval, aligns with today's findings.
+- Not blocked on Track A — can proceed independently.
+
+### Track C — Broader monetization (parked, deliberately, until A+B land)
+- Marketplace application (other affiliate programs) — not started
+- Real underlying issue flagged: Edmunds' 1.3M-listing catalog vs.
+  Auto.dev's ~3-4M inventory is a genuine coverage gap that no amount of
+  Impact API work can close — worth exploring other data
+  sources/programs later, this is the actual lever, not further
+  engineering against Impact's API.
+
+### Old CarClever (Fractal, separate codebase/team, not this session's
+direct work)
+- CJ→Impact swap fully investigated by a separate Fractal code agent,
+  confirmed safe, ready to implement — same base formula as above.
+- Investigation output reviewed here (Engineering lane) — one flagged gap
+  (unconfirmed 5th CSP array location) was sent back for confirmation
+  before implementation.
+
+### Open items, not yet resolved (lower priority than the above)
+- Reports → "More" submenu in Impact dashboard — never opened
+- Attribution/reporting granularity (can Impact distinguish app vs.
+  website leads?) — not checked
+- Trackonomics Essentials — still just a name, not evaluated
+- Production API token scope for actual implementation (current token is
+  Catalogs-read-only, research-purpose) — needs a proper scope decision
+  before any live Tracking-Links-API use, though Track A's static-formula
+  approach doesn't actually need this
+
+---
+
 ## Why this doc exists
 
 Edmunds moved its affiliate program from CJ Affiliate to Impact.com. André
