@@ -125,18 +125,55 @@ Catalog API to verify listings are both clearly fine — real users clicking
 real links, no fabrication or incentive involved. Full clause-by-clause
 detail in the companion research doc.
 
-## Major update: Product Catalog returns pre-tracked per-VIN links
+## Correction + important update: VIN lookup is NOT possible — but general catalog search is, and may be useful for the website
 
-The biggest finding from today's session: Impact's Product Catalog API
-(1,334,554 Edmunds listings) doesn't just hold inventory data — each item
-already includes a **complete, ready-to-use, pre-tracked affiliate URL**
-pointing at that exact VIN's listing page, plus real-time price and stock
-status. This is materially better than the originally planned approach
-(constructing tracking links ourselves via the Tracking Links API) — it
-means looking up a VIN in this catalog can hand back a working affiliate
-link directly, with our own link-construction logic only needed as a
-fallback for VINs not yet in Edmunds' feed. Full technical detail in the
-companion research doc.
+**Correcting an earlier update in this doc.** An earlier version of this
+handoff said the Product Catalog API could look up a specific VIN and
+return a pre-tracked link. **That was wrong, and has since been
+disproven** — both by our own live testing and by direct confirmation
+from Impact support (ticket #882346): **VIN cannot be searched or
+filtered by, in any way, through this API.** If any website design work
+started from the earlier (incorrect) claim, it should be revisited —
+there is no way to check "is this specific VIN on Edmunds" via this API.
+
+**What the API genuinely CAN do — and this may still be useful for the
+website, separate from the VIN question:**
+
+The Catalog API supports **general search/filtering** across the Edmunds
+inventory (1,334,554 listings, updated at least daily) by these confirmed
+fields:
+- **Dealer name** (field is called `Manufacturer` in the API, but
+  actually holds the dealer's name, e.g. "AutoNation Honda Valencia" —
+  not the car's make)
+- **Model** (field `Text1`, e.g. "CR-V" — confirmed working despite not
+  being in Impact's own documented list of searchable fields)
+- **Body style / category** (field `Category`, e.g. "4WD Sport Utility
+  Vehicles")
+- Likely also: price, stock status (listed as supported, not yet tested
+  live)
+
+Each matching result includes: **a ready-to-use pre-tracked affiliate
+link, current price, stock status, photo, dealer name and address, and
+year/model/trim.**
+
+**Possible website use, worth considering separately from the app work:**
+a page or widget that pulls real, current Edmunds inventory by a general
+filter — e.g. "used SUVs near you," "current Honda CR-V listings," a
+dealer-specific page — would get back genuinely live data with working
+tracked links already attached, no link-building needed on our side for
+that specific use case. This is different from (and doesn't require) any
+VIN-specific lookup.
+
+**Caveats to know before designing anything around this:**
+- Hard cap: cannot page beyond 20,000 results per catalog (irrelevant for
+  narrow/filtered searches, relevant if ever browsing broadly)
+- Rate limit: 3,600 requests/hour on this endpoint specifically
+- Coverage: Edmunds' 1.3M listings vs. Auto.dev's ~3-4M — a real gap, so
+  this only ever covers a subset of the full market either way
+
+Full technical detail, every field tested, and the exact API responses
+are recorded in the companion research doc — no need to redo this
+research or testing.
 
 ## Current status snapshot
 
@@ -145,10 +182,10 @@ companion research doc.
 | CJ links (website + app) | Still live, unchanged, still the production mechanism |
 | Impact account | Approved, one API token created (Engineering research only, read-only, Catalogs scope) |
 | VIN deep-linking | **Confirmed working end-to-end** — live-tested by André against a real listing, resolved correctly through Impact's tracking |
-| Product Catalog API | **Confirmed live, 200 OK** — returns pre-tracked per-VIN URLs, real-time price/stock. Major positive finding — see above |
+| Product Catalog API | **Confirmed live, works for general search** (dealer, model, category) — does NOT support VIN lookup (confirmed by Impact support). Possible website use, not an app-side VIN solution — see above |
 | Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
-| App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based |
+| App code (`lib/edmunds-cj.ts`) | Untouched, still CJ-based. Plan confirmed: same static-formula swap as old CarClever, no API/catalog dependency |
 | Target completion | End of September 2026 |
 
 ## Full detail
