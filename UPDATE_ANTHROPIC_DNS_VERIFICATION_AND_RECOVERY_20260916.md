@@ -1,7 +1,7 @@
 # Anthropic DNS Verification and Recovery Note — 2026-09-16
 
 **Owner lane:** ChatGPT — Business/Strategy  
-**Status:** FACTUAL UPDATE — V2 recovery complete; release-control prevention confirmed; Anthropic branded MCP domain live and verified; directory update still pending
+**Status:** FACTUAL UPDATE — V2 recovery complete; release-control prevention confirmed; Anthropic branded MCP domain live and verified; Anthropic support-side URL update pending
 
 ## Incident and recovery
 
@@ -68,7 +68,21 @@ completed successfully at the TLS/HTTP layer and returned the expected MCP JSON-
 - `strict-transport-security` present;
 - response served by Vercel.
 
-This is the expected result for a GET request to the MCP transport and confirms that DNS, SSL/HTTPS routing, Vercel aliasing, and the MCP route are live on the new Anthropic hostname.
+This confirms that DNS, SSL/HTTPS routing, Vercel aliasing, and the MCP route are live on the new Anthropic hostname.
+
+Andre also confirmed a successful functional MCP-client test using **`CarClever - Find My Car`** against the new branded endpoint. This provides an additional end-to-end confirmation beyond the browser/HTTP transport check.
+
+## Anthropic listing update workflow — corrected
+
+Andre cannot edit the pending Anthropic MCP URL in the portal. This is the reason the support thread with Marco was opened.
+
+Marco's guidance established that the MCP URL can be changed while the listing is pending and that the correct path is to send Anthropic support the replacement URL for the pending submission.
+
+Therefore the next action is **not** a portal Edit Server / Sync / Rescan step by Andre. The next action is to reply to Marco with the verified replacement MCP URL:
+
+`https://carclever-anth.getcarwise.app/mcp`
+
+Anthropic/support must apply the URL change to the pending listing on their side. Any follow-up sync/rescan or review action should be performed according to the instructions Anthropic provides after making that change.
 
 ## Anthropic TXT clarification
 
@@ -78,15 +92,14 @@ Operationally:
 
 - do not remove or replace the existing Anthropic TXT record;
 - keep existing Anthropic aliases alive during the directory migration;
-- if Anthropic's portal explicitly requests another verification record, follow the portal-provided value.
+- if Anthropic later explicitly requests another verification record, follow the portal/support-provided value.
 
 ## Next sequence
 
-1. Update the pending Anthropic listing MCP URL to `https://carclever-anth.getcarwise.app/mcp`.
-2. Run Anthropic's current Sync/Rescan Tools step and verify the expected V2 tool contract is discovered.
-3. Save the pending listing update.
-4. Reply to Marco with the verified replacement MCP URL.
-5. Keep `carclever.getcarwise.app` and `carclever-find-my-car.vercel.app` live during the transition; no cleanup is required before Anthropic confirms the new endpoint is recorded.
-6. Do not change OpenAI project `ccfmc-dev-v2` or `carclever-oai.getcarwise.app`.
+1. Reply to Marco with `https://carclever-anth.getcarwise.app/mcp` and ask Anthropic to replace the pending listing's current MCP URL with this verified endpoint.
+2. State that the new endpoint is already live and tested, including a successful `CarClever - Find My Car` MCP-client test.
+3. Wait for Anthropic to confirm the pending listing has been updated or provide any required follow-up validation instructions.
+4. Keep `carclever.getcarwise.app` and `carclever-find-my-car.vercel.app` live during the transition; no cleanup is required before Anthropic confirms the new endpoint is recorded.
+5. Do not change OpenAI project `ccfmc-dev-v2` or `carclever-oai.getcarwise.app`.
 
 No application-code or deployment changes were performed by ChatGPT in producing this record.
