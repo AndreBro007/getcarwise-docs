@@ -40,30 +40,60 @@ disrupting the two live app-store submissions in review.
     any such config) — architecturally different from old CarClever's
     Fractal/Skybridge setup, which needed 4-5 separate CSP array updates.
 - **Timing decision, deliberate exception to the standing "freeze during
-  review" rule** (see `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`):
-  André's reasoning, agreed — (1) the Anthropic review may already be
-  "disturbed" by the open Marco/support thread requesting an MCP URL
-  change, so this edit doesn't introduce a new disturbance where none
-  existed; (2) end-of-September is a hard deadline that doesn't move for
-  either platform's review timeline; (3) the edit itself has no schema/
+  review" rule, covers BOTH platforms** (see
+  `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`): André's reasoning,
+  agreed — (1) the Anthropic review may already be "disturbed" by the
+  open Marco/support thread requesting an MCP URL change, so this edit
+  doesn't introduce a new disturbance where none existed; (2)
+  end-of-September is a hard deadline that doesn't move for either
+  platform's review timeline; (3) the edit itself has no schema/
   tool-description footprint and no CSP footprint — structurally
   invisible to any automated review scan, confirmed by direct code
-  inspection. This is a considered, recorded exception — not a reversal
-  of the freeze policy in general.
+  inspection. **Correction (Sep 17): this exception was discussed and
+  agreed for both platforms during this session — OpenAI's live
+  resubmission (Sep 12) was explicitly raised alongside Anthropic's
+  review at the time timing was decided, but was not correctly carried
+  into this doc's write-up until now.** Since both platforms build from
+  the same shared codebase/branch (confirmed:
+  `AndreBro007/carclever-find-my-car`, two separate Vercel projects —
+  `carclever-find-my-car` for Anthropic, `ccfmc-dev-v2` for OpenAI — both
+  auto-build every commit on this branch), the code change is
+  unavoidably shared regardless; what was actually decided here is that
+  **production promotion should proceed for both platforms together,
+  not staggered** — same reasoning applies equally to both, and doing
+  them separately would mean two separate "touch a reviewed app" events
+  instead of one. This is a considered, recorded exception — not a
+  reversal of the freeze policy in general.
 - **Chosen implementation method:**
   1. ✅ Branch off the *exact reviewed SHA*, not off `main` — done
   2. ✅ Make the edit — done, verified byte-identical after every push
-  3. ⬜ Run existing test suite + production build, confirm clean — NOT
-     YET DONE
-  4. ⬜ Push branch → Vercel preview deployment — NOT YET DONE (branch is
-     pushed, but no preview deployment has been triggered/confirmed yet)
-  5. ⬜ Manually test the preview deployment with a real search — NOT YET
-     DONE
-  6. ⬜ Separately, decide production-promotion timing (considering US
-     overnight hours as a low-cost precaution, not a review-risk
+  3. ✅ Run existing test suite + production build — **DONE, PASSED.**
+     Test suite: 79/79 pass (confirmed in isolated sandbox clone of the
+     branch), including every affiliate-link-specific test (D2h, D2i,
+     D2l, D2p). TypeScript typecheck: one pre-existing error found, in
+     `tests/best-for-budget-ranking.test.ts` — confirmed via a fresh,
+     separate clone of the *unmodified* reviewed SHA that this exact
+     same error already exists there, i.e. it predates and is unrelated
+     to this work.
+  4. ✅ Vercel preview deployments — **confirmed happening automatically**
+     on every push, on both projects (`carclever-find-my-car` and
+     `ccfmc-dev-v2`), no manual trigger needed. **One historical build
+     shows "Error"** — commit `a2372d0` (the very first edit to
+     `lib/edmunds-cj.ts`) broke the build transiently, because that
+     commit renamed `wrapWithCJ` before the very next commit updated
+     `lib/link-resolution.ts`'s import of it — a real, avoidable process
+     mistake (should have been one atomic commit, not two interdependent
+     ones). **Confirmed resolved**: every commit from the
+     `link-resolution.ts` fix onward, including the current final state,
+     shows "Ready" on both projects.
+  5. ⬜ Manually test a live preview deployment with a real search — NOT
+     YET DONE — next step
+  6. ⬜ Decide production-promotion timing for both platforms (considering
+     US overnight hours as a low-cost precaution, not a review-risk
      mitigation) — NOT YET DONE
-- **Status as of this update: code edits complete and pushed to the
-  branch. Testing/build/deploy has not started.**
+- **Status as of this update: code complete, tested, and confirmed
+  building cleanly on both platforms' Vercel projects. Next: manually
+  verify a live preview URL, then decide promotion timing for both.**
 
 ### Track B — Website (ChatGPT's lane)
 - Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
