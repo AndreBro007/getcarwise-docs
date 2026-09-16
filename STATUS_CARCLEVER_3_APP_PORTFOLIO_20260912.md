@@ -1,4 +1,4 @@
-# CarClever 3-App Portfolio — Current Status 2026-09-12
+# CarClever 3-App Portfolio — Current Status updated 2026-09-16
 
 ## Purpose
 
@@ -10,7 +10,7 @@ This is the current-status companion to the older `carclever-widget/CARCLEVER_3_
 |---|---|---|---|---|
 | **CarClever / legacy Fractal app** | Fractal production endpoint | Legacy/fallback historical surface | Historical published/submission lineage; not today's V2 submission | Historical Claude submission path; not today's active V2 update |
 | **CarClever - New & Used Cars** | Fractal Sky | Separate all-inventory Fractal product/history | Historical OpenAI review/submission lineage | Not the active Anthropic Find My Car submission |
-| **CarClever - Find My Car** | Vercel, repo `AndreBro007/carclever-find-my-car` | **Primary active release and current cross-platform submission** | **V2 submitted 2026-09-12 — REVIEW** | **V2 production cutover + listing update 2026-09-12 — IN REVIEW** |
+| **CarClever - Find My Car** | Vercel, repo `AndreBro007/carclever-find-my-car` | **Primary active release and current cross-platform submission** | **V2 submitted 2026-09-12 — REVIEW** | **V2 in review; new branded MCP live; support-side URL replacement requested 2026-09-16** |
 
 The strategic center of gravity is now **Find My Car V2**, not the Fractal apps.
 
@@ -18,56 +18,90 @@ The strategic center of gravity is now **Find My Car V2**, not the Fractal apps.
 
 Do not confuse the three product surfaces above with Find My Car's internal release branches:
 
-- **V1:** `main`, preserved at `e7c8634...`; historical submitted/production baseline and rollback point. It is no longer the behavior deliberately served behind the Anthropic submitted URL after the Sep 12 controlled cutover.
-- **V2:** `release/v2`, exact current submission SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`; active submitted release on both platforms.
+- **V1/main:** preserved as historical baseline/rollback lineage; no longer the deliberately served cross-platform V2 release.
+- **V2/release/v2:** exact current submission SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`; active submitted release on both platforms.
 - **V3:** paused at `v3.1-3.3/card-first-check-vehicle`, commit `4032feb`; no merge, promotion or submission action authorized while V2 reviews are active.
 
 ## OpenAI current state
 
-- Production Vercel project: `ccfmc-dev-v2`.
+- Production Vercel project: `ccfmc-dev-v2` (project ID `prj_EJRR8xftf6TEIA3QS7jFXjBPr2aX`).
 - MCP URL: `https://carclever-oai.getcarwise.app/mcp`.
-- Exact release: V2 `b8b07d8`.
+- Exact release: V2 `b8b07d8542f5d3f2a12e00433e089dde28ae5792`.
 - Domain verification: complete.
 - Final Scan Tools: passed with V2 schema, no legacy `goals`, correct custom widget origin/CSP and tool annotations.
 - Final positive smoke: normal inventory search, exact VIN Buyer Check, self-contained listing-presence/availability all passed on the custom domain.
 - Submission: `CarClever - Find My Car`, version 1.0.0.
-- Status: **REVIEW** as of 2026-09-12.
+- Status: **REVIEW**.
+- Production branch tracking: `release/v2`.
+- **Auto-assign Custom Production Domains: Disabled** as of 2026-09-16; future production-domain movement requires deliberate manual promotion.
 
 ## Anthropic current state
 
-- Existing Vercel project: `carclever-find-my-car`.
-- Existing submitted MCP URL retained: `https://carclever-find-my-car.vercel.app/mcp`.
-- Production manually promoted from `release/v2` exact SHA `b8b07d8`.
-- Production deployment: READY.
-- Anthropic server listing: existing `CarClever - Find My Car`, slug unchanged.
-- Sync/Rescan from server performed.
-- Public description updated to final V2 marketing copy.
-- Update saved successfully.
-- Status: **IN REVIEW**, Updated `just now` at submission confirmation on 2026-09-12.
+- Vercel project: `carclever-find-my-car` (project ID `prj_AGtLT6n36FwfIida35UUKCYIB3zS`).
+- Approved production release: exact V2 SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`, source `release/v2`, READY production deployment `dpl_9vP17yqXx5fdfV2uTWfAenvfYFD2`.
+- New branded production MCP: `https://carclever-anth.getcarwise.app/mcp`.
+- New branded domain is Vercel-valid, HTTPS-valid, resolves to the exact approved V2 production deployment, and has passed a functional `CarClever - Find My Car` MCP-client test.
+- Existing MCP currently recorded by Anthropic remains `https://carclever-find-my-car.vercel.app/mcp` until Anthropic support confirms the replacement.
+- Existing aliases remain live during the transition, including `https://carclever.getcarwise.app/mcp` and the submitted Vercel hostname.
+- Anthropic server listing remains `CarClever - Find My Car`, slug unchanged.
+- Status: **IN REVIEW / SUPPORT-SIDE URL CHANGE PENDING CONFIRMATION**.
+- **Auto-assign Custom Production Domains: Disabled**; future production-domain movement requires deliberate manual promotion.
 
-## Claude-specific pending item
+## Sep 16 Anthropic support request
 
-The first Claude connector attempt after the backend cutover still showed stale V1 tool metadata (`goals`) and an `Unable to reach` banner even though:
+The pending Anthropic listing URL cannot be changed by André in the portal, which is why the support thread with Marco was opened.
 
-- Claude tool discovery could see the connector;
-- the V2 Test connector exposed the correct V2 schema; and
-- direct GET to the submitted MCP hostname returned the expected JSON-RPC `Method not allowed` response.
+Marco confirmed that the MCP URL may be changed while the current listing is pending and that the old April submission does not require separate retirement action.
 
-Treat this as a **Claude connector/tool-metadata cache refresh issue pending retest**, not proof of server unavailability. The next session should clear/recreate connector state and confirm the base connector now advertises V2 fields before changing code.
+On 2026-09-16 André emailed Marco asking Anthropic to replace the pending listing's MCP URL with:
+
+`https://carclever-anth.getcarwise.app/mcp`
+
+The email stated that the endpoint is live and tested, that the old endpoint will remain active during transition, and politely asked whether the current listing could be flagged with the review team given the submission history dating back to April.
+
+Do not mark the new URL as stored in the Anthropic directory until support confirms the change.
+
+## Sep 16 production incident and release-control outcome
+
+A Sep 14 `main` push temporarily replaced the deliberately promoted Anthropic V2 production deployment because the Anthropic Vercel project's Production environment had **Auto-assign Custom Production Domains** enabled.
+
+Recovery is complete:
+
+1. restored exact approved V2 SHA `b8b07d8...` to Production;
+2. verified the production aliases on the correct V2 deployment;
+3. disabled **Auto-assign Custom Production Domains** on Anthropic;
+4. proactively disabled the same auto-assignment behavior on OpenAI after confirming its tracked Production branch is `release/v2`.
+
+The source of the Sep 14 documentation/test-log commit remains unidentified and should not be attributed without evidence. The operational release-control gap is closed by manual production promotion.
 
 ## Current strategic decision
 
-1. **Find My Car V2 is the active cross-platform bet.** Both OpenAI and Anthropic now review the same V2 codebase through platform-specific production origins.
-2. **Do not merge V2 into main merely to make the submissions work.** The Sep 12 Anthropic cutover proved V2 can be deliberately promoted without changing main.
+1. **Find My Car V2 is the active cross-platform bet.** Both OpenAI and Anthropic use the same V2 codebase/release through platform-specific production origins.
+2. **Do not merge V2 into main merely to make submissions work.** Platform production is controlled through deliberate Vercel promotion.
 3. **Freeze V2 during review** unless a platform requests a correction or a concrete reproducible defect appears.
 4. **Keep V3 paused.** Do not let V3 work contaminate the submission/review window.
-5. The older Fractal portfolio remains historical/fallback context; no new Fractal migration/submission action was authorized in this session.
+5. **Production promotion is manual on both platform projects.** Check branch/SHA before promotion and endpoint/SHA after promotion.
+6. Keep Anthropic legacy aliases live until support confirms the new branded MCP URL is recorded.
+7. Defer Vercel project display-name cleanup until the Anthropic URL transition is confirmed.
+
+## Deferred infrastructure housekeeping
+
+After the current submission transitions stabilize:
+
+- proposed Vercel project display-name cleanup:
+  - `ccfmc-dev-v2` -> `carclever-openai`;
+  - `carclever-find-my-car` -> `carclever-anthropic`;
+- audit remaining CarClever Vercel projects and classify active test infrastructure vs historical reference vs retirement candidates;
+- re-audit stale GitHub branches before any bulk deletion;
+- do not rename the shared `AndreBro007/carclever-find-my-car` GitHub repository as part of Vercel display-name cleanup.
+
+See `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md` for the controlled housekeeping plan.
 
 ## Immediate next actions
 
-- Claude: reset connector/cache, verify V2 schema, run CR-V baseline and exact-VIN Buyer Check.
-- Vercel: confirm long-term production-branch/release behavior on the Anthropic project so a future V1 `main` push cannot silently supersede the manual V2 production promotion.
-- Reviews: monitor OpenAI and Anthropic; no proactive code changes while both are in review.
+- Anthropic: wait for Marco/support to confirm the pending listing MCP URL has been replaced with `https://carclever-anth.getcarwise.app/mcp` or provide follow-up validation instructions.
+- Reviews: monitor OpenAI and Anthropic; no proactive code changes while both remain in review.
+- Infrastructure: no rename/deletion cleanup until the Anthropic support-side URL change is confirmed.
 
 ## Related records
 
@@ -75,5 +109,8 @@ Treat this as a **Claude connector/tool-metadata cache refresh issue pending ret
 - `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md`
 - `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md`
 - `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`
+- `UPDATE_ANTHROPIC_MCP_URL_AND_PRODUCTION_DRIFT_20260916.md`
+- `UPDATE_ANTHROPIC_DNS_VERIFICATION_AND_RECOVERY_20260916.md`
+- `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`
 - `AUDIT_CARCLEVER_DUAL_PLATFORM_VERCEL_FEASIBILITY_20260911.md`
 - historical portfolio analysis: `carclever-widget/CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md`
