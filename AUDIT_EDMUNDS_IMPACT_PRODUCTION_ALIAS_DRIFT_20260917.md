@@ -35,3 +35,8 @@ The canonical .vercel.app aliases also need explicit verification; they are demo
 1. A cached response would normally be indicated by a cache hit/revalidation signal, but these MCP responses are explicitly MISS and no-cache. More importantly, the response identity differs by hostname: public aliases consistently run b8b07d8, while the immutable deployment URL runs dd68e15.
 2. This session provides a concrete yes: the deployment is tagged Production, yet the public aliases still resolve to the older build. The issue is alias/domain assignment or promotion semantics, not stale content at the MCP route.
 3. For this route, no purge should be needed. The reliable operational fix is explicit alias/domain reassignment to the intended deployment, followed by raw MCP identity and link-output verification. If a future static/CDN response is intentionally cached, use Vercel's purge mechanism or cache tags; that is separate from this MCP failure.
+
+
+## Resolution — 2026-09-17
+
+André confirmed that the public production aliases were successfully moved to the dd68e15 Impact deployment and all live/connector tests passed. The Auto-assign Custom Production Domains setting was toggled off again, restoring deliberate manual production promotion. The alias-drift incident is closed. Future releases require explicit promotion followed by raw MCP identity and affiliate-link verification.
