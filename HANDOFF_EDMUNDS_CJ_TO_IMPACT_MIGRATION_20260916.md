@@ -7,14 +7,15 @@
 
 ## What's changing, in one paragraph
 
-Edmunds has moved (or is moving) its affiliate program from the CJ Affiliate
-network to Impact.com. André's Impact account is already approved for
-Edmunds. CJ is still live as of this session, so this is a planned,
-unhurried migration — **target: fully transitioned by end of September
-2026** — not an emergency fix. This affects every Edmunds affiliate link
-across the website and the app(s), plus opens up monetization options that
-didn't exist under CJ. Nothing has been changed in production yet anywhere
-— website links are still the old CJ links, the app's code still uses CJ.
+Edmunds moved its affiliate program from CJ Affiliate to Impact.com.
+**Update (Sep 17): the Find My Car app's CJ→Impact migration is now
+complete, live, and independently verified in production on both
+platforms** (Anthropic and OpenAI) — see the status table below for
+detail. **Website links (WordPress) and old CarClever (Fractal) are
+still on CJ, not yet migrated** — that work remains open, per Phase 5
+in the companion research doc. CJ affiliate tracking overall is being
+kept active as a fallback during a monitoring period — no reason to
+retire it yet.
 
 ## Why this matters beyond "swap the link format"
 
@@ -179,13 +180,13 @@ research or testing.
 
 | Area | Status |
 |---|---|
-| CJ links (website + app) | Still live, unchanged, still the production mechanism |
+| CJ links (website only) | Still live — website (WordPress) and old CarClever (Fractal) not yet migrated |
 | Impact account | Approved, one API token created (Engineering research only, read-only, Catalogs scope) |
 | VIN deep-linking | **Confirmed working end-to-end** — live-tested by André against a real listing, resolved correctly through Impact's tracking |
 | Product Catalog API | **Confirmed live, works for general search** (dealer, model, category) — does NOT support VIN lookup (confirmed by Impact support). Possible website use, not an app-side VIN solution — see above |
 | Master Program Agreement | **Read in full, gate cleared** — one relevant constraint (no incentivized/automated leads), doesn't block VIN deep-linking or catalog reads |
 | Website Publisher Tag / assets | Available now, not yet implemented anywhere |
-| App code (`lib/edmunds-cj.ts`) | **Implemented and tested** on branch `edmunds-impact-swap` (79/79 tests pass, clean build on both Anthropic and OpenAI Vercel projects — shared codebase). Not yet promoted to production on either platform. |
+| App code (`lib/edmunds-cj.ts`) | **Live in production on both platforms** (commit `dd68e15`) — independently verified via raw MCP calls and real connector tests on both Anthropic and OpenAI. See `STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md` Phase 3/4 for full detail. |
 | Target completion | End of September 2026 |
 
 ## Full detail
