@@ -34,7 +34,7 @@ Do not confuse the three product surfaces above with Find My Car's internal rele
 - Submission: `CarClever - Find My Car`, version 1.0.0.
 - Status: **REVIEW**.
 - Production branch tracking: `release/v2`.
-- **Auto-assign Custom Production Domains: currently ENABLED (temporary, since evening of 2026-09-17)** — re-enabled deliberately to work around a confirmed Vercel behavior where domain reassignment silently fails on manual promotion while this setting is off (see `STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md` for full detail). André intends to disable it again to restore the Sep 16 incident-prevention posture — **verify the live setting directly, do not assume from this document.**
+- **Auto-assign Custom Production Domains: Disabled (confirmed re-disabled, 2026-09-17)**, restoring the Sep 16 incident-prevention posture. Future production-domain movement requires deliberate manual promotion, with independent post-promotion verification per the lesson below.
 
 ## Anthropic current state
 
@@ -47,7 +47,7 @@ Do not confuse the three product surfaces above with Find My Car's internal rele
 - Existing aliases remain live during the transition, including `https://carclever.getcarwise.app/mcp` and the submitted Vercel hostname.
 - Anthropic server listing remains `CarClever - Find My Car`, slug unchanged.
 - Status: **IN REVIEW / SUPPORT-SIDE URL CHANGE PENDING CONFIRMATION**.
-- **Auto-assign Custom Production Domains: currently ENABLED (temporary, since evening of 2026-09-17)** — same situation and same caveat as OpenAI above; verify the live setting directly.
+- **Auto-assign Custom Production Domains: Disabled (confirmed re-disabled, 2026-09-17)** — same as OpenAI above, restored to the safe posture.
 
 ## Vercel gotcha discovered and fixed, 2026-09-17
 
