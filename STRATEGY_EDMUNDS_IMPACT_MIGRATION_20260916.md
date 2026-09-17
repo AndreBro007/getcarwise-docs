@@ -117,41 +117,72 @@ disrupting the two live app-store submissions in review.
      claimed) — this satisfies the project's standing "verify, don't just
      claim" discipline for the promotion step itself.
 
-- **NEW open item, found immediately after promotion, NOT YET RESOLVED:**
-  a real post-promotion test via the standing `CarClever - Find My Car`
-  Claude connector (query: Honda CR-V, priceMax 35000, used) returned 5
-  results, all with `anrdoezrs.net` (old CJ domain) links — NOT the
-  expected `edmunds.sjv.io` (Impact) links. This is either (a) the
-  already-documented Claude-connector caching bug (`SYS-20260831-001`
-  through `-004` — tool/resource output not refreshing after a real
-  server-side change) recurring, or (b) the promotion did not actually
-  take effect the way the Vercel dashboard screenshots suggest, or (c)
-  some other cause not yet considered. **Not distinguished yet.** A raw
-  GET to `https://carclever-anth.getcarwise.app/mcp` returned the normal
-  `{"error":{"code":-32000,"message":"Method not allowed."}}` JSON-RPC
-  response — confirms the server is up and running real MCP code, but a
-  bare GET cannot reveal which commit/version is actually serving
-  requests, so this does not resolve the question either way.
-  **Recommended next step (not yet done): repeat the exact same search
-  via the same connector from a brand-new chat/session** (isolates
-  this-conversation client-side caching from a genuine server-side
-  problem — if the new chat still shows `anrdoezrs.net`, treat this as
-  likely server-side/promotion-related and investigate further per the
-  raw-MCP-call diagnostic method in `PLAYBOOK.md`'s
-  `TASK: MCP_LIVE_TEST_VIA_CHAT`; if it shows `edmunds.sjv.io`, this was
-  purely this session's client-side cache and no further action is
-  needed). **Do not treat the Impact migration as fully verified live
-  until this is resolved** — the code/build/promotion side is solid and
-  confirmed, but the actual end-user-visible link output has not yet been
-  positively confirmed as fixed post-promotion.
+- **RESOLVED (Sep 17, later that evening).** The post-promotion stale-code
+  symptom (`serverInfo.version` reporting `b8b07d8` instead of `dd68e15`,
+  and links still on `anrdoezrs.net` instead of `edmunds.sjv.io`) was
+  **not** the previously-suspected Claude-connector caching bug
+  (`SYS-20260831-001` series). Confirmed via a raw browser-console MCP
+  `initialize` call (bypassing both Claude's and ChatGPT's client layers
+  entirely) that `x-vercel-cache: MISS` on every request — ruling out
+  caching as the cause outright.
 
-- **Status as of this update: code complete, tested pre-promotion, and
-  promoted to production on both platforms at the same commit
-  (`dd68e15`), confirmed via dashboard screenshots. Next, before this can
-  be called fully done: resolve the open post-promotion link-domain
-  discrepancy above (fresh-chat re-test), and separately, decide whether
-  the "one platform's manual test stands in for both" assumption used for
-  step 5 needs revisiting for future releases.**
+  **Real root cause, confirmed:** on both `ccfmc-dev-v2` and
+  `carclever-find-my-car`, Production's **Auto-assign Custom Production
+  Domains** setting was Disabled (a deliberate choice from the Sep 16
+  incident fix, to prevent the kind of silent branch-push takeover that
+  caused that incident). With this setting off, clicking **"Promote to
+  Production"** in the Vercel dashboard on a preview deployment correctly
+  builds and tags a new deployment as "Production" — confirmed via the
+  dashboard's own blue "Production" badge — but **does not actually
+  reassign the project's custom/default domains to that new
+  deployment.** The domains kept serving whatever deployment they were
+  last explicitly aliased to (`b8b07d8`, the Sep 12 release), regardless
+  of what the dashboard showed as the current "Production"-tagged build.
+  This is a real, non-obvious Vercel behavior — "Promoted" and "domain-
+  assigned"/"Current" are distinct states when Auto-assign is off (per
+  Vercel's own `/docs/deployments/promoting-a-deployment` docs, which
+  describe exactly these three states: Staged, Promoted, Current — a
+  distinction not appreciated at the time Auto-assign was disabled during
+  the Sep 16 incident response).
+
+  Confirmed via extensive investigation, including: a genuinely useful
+  independent second-opinion diagnosis from ChatGPT correctly identifying
+  the shape of the problem (aliases not moving, not caching) before the
+  exact mechanism was pinned down; attempted Vercel CLI `vercel promote`
+  (failed — CLI not usable without a local project checkout, and CLI
+  short-SHA promotion syntax didn't resolve cleanly either); Instant
+  Rollback (ruled out — Hobby plan only offers the immediately-previous
+  deployment, which was itself `b8b07d8`, not helpful here); and finally,
+  temporarily **re-enabling Auto-assign Custom Production Domains**, then
+  re-running "Promote to Production" on the `dd68e15` deployment on both
+  projects. **This time the promotion correctly moved every domain.**
+
+  **Confirmed live via raw MCP `initialize` calls, from a fresh browser
+  tab per domain (bypassing all client/connector caching):**
+  - `https://ccfmc-dev-v2.vercel.app/mcp` → `serverInfo.version: "dd68e15"`
+  - `https://carclever-anth.getcarwise.app/mcp` → `serverInfo.version: "dd68e15"`
+
+  **Standing lesson for any future promotion while Auto-assign Custom
+  Production Domains is disabled on either project:** clicking "Promote
+  to Production" alone is not sufficient to verify a release is actually
+  live. After promoting, always independently verify with a raw MCP
+  `initialize` call (browser console `fetch()`, filter set to "Default"
+  to see `console.log` output) checking `serverInfo.version` directly
+  against the exact commit expected — do not rely on the dashboard's blue
+  "Production" badge alone, and do not assume a stale-looking result is
+  automatically a caching issue without first ruling out this exact
+  domain-reassignment gap.
+
+- **Status as of this update: FULLY RESOLVED AND VERIFIED LIVE.** Both
+  platforms are now confirmed serving commit `dd68e15` (the Edmunds
+  CJ→Impact affiliate-link migration) via independently-verified raw MCP
+  calls, not just dashboard state or connector output. The "one
+  platform's manual test stands in for both" assumption from step 5
+  turned out to be fine in this case (the code itself was never the
+  problem), but the promotion/domain-reassignment issue found here
+  applies per-project regardless of shared code, so future releases
+  should still independently verify each platform's live endpoint after
+  promotion, not just one.
 
 ### Track B — Website (ChatGPT's lane)
 - Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
