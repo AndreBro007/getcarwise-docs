@@ -86,14 +86,72 @@ disrupting the two live app-store submissions in review.
      ones). **Confirmed resolved**: every commit from the
      `link-resolution.ts` fix onward, including the current final state,
      shows "Ready" on both projects.
-  5. ⬜ Manually test a live preview deployment with a real search — NOT
-     YET DONE — next step
-  6. ⬜ Decide production-promotion timing for both platforms (considering
-     US overnight hours as a low-cost precaution, not a review-risk
-     mitigation) — NOT YET DONE
-- **Status as of this update: code complete, tested, and confirmed
-  building cleanly on both platforms' Vercel projects. Next: manually
-  verify a live preview URL, then decide promotion timing for both.**
+  5. ✅ Manually test a live preview deployment with a real search — DONE
+     Sep 17. André manually ran a real search via the standing
+     `CarClever - Find My Car` connector against the Anthropic-side
+     preview build (branch `edmunds-impact-swap`, commit `dd68e15`) and
+     confirmed a working Impact-tracked result. Decision made at the time:
+     since both platforms build from the identical shared codebase/commit
+     (`carclever-find-my-car` and `ccfmc-dev-v2` both auto-build every
+     push to this branch, per the Session 3 architecture note above), the
+     Anthropic-side manual pass was treated as sufficient evidence for
+     both platforms — no separate manual OpenAI-side preview test was
+     run. Flagging this explicitly as the actual decision made, not an
+     oversight: if this assumption turns out wrong (see open item below),
+     revisit whether per-platform manual testing is actually required
+     before promotion, not just per-commit.
+  6. ✅ Decide production-promotion timing for both platforms — DONE
+     Sep 17, ~8:45pm ET / 5:45pm PT (André's judgment: outside likely
+     reviewer working hours for both coasts; a precaution, not a proven
+     review-safety mitigation, consistent with the "US overnight hours"
+     framing above). **Both platforms promoted together, same commit:**
+     - `carclever-find-my-car` (Anthropic): promoted `dd68e15` to
+       Production via Vercel dashboard "Promote to Production" dialog.
+       Confirmed via screenshot: deployment list shows `dd68e15`
+       ("Genericize remaining CJ-specific wording in module comment") as
+       the top `Production`-tagged entry, built in 27s.
+     - `ccfmc-dev-v2` (OpenAI): promoted the same `dd68e15` to Production
+       the same way. Confirmed via screenshot: same commit, tagged
+       `Production`, built in 34s.
+     Both promotions confirmed via direct dashboard screenshots (not just
+     claimed) — this satisfies the project's standing "verify, don't just
+     claim" discipline for the promotion step itself.
+
+- **NEW open item, found immediately after promotion, NOT YET RESOLVED:**
+  a real post-promotion test via the standing `CarClever - Find My Car`
+  Claude connector (query: Honda CR-V, priceMax 35000, used) returned 5
+  results, all with `anrdoezrs.net` (old CJ domain) links — NOT the
+  expected `edmunds.sjv.io` (Impact) links. This is either (a) the
+  already-documented Claude-connector caching bug (`SYS-20260831-001`
+  through `-004` — tool/resource output not refreshing after a real
+  server-side change) recurring, or (b) the promotion did not actually
+  take effect the way the Vercel dashboard screenshots suggest, or (c)
+  some other cause not yet considered. **Not distinguished yet.** A raw
+  GET to `https://carclever-anth.getcarwise.app/mcp` returned the normal
+  `{"error":{"code":-32000,"message":"Method not allowed."}}` JSON-RPC
+  response — confirms the server is up and running real MCP code, but a
+  bare GET cannot reveal which commit/version is actually serving
+  requests, so this does not resolve the question either way.
+  **Recommended next step (not yet done): repeat the exact same search
+  via the same connector from a brand-new chat/session** (isolates
+  this-conversation client-side caching from a genuine server-side
+  problem — if the new chat still shows `anrdoezrs.net`, treat this as
+  likely server-side/promotion-related and investigate further per the
+  raw-MCP-call diagnostic method in `PLAYBOOK.md`'s
+  `TASK: MCP_LIVE_TEST_VIA_CHAT`; if it shows `edmunds.sjv.io`, this was
+  purely this session's client-side cache and no further action is
+  needed). **Do not treat the Impact migration as fully verified live
+  until this is resolved** — the code/build/promotion side is solid and
+  confirmed, but the actual end-user-visible link output has not yet been
+  positively confirmed as fixed post-promotion.
+
+- **Status as of this update: code complete, tested pre-promotion, and
+  promoted to production on both platforms at the same commit
+  (`dd68e15`), confirmed via dashboard screenshots. Next, before this can
+  be called fully done: resolve the open post-promotion link-domain
+  discrepancy above (fresh-chat re-test), and separately, decide whether
+  the "one platform's manual test stands in for both" assumption used for
+  step 5 needs revisiting for future releases.**
 
 ### Track B — Website (ChatGPT's lane)
 - Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
@@ -887,3 +945,65 @@ decision made.**
    Impact replacement as a real implementation
    task (new module, new tests, live-tested before merge — same discipline
    as the original CJ integration, built on its own branch per point 4).
+
+## Session 3 continued (Sep 17, later) — production promotion, post-promotion caching question, and a corrected OpenAI test-branch note
+
+**Both platforms promoted to production together, same commit `dd68e15`,
+confirmed via dashboard screenshots.** See the updated status in the
+"Chosen implementation method" checklist above (steps 5-6, now marked
+done) and the new open item logged there about a post-promotion link
+domain discrepancy (old `anrdoezrs.net` links still showing via the
+Claude connector immediately after promotion) — not yet resolved as of
+this entry, pending a fresh-chat re-test André will run later.
+
+### Correction: the OpenAI/ChatGPT-side branch-testing URL confusion, and the actual standing method
+
+This session repeatedly guessed at the wrong URL for testing a branch
+preview against ChatGPT, wasting real time. Recording the actual, correct,
+already-existing standing method here so this isn't re-derived badly
+again:
+
+**Do not use:**
+- A raw Vercel per-deployment preview URL with a random hash (e.g.
+  `ccfmc-dev-v2-1zlwzi323-andre-broekmans-projects.vercel.app`) — resolves
+  fine but isn't the intended stable testing pattern and isn't what
+  earlier sessions actually used.
+- `ccfmc-dev-v2`'s own git-branch alias
+  (`ccfmc-dev-v2-git-<branch>-andre-broekmans-projects.vercel.app`) — this
+  is a real, valid, auto-updating URL for that branch, but it is **not**
+  the "short URL" workaround referenced from memory this session, and it
+  did not resolve the "ChatGPT not rendering" problem when tried live
+  today.
+
+**The actual standing method, already documented pre-existing (`STATE.md`
+Aug/Sep entries, `DECISIONS.md` `SYS-20260906-002`), just not found quickly
+enough this session:** a dedicated, separate, permanently short-named
+Vercel project, **`ccfmc-dev`** (no `-v2` suffix — this is deliberately a
+different, older project from the current `ccfmc-dev-v2` release
+project), exists specifically to work around a real, confirmed DNS-label-
+length problem that breaks ChatGPT-side connector testing on longer
+project/branch name combinations. Method, unchanged from when it was
+established:
+
+1. Push a short, disposable branch name (the convention used historically
+   is very short, e.g. `t1`) off the exact commit that needs testing.
+2. On the `ccfmc-dev` project specifically (not `ccfmc-dev-v2`), manually
+   trigger a Vercel "Create Deployment" for that branch — a plain branch
+   push alone does not reliably auto-trigger a build on this project,
+   confirmed more than once in past sessions.
+3. Use the resulting short branch-alias URL
+   (`ccfmc-dev-git-<short-branch>-andre-broekmans-projects.vercel.app/mcp`)
+   as the ChatGPT (or Claude) test connector URL.
+4. Delete the throwaway branch once testing is done.
+
+**Also still true and relevant:** new Vercel projects default to
+"Require Log In" Deployment Protection ON — this must be OFF on `ccfmc-dev`
+before any external host (ChatGPT, Claude, etc.) can connect, or connector
+creation fails with a generic, non-obvious error. Already done once for
+`ccfmc-dev` per prior sessions, but worth re-checking if this project is
+ever recreated or if connector creation fails again for no obvious reason.
+
+**Recommendation for future sessions:** before improvising a new URL
+guess for OpenAI/ChatGPT-side branch testing, check for the `ccfmc-dev`
+project and this exact method first — it already exists precisely to
+solve this problem and does not need to be reinvented per-session.
