@@ -13,7 +13,7 @@ Claude correctly identifies a scaling problem, but the proposed active/archive l
 
 ## Verified evidence
 
-The current GitHub API root listing contained **110 files: 109 dated documents and README.md**, with no directories. Every returned file was fetched in full, together with the seven required carclever-widget admin files. The documents total 1,031,018 bytes in the directory listing.
+The initial review's GitHub API root listing contained **110 files: 109 dated documents and README.md**, with no directories. Every returned file was fetched in full, together with the seven required carclever-widget admin files. The documents total 1,031,018 bytes in the directory listing.
 
 Using September 18 as the reference date, and retaining documents whose filename date is on or after the cutoff:
 
@@ -54,14 +54,23 @@ An archived file is still available, but discoverability alone does not make it 
 
 The following is the replacement procedure to adopt **only after André approves it**:
 
-1. **Retain the existing core admin reads and lane boundaries.** Identify the actual task and its gates. Do not act on unrelated open tasks.
+1. **Retain fresh reads of the seven core admin documents and the existing lane boundaries.** Identify the actual task and its gates. Use this lane's separate carclever-widget review checkpoint for the existing relevant-commit spot checks; the checkpoint does not replace reading current admin context. Do not act on unrelated open tasks.
 2. **Dynamically list the complete getcarwise-docs file inventory every session.** Discover actual paths, including any directories if they exist later. Do not replace the listing with a manually maintained index or a fixed list of known documents.
-3. **Review every addition, modification, rename and deletion since this lane's own last successfully reviewed repository commit.** Fetch the current full contents of every added or modified document; inspect renames/deletions and any affected live references. This step is independent of whether a filename appears relevant, so an unlinked new protocol or a correction to an old file cannot be silently filtered out by title or age.
+3. **Review every getcarwise-docs addition, modification, rename and deletion since this lane's own last successfully reviewed getcarwise-docs commit.** Fetch the current full contents of every added or modified document; inspect renames/deletions and any affected live references. This step is independent of whether a filename appears relevant, so an unlinked new protocol or a correction to an old file cannot be silently filtered out by title or age.
 4. **Read the current task's linked specifications, handoffs and evidence in full, regardless of age.** Follow relevant references and search the full inventory when more context is needed. Previously reviewed but unchanged historical documents are fetched again only when the task needs them.
 5. **If the previous review point or complete change list cannot be established, perform a full fetch to establish a baseline.** Do not guess a seven-/fourteen-day lookback, treat the other AI's review as your own, or silently accept an incomplete response.
-6. **At normal session close, record the reviewed getcarwise-docs commit in that lane's existing STATE entry.** Keep ChatGPT and Claude review positions separate; advance only after the required reads succeed. Re-fetch and verify any documentation writes as already required.
+6. **At normal session close, record two reviewed commit SHAs for this lane in the existing STATE record: one for getcarwise-docs and one for carclever-widget.** Keep ChatGPT and Claude review positions separate. Record the exact snapshots actually reviewed, not an unreviewed newer repository tip; advance only after the applicable reads and checks succeed. Re-fetch and verify documentation writes as already required.
 
-One reviewed commit reference per lane is the only additional bookkeeping. It uses the existing session close-out rather than adding a new manifest, tracking document, scheduled job or service. It is necessary to distinguish “already checked” from “possibly unseen”; a single shared checkpoint could cause one AI to skip the other AI's new work.
+Keep one compact checkpoint table in the existing STATE record, updated during normal session close-out:
+
+| Lane | getcarwise-docs reviewed through | carclever-widget reviewed through |
+|---|---|---|
+| ChatGPT | This lane's verified docs commit SHA | This lane's verified admin/relevant-change commit SHA |
+| Claude | This lane's verified docs commit SHA | This lane's verified admin/relevant-change commit SHA |
+
+These are four commit values in total, not a per-file register. Each lane updates only its own row, using a fresh STATE read and preserving the other lane's values. The widget checkpoint covers the existing admin/relevant-change review; it is not a claim that every application-code change has been audited. The table is a proposed format, not an initialized baseline.
+
+This uses the existing session close-out rather than adding a new manifest, tracking document, scheduled job or service. A single shared checkpoint could cause one AI to skip the other AI's new work. The recorded widget SHA can precede the commit that saves the checkpoint itself; do not chase a self-referential commit SHA or advance to a newer snapshot without reviewing it.
 
 GitHub already supports listing directory entries separately from fetching individual file bodies, and supports reading a known repository ref. This separation is supported by the [GitHub contents API documentation](https://docs.github.com/en/rest/repos/contents#get-repository-content). If the repository later exceeds the directory-listing limit, use the complete tree listing; do not accept truncated discovery.
 
@@ -84,7 +93,7 @@ If André approves this recommendation:
 
 1. Update the authoritative startup and close-out instructions in PLAYBOOK and the short README guidance.
 2. Align **both ChatGPT and Claude project/session instructions** with the same rule. ChatGPT's current project instructions explicitly demand a complete full-content fetch every session; updating PLAYBOOK alone cannot override them. André must update any project settings the assistants cannot edit directly.
-3. Establish each lane's initial reviewed-commit baseline using a completed full fetch. Do not invent or advance the other lane's baseline.
+3. Establish each lane's separate baseline for each repository after completing the applicable verification: a full getcarwise-docs fetch, and the required widget admin reads plus relevant-commit review. Do not invent or advance the other lane's baselines.
 4. Confirm the procedure finds a newly added unlinked document, a newly edited older document, and an older task-linked specification. Confirm a missing baseline triggers the full-fetch fallback.
 
 No repository reorganization is required. There is no implementation request here for the live application repository.
@@ -103,5 +112,14 @@ This is an observation, not authorization for a wider cleanup. For now, avoid co
 - Recent docs commits `bbd25d4` and `8b70de1` were inspected against their changed documents: the migration handoff and canonical phased plan do contain the claimed updates. The plan records the corrected resolution as temporary re-enabling of Auto-assign Custom Production Domains plus re-promotion.
 - The latest old CarClever STATE entry contains both “user-verified live in production” language and an explicit “NOT YET DEPLOYED TO PRODUCTION” close-out. Production status should not be inferred from that entry. No deployment/submission gate is crossed by this review.
 - Review snapshot: getcarwise-docs `bbd25d4e2efb38b928bde8839394ee5f713ead9b`; carclever-widget `7e166707e7b4a7f705f981450b2e4120049252d9`.
-- **ChatGPT recommendation:** revise the proposal as above; do not adopt age-based active/archive filing.
+- **ChatGPT recommendation:** adopt the revised procedure above, including separate checkpoints by lane and repository; do not adopt age-based active/archive filing.
 - **André decision:** pending. This review records advice, not an approved change to the workflow.
+
+
+## Follow-up — Claude response relayed by André, Sep 18
+
+Claude reports withdrawing the active/archive proposal and endorsing the revised startup procedure. ChatGPT accepts Claude's clarification that the two repositories require separate checkpoint values for each lane; the proposed procedure above has been made explicit.
+
+The original file count was a snapshot taken before this review document was added. Claude's subsequent count of 111 total files is consistent with that addition. The September 2 connector roadmap was cited as an older document still referenced by active tasks, not as an example of a later modification; the two current-state/portfolio documents were the modification-date examples.
+
+**Decision status:** agreement between the two AIs on the recommendation, as reported in this conversation. André's implementation decision remains pending. No files moved, no PLAYBOOK or project-instruction changes, and no live checkpoint table initialized by this follow-up.
