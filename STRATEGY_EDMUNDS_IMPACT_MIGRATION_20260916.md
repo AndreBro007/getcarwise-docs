@@ -956,54 +956,59 @@ domain discrepancy (old `anrdoezrs.net` links still showing via the
 Claude connector immediately after promotion) — not yet resolved as of
 this entry, pending a fresh-chat re-test André will run later.
 
-### Correction: the OpenAI/ChatGPT-side branch-testing URL confusion, and the actual standing method
+### Correction: the OpenAI/ChatGPT-side branch-testing URL — RESOLVED, corrected twice this session
 
-This session repeatedly guessed at the wrong URL for testing a branch
-preview against ChatGPT, wasting real time. Recording the actual, correct,
-already-existing standing method here so this isn't re-derived badly
-again:
+This session repeatedly guessed at the wrong URL for testing against
+ChatGPT, wasting real time — recording the final, confirmed-correct
+answer here so this isn't re-derived badly again.
 
-**Do not use:**
-- A raw Vercel per-deployment preview URL with a random hash (e.g.
-  `ccfmc-dev-v2-1zlwzi323-andre-broekmans-projects.vercel.app`) — resolves
-  fine but isn't the intended stable testing pattern and isn't what
-  earlier sessions actually used.
+**Confirmed correct method (via direct screenshot of the connector's own
+settings, Sep 17):** ChatGPT's standing **`CarClever V2 Test`** connector
+is already configured against:
+
+```
+https://ccfmc-dev-v2.vercel.app/mcp
+```
+
+This is `ccfmc-dev-v2`'s own default Vercel production domain — a real,
+permanent, stable, short(ish) URL, not a per-deployment preview link and
+not a branch alias. It tracks whatever commit is currently promoted to
+that project's Production slot (confirmed: this is the exact same
+"Production" concept as `carclever-oai.getcarwise.app` on the branded
+side — same project, same promotion mechanism, just the plain Vercel
+domain instead of the custom branded one). Connector settings confirm:
+"Review status: development," "Version name: dev mode," connected
+Sep 6, 2026 — this is a genuine standing dev/test connector, already
+correctly wired, requiring no new setup.
+
+**Practical implication:** since this URL always reflects whatever is
+promoted to `ccfmc-dev-v2` Production, testing a new commit here means
+promoting it to that project's Production first (exactly what this
+session already did for the Edmunds/Impact commit) — there is no
+separate "preview-only" test step needed on the OpenAI side beyond that
+promotion. The standing connector picks it up automatically.
+
+**Superseded/incorrect leads explored this session, kept here only so a
+future session doesn't waste time on them again:**
+- A raw per-deployment preview URL with a random hash
+  (`ccfmc-dev-v2-1zlwzi323-...vercel.app`) — valid but not the intended
+  reusable pattern.
 - `ccfmc-dev-v2`'s own git-branch alias
-  (`ccfmc-dev-v2-git-<branch>-andre-broekmans-projects.vercel.app`) — this
-  is a real, valid, auto-updating URL for that branch, but it is **not**
-  the "short URL" workaround referenced from memory this session, and it
-  did not resolve the "ChatGPT not rendering" problem when tried live
-  today.
+  (`ccfmc-dev-v2-git-<branch>-...vercel.app`) — also valid, but not what
+  the standing connector actually uses, and did not resolve the
+  ChatGPT-rendering problem when tried live.
+- The older, separate `ccfmc-dev` project (no `-v2`) and its documented
+  short-throwaway-branch method (`STATE.md`/`DECISIONS.md`
+  `SYS-20260906-002`) — this was a real, correctly-documented method from
+  an earlier point in the project's history, but **appears superseded by
+  the simpler fact that `ccfmc-dev-v2.vercel.app` itself is already
+  short and stable enough** for the standing `CarClever V2 Test`
+  connector's actual needs. Not confirmed dead/retired, just not the
+  answer to today's question — don't assume it still needs to be used
+  for this purpose without checking first.
 
-**The actual standing method, already documented pre-existing (`STATE.md`
-Aug/Sep entries, `DECISIONS.md` `SYS-20260906-002`), just not found quickly
-enough this session:** a dedicated, separate, permanently short-named
-Vercel project, **`ccfmc-dev`** (no `-v2` suffix — this is deliberately a
-different, older project from the current `ccfmc-dev-v2` release
-project), exists specifically to work around a real, confirmed DNS-label-
-length problem that breaks ChatGPT-side connector testing on longer
-project/branch name combinations. Method, unchanged from when it was
-established:
-
-1. Push a short, disposable branch name (the convention used historically
-   is very short, e.g. `t1`) off the exact commit that needs testing.
-2. On the `ccfmc-dev` project specifically (not `ccfmc-dev-v2`), manually
-   trigger a Vercel "Create Deployment" for that branch — a plain branch
-   push alone does not reliably auto-trigger a build on this project,
-   confirmed more than once in past sessions.
-3. Use the resulting short branch-alias URL
-   (`ccfmc-dev-git-<short-branch>-andre-broekmans-projects.vercel.app/mcp`)
-   as the ChatGPT (or Claude) test connector URL.
-4. Delete the throwaway branch once testing is done.
-
-**Also still true and relevant:** new Vercel projects default to
-"Require Log In" Deployment Protection ON — this must be OFF on `ccfmc-dev`
-before any external host (ChatGPT, Claude, etc.) can connect, or connector
-creation fails with a generic, non-obvious error. Already done once for
-`ccfmc-dev` per prior sessions, but worth re-checking if this project is
-ever recreated or if connector creation fails again for no obvious reason.
-
-**Recommendation for future sessions:** before improvising a new URL
-guess for OpenAI/ChatGPT-side branch testing, check for the `ccfmc-dev`
-project and this exact method first — it already exists precisely to
-solve this problem and does not need to be reinvented per-session.
+**Recommendation for future sessions:** before guessing at any new URL
+for OpenAI/ChatGPT-side testing, check the `CarClever V2 Test`
+connector's own settings/Information panel in ChatGPT first (URL field)
+— it already shows the actual, currently-working answer directly, no
+need to reconstruct it from Vercel or from doc history.
