@@ -1,226 +1,115 @@
-# Edmunds Affiliate Program — CJ → Impact.com Migration & Channel Reference — 2026-09-16
+# Edmunds Affiliate Program — CJ → Impact.com Migration — Phased Plan
 
-## PLAN & STATUS — read this first, everything else is supporting detail
+**Last updated:** 2026-09-17
+**Status:** Track A (application code) complete, live, and independently verified on both platforms. Tracks B/C and Phases 5-7 remain open.
 
-**Objective:** migrate Edmunds affiliate links from CJ to Impact across all
-channels (apps + website) before end of September 2026, safely, without
-disrupting the two live app-store submissions in review.
+This is the canonical phased structure for this migration. It supersedes the narrative session-log format previously used in this document; that detailed log is preserved below under "Full session history" for anyone who needs the blow-by-blow investigation record, but this phased summary is the one to read first.
 
-### Track A — `carclever-find-my-car` (this app)
-- **Decision made:** use the same static-formula link swap as old
-  CarClever — no catalog/API dependency for link generation. Confirmed
-  via Impact support (ticket #882346): VIN cannot be looked up via the
-  API, ruling out the more ambitious "catalog lookup" design.
-- **Formula, live-tested and confirmed working:**
+---
+
+## Phase 1 — Business and Impact setup — ✅ COMPLETE
+
+- Confirmed Edmunds is moving its affiliate program from CJ Affiliate to Impact.com.
+- Confirmed CJ remains live in parallel — this was a planned transition, not an emergency cutover.
+- Confirmed the Impact "media partner" account (Broekman Consulting Pty Ltd, Account ID `7765200`) and that the Edmunds program under it is Approved.
+- Confirmed commission amounts are unchanged from the CJ-era program ($10 used/new vehicle lead, $3.50 trade-in lead) and that Impact's referral window (30 days) is actually an improvement over CJ's (14-15 days).
+- Read the Impact Master Program Agreement in full. Section 4.2 ("Promotional Methods") is the only clause that actually constrains this work — it prohibits fabricated/automated/incentivized actions, not destination-URL specificity. VIN deep-linking, and reading the Product Catalog API to build better links, are both clear under this agreement.
+- Confirmed via the Assets screen's "Deeplinking: Supported" filter that Edmunds has deep linking enabled for this program, no assets excluded.
+- Created a read-only Impact Catalogs API token ("GetCarWise Engineering - Read Access") for research purposes. The actual secret was never viewed or transcribed by Claude, per credential-handling rules.
+
+## Phase 2 — Link migration design — ✅ COMPLETE
+
+- Confirmed Impact's tracking-link format via live testing:
   ```
   https://edmunds.sjv.io/c/7765200/3949600/52125?u={encodeURIComponent(destinationUrl)}
   ```
-- **Exact code change made** (branch: `edmunds-impact-swap`, off exact
-  reviewed SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792`):
-  - `lib/edmunds-cj.ts` — 3 old CJ constants replaced with 1 generic
-    constant (`AFFILIATE_BASE_LINK`); function renamed
-    `wrapWithCJ()` → `wrapWithAffiliateNetwork()`, body updated to new
-    URL format. Naming deliberately made network-generic (no "CJ" or
-    "Impact" anywhere in code) after review discussion — see Session 3
-    notes below for the reasoning.
-  - `lib/link-resolution.ts` — import + **3 call sites** (not 2 as
-    originally scoped — this file has richer New/Used/Carvana logic than
-    first assumed, confirmed by direct inspection against the reviewed
-    SHA) updated to new function name.
-  - `tests/stable-boundaries.test.ts` — domain constant renamed/updated;
-    **6 places required a functional fix** (`url=` → `u=`, since
-    Impact's deep-link param name differs from CJ's — this was not
-    optional/cosmetic); wording genericized.
-  - Total diff: 3 files, ~44 lines. No CSP/manifest/schema file touched —
-    confirmed via full-repo sweep, zero matches for
-    `anrdoezrs`/`CJ_CLICK_DOMAIN`/`wrapWithCJ` anywhere outside this
-    branch's own edits.
-  - **No other file needs touching** — confirmed this app has no
-    CSP/domain-allowlist config anywhere (`vercel.json` checked, empty of
-    any such config) — architecturally different from old CarClever's
-    Fractal/Skybridge setup, which needed 4-5 separate CSP array updates.
-- **Timing decision, deliberate exception to the standing "freeze during
-  review" rule, covers BOTH platforms** (see
-  `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md`): André's reasoning,
-  agreed — (1) the Anthropic review may already be "disturbed" by the
-  open Marco/support thread requesting an MCP URL change, so this edit
-  doesn't introduce a new disturbance where none existed; (2)
-  end-of-September is a hard deadline that doesn't move for either
-  platform's review timeline; (3) the edit itself has no schema/
-  tool-description footprint and no CSP footprint — structurally
-  invisible to any automated review scan, confirmed by direct code
-  inspection. **Correction (Sep 17): this exception was discussed and
-  agreed for both platforms during this session — OpenAI's live
-  resubmission (Sep 12) was explicitly raised alongside Anthropic's
-  review at the time timing was decided, but was not correctly carried
-  into this doc's write-up until now.** Since both platforms build from
-  the same shared codebase/branch (confirmed:
-  `AndreBro007/carclever-find-my-car`, two separate Vercel projects —
-  `carclever-find-my-car` for Anthropic, `ccfmc-dev-v2` for OpenAI — both
-  auto-build every commit on this branch), the code change is
-  unavoidably shared regardless; what was actually decided here is that
-  **production promotion should proceed for both platforms together,
-  not staggered** — same reasoning applies equally to both, and doing
-  them separately would mean two separate "touch a reviewed app" events
-  instead of one. This is a considered, recorded exception — not a
-  reversal of the freeze policy in general.
-- **Chosen implementation method:**
-  1. ✅ Branch off the *exact reviewed SHA*, not off `main` — done
-  2. ✅ Make the edit — done, verified byte-identical after every push
-  3. ✅ Run existing test suite + production build — **DONE, PASSED.**
-     Test suite: 79/79 pass (confirmed in isolated sandbox clone of the
-     branch), including every affiliate-link-specific test (D2h, D2i,
-     D2l, D2p). TypeScript typecheck: one pre-existing error found, in
-     `tests/best-for-budget-ranking.test.ts` — confirmed via a fresh,
-     separate clone of the *unmodified* reviewed SHA that this exact
-     same error already exists there, i.e. it predates and is unrelated
-     to this work.
-  4. ✅ Vercel preview deployments — **confirmed happening automatically**
-     on every push, on both projects (`carclever-find-my-car` and
-     `ccfmc-dev-v2`), no manual trigger needed. **One historical build
-     shows "Error"** — commit `a2372d0` (the very first edit to
-     `lib/edmunds-cj.ts`) broke the build transiently, because that
-     commit renamed `wrapWithCJ` before the very next commit updated
-     `lib/link-resolution.ts`'s import of it — a real, avoidable process
-     mistake (should have been one atomic commit, not two interdependent
-     ones). **Confirmed resolved**: every commit from the
-     `link-resolution.ts` fix onward, including the current final state,
-     shows "Ready" on both projects.
-  5. ✅ Manually test a live preview deployment with a real search — DONE
-     Sep 17. André manually ran a real search via the standing
-     `CarClever - Find My Car` connector against the Anthropic-side
-     preview build (branch `edmunds-impact-swap`, commit `dd68e15`) and
-     confirmed a working Impact-tracked result. Decision made at the time:
-     since both platforms build from the identical shared codebase/commit
-     (`carclever-find-my-car` and `ccfmc-dev-v2` both auto-build every
-     push to this branch, per the Session 3 architecture note above), the
-     Anthropic-side manual pass was treated as sufficient evidence for
-     both platforms — no separate manual OpenAI-side preview test was
-     run. Flagging this explicitly as the actual decision made, not an
-     oversight: if this assumption turns out wrong (see open item below),
-     revisit whether per-platform manual testing is actually required
-     before promotion, not just per-commit.
-  6. ✅ Decide production-promotion timing for both platforms — DONE
-     Sep 17, ~8:45pm ET / 5:45pm PT (André's judgment: outside likely
-     reviewer working hours for both coasts; a precaution, not a proven
-     review-safety mitigation, consistent with the "US overnight hours"
-     framing above). **Both platforms promoted together, same commit:**
-     - `carclever-find-my-car` (Anthropic): promoted `dd68e15` to
-       Production via Vercel dashboard "Promote to Production" dialog.
-       Confirmed via screenshot: deployment list shows `dd68e15`
-       ("Genericize remaining CJ-specific wording in module comment") as
-       the top `Production`-tagged entry, built in 27s.
-     - `ccfmc-dev-v2` (OpenAI): promoted the same `dd68e15` to Production
-       the same way. Confirmed via screenshot: same commit, tagged
-       `Production`, built in 34s.
-     Both promotions confirmed via direct dashboard screenshots (not just
-     claimed) — this satisfies the project's standing "verify, don't just
-     claim" discipline for the promotion step itself.
+  This is functionally the same shape as CJ's `?url=` wrapper (Impact uses `u=` instead), which meant the app's existing URL-building logic could be reused rather than rebuilt.
+- Investigated a more ambitious "look up VIN in Impact's Product Catalog, use its pre-tracked URL" design. **Ruled out**, confirmed directly by Impact support (ticket #882346): VIN cannot be searched or filtered by, via the Catalog Items API, under any field. **Decision, final: use the same static-formula approach as old CarClever** — no catalog/API dependency for link generation at request time.
+- Confirmed the design preserves all existing behavior: exact VIN links for used vehicles, trim-specific/category fallback links, CPO handling, new/used/Carvana link logic, and the "similar vehicles" fallback link.
+- Live-tested a real VIN-specific Impact link end-to-end (2026 Honda CR-V EX-L, VIN `2HKRS3H79TH322650`): clicked manually by André (not Claude, to avoid looking like automated traffic per the Master Agreement's Section 4.2), resolved correctly to the exact listing with Impact's tracking parameters (`irpid=7765200`, `utm_source=impact`) present and correct.
 
-- **RESOLVED (Sep 17, later that evening).** The post-promotion stale-code
-  symptom (`serverInfo.version` reporting `b8b07d8` instead of `dd68e15`,
-  and links still on `anrdoezrs.net` instead of `edmunds.sjv.io`) was
-  **not** the previously-suspected Claude-connector caching bug
-  (`SYS-20260831-001` series). Confirmed via a raw browser-console MCP
-  `initialize` call (bypassing both Claude's and ChatGPT's client layers
-  entirely) that `x-vercel-cache: MISS` on every request — ruling out
-  caching as the cause outright.
+## Phase 3 — Application code change — ✅ COMPLETE
 
-  **Real root cause, confirmed:** on both `ccfmc-dev-v2` and
-  `carclever-find-my-car`, Production's **Auto-assign Custom Production
-  Domains** setting was Disabled (a deliberate choice from the Sep 16
-  incident fix, to prevent the kind of silent branch-push takeover that
-  caused that incident). With this setting off, clicking **"Promote to
-  Production"** in the Vercel dashboard on a preview deployment correctly
-  builds and tags a new deployment as "Production" — confirmed via the
-  dashboard's own blue "Production" badge — but **does not actually
-  reassign the project's custom/default domains to that new
-  deployment.** The domains kept serving whatever deployment they were
-  last explicitly aliased to (`b8b07d8`, the Sep 12 release), regardless
-  of what the dashboard showed as the current "Production"-tagged build.
-  This is a real, non-obvious Vercel behavior — "Promoted" and "domain-
-  assigned"/"Current" are distinct states when Auto-assign is off (per
-  Vercel's own `/docs/deployments/promoting-a-deployment` docs, which
-  describe exactly these three states: Staged, Promoted, Current — a
-  distinction not appreciated at the time Auto-assign was disabled during
-  the Sep 16 incident response).
+- Branch `edmunds-impact-swap` created off the exact reviewed SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` (not off `main`), so the diff is measured against precisely what's live in review.
+- The substantive code migration (CJ wrapper → Impact wrapper) was introduced in commit `a2372d0`. Final promoted commit is `dd68e15`, which includes this plus later cleanup (generic naming, cosmetic comment removal, test assertion fixes).
+- Changes: `lib/edmunds-cj.ts` (3 old CJ constants consolidated into 1 generic `AFFILIATE_BASE_LINK`; `wrapWithCJ()` renamed to the network-generic `wrapWithAffiliateNetwork()`), `lib/link-resolution.ts` (3 real call sites updated — not 2 as first assumed, corrected by direct inspection), `tests/stable-boundaries.test.ts` (domain constant renamed; 6 places fixed for the `u=` vs `url=` parameter-name difference between Impact and CJ — a real functional fix, not cosmetic; if missed, the test suite would have failed even though production code would have worked).
+- Naming deliberately made network-generic (zero occurrences of "CJ" or "Impact" in any touched code) so a future network change needs no renaming, only a value update.
+- Total diff: 46 lines across 3 files.
+- Build/test validation: 79/79 tests pass (confirmed in an isolated sandbox clone of the branch), clean production build on both Vercel projects. One pre-existing, unrelated TypeScript error confirmed to predate this work (verified against a fresh clone of the unmodified reviewed SHA).
+- Manually verified on a live preview deployment (real search, real Impact-tracked result) before promotion.
+- **Promoted `dd68e15` to production on both platforms together** (`carclever-find-my-car` for Anthropic, `ccfmc-dev-v2` for OpenAI), not staggered — both projects build from the same shared branch/commit.
 
-  Confirmed via extensive investigation, including: a genuinely useful
-  independent second-opinion diagnosis from ChatGPT correctly identifying
-  the shape of the problem (aliases not moving, not caching) before the
-  exact mechanism was pinned down; attempted Vercel CLI `vercel promote`
-  (failed — CLI not usable without a local project checkout, and CLI
-  short-SHA promotion syntax didn't resolve cleanly either); Instant
-  Rollback (ruled out — Hobby plan only offers the immediately-previous
-  deployment, which was itself `b8b07d8`, not helpful here); and finally,
-  temporarily **re-enabling Auto-assign Custom Production Domains**, then
-  re-running "Promote to Production" on the `dd68e15` deployment on both
-  projects. **This time the promotion correctly moved every domain.**
+## Phase 4 — Production deployment correction — ✅ COMPLETE
 
-  **Confirmed live via raw MCP `initialize` calls, from a fresh browser
-  tab per domain (bypassing all client/connector caching):**
-  - `https://ccfmc-dev-v2.vercel.app/mcp` → `serverInfo.version: "dd68e15"`
-  - `https://carclever-anth.getcarwise.app/mcp` → `serverInfo.version: "dd68e15"`
+- Immediately after promotion, discovered a real discrepancy: the Vercel dashboard showed `dd68e15` tagged "Production" on both projects, but live raw MCP calls to both public domains (`ccfmc-dev-v2.vercel.app`, `carclever-anth.getcarwise.app`, and others) returned `serverInfo.version: "b8b07d8"` — the old commit.
+- **Ruled out CDN/edge caching** as the cause: confirmed via raw browser-console `fetch()` calls that every response showed `x-vercel-cache: MISS`, not `HIT` or `STALE`. Also ruled out the previously-suspected Claude-connector caching bug (`SYS-20260831-001` series) on this basis.
+- **Attempted and ruled out two other fix paths before finding the real one:**
+  - Vercel CLI `vercel promote <sha>` — failed; the CLI requires a full deployment ID or URL, not a bare short SHA, and using it without a local project checkout proved impractical in this session.
+  - **Vercel's Instant Rollback dashboard feature — attempted, did NOT work as the fix.** On the Hobby plan, Instant Rollback only offers the single immediately-previous deployment as an option, and that option was itself the old `b8b07d8` build, not `dd68e15` — so Instant Rollback could not reach the deployment we actually needed. This rules out Instant Rollback as the mechanism that fixed this issue, correcting an earlier mischaracterization.
+- **Actual root cause, confirmed:** on both projects, **Auto-assign Custom Production Domains was Disabled** (a deliberate setting from the Sep 16 incident response, meant to prevent silent branch-push takeovers). With this setting off, "Promote to Production" correctly tags a new deployment as Production but does **not** automatically reassign the project's actual domains to it — per Vercel's own documentation, "Promoted" and "Current" (domain-assigned) are genuinely distinct states in this configuration, not the same action.
+- **Actual fix:** temporarily **re-enabled Auto-assign Custom Production Domains** on both projects, then re-ran "Promote to Production" on `dd68e15` on each. This time the domain reassignment completed correctly.
+- **Confirmed live via independent raw MCP `initialize` calls** (fresh browser tabs, bypassing all connector/client caching): both `https://ccfmc-dev-v2.vercel.app/mcp` and `https://carclever-anth.getcarwise.app/mcp` report `serverInfo.version: "dd68e15"`.
+- **Confirmed working end-to-end via real tool calls**, not just raw protocol checks: both the standing Claude connector (`CarClever - Find My Car`) and the standing ChatGPT connector (`CarClever V2 Test`) return real search results with `edmunds.sjv.io` links (not the old `anrdoezrs.net`). Manual click-throughs on real listings confirmed working — one VIN hit Edmunds' documented "vehicle no longer available, see similar" fallback page (expected, correct behavior, not a bug), the rest landed on live listings with correct price/dealer/photos.
+- **Auto-assign Custom Production Domains confirmed re-disabled** on both projects afterward, restoring the Sep 16 incident-prevention posture.
 
-  **Standing lesson for any future promotion while Auto-assign Custom
-  Production Domains is disabled on either project:** clicking "Promote
-  to Production" alone is not sufficient to verify a release is actually
-  live. After promoting, always independently verify with a raw MCP
-  `initialize` call (browser console `fetch()`, filter set to "Default"
-  to see `console.log` output) checking `serverInfo.version` directly
-  against the exact commit expected — do not rely on the dashboard's blue
-  "Production" badge alone, and do not assume a stale-looking result is
-  automatically a caching issue without first ruling out this exact
-  domain-reassignment gap.
+**Current production URLs:**
+- OpenAI: `https://carclever-oai.getcarwise.app/mcp`
+- Anthropic: `https://carclever-anth.getcarwise.app/mcp` (also still reachable at the original submitted URL and other legacy aliases during the separate, still-pending Anthropic support URL-change request)
 
-- **Status as of this update: FULLY RESOLVED AND VERIFIED LIVE.** Both
-  platforms are now confirmed serving commit `dd68e15` (the Edmunds
-  CJ→Impact affiliate-link migration) via independently-verified raw MCP
-  calls, not just dashboard state or connector output. The "one
-  platform's manual test stands in for both" assumption from step 5
-  turned out to be fine in this case (the code itself was never the
-  problem), but the promotion/domain-reassignment issue found here
-  applies per-project regardless of shared code, so future releases
-  should still independently verify each platform's live endpoint after
-  promotion, not just one.
+**Standing lesson for any future promotion while Auto-assign is disabled on either project:** the dashboard's blue "Production" badge is not sufficient proof a release is actually live. Always independently verify via a raw MCP `initialize` call checking `serverInfo.version` against the exact expected commit.
 
-### Track B — Website (ChatGPT's lane)
-- Handoff sent (see `HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`)
-  covering: Publisher Tag, ready-made Assets, general catalog search
-  (dealer/model/category — NOT VIN) as a possible inventory-display
-  feature, corrected after an earlier overstated VIN-lookup claim.
-- ChatGPT has its own funnel strategy doc
-  (`STRATEGY_DISCOVERY_MCP_EDMUNDS_REVENUE_FUNNEL_20260916.md`) — pending
-  André's approval, aligns with today's findings.
-- Not blocked on Track A — can proceed independently.
+## Phase 5 — Website and other CarClever surfaces — ⬜ NOT STARTED
 
-### Track C — Broader monetization (parked, deliberately, until A+B land)
-- Marketplace application (other affiliate programs) — not started
-- Real underlying issue flagged: Edmunds' 1.3M-listing catalog vs.
-  Auto.dev's ~3-4M inventory is a genuine coverage gap that no amount of
-  Impact API work can close — worth exploring other data
-  sources/programs later, this is the actual lever, not further
-  engineering against Impact's API.
+- WordPress website CTAs still use CJ links — not yet migrated.
+- Old CarClever (Fractal-managed, separate codebase/team) still needs its own CJ→Impact swap. A separate Fractal code agent already investigated this and confirmed it's safe and ready to implement using the same static-formula approach — but one flagged gap (an unconfirmed 5th CSP array location) was sent back for confirmation and has not yet been resolved. Not this session's direct responsibility (Track A/Engineering owns the main app; old CarClever's migration is a separate decision).
+- Website implementation needs a decision between two real options, not yet made:
+  1. Replace each CTA with a direct Impact deep link (same approach as the app).
+  2. Use Impact's **Publisher Tag** (a JS snippet, account-scoped ID already identified: `P-A7765200-5940-4415-8561-...`) to auto-rewrite plain Edmunds links into tracked Impact links client-side, with basic impression tracking. This is website-only — not applicable to the app's server-rendered MCP tool responses, but relevant here.
+- Once implemented, website links need testing for: correct Impact redirect, correct Edmunds destination, tracking attribution, disclosure wording, and no broken or leftover CJ links.
+- This is a separate workstream from the Find My Car application switch (Phases 1-4 above), owned by ChatGPT's Business/Strategy lane per the existing handoff (`HANDOFF_EDMUNDS_CJ_TO_IMPACT_MIGRATION_20260916.md`), not blocked by or blocking it.
 
-### Old CarClever (Fractal, separate codebase/team, not this session's
-direct work)
-- CJ→Impact swap fully investigated by a separate Fractal code agent,
-  confirmed safe, ready to implement — same base formula as above.
-- Investigation output reviewed here (Engineering lane) — one flagged gap
-  (unconfirmed 5th CSP array location) was sent back for confirmation
-  before implementation.
+## Phase 6 — Monitoring after launch — ⬜ TO BE DONE
 
-### Open items, not yet resolved (lower priority than the above)
-- Reports → "More" submenu in Impact dashboard — never opened
-- Attribution/reporting granularity (can Impact distinguish app vs.
-  website leads?) — not checked
-- Trackonomics Essentials — still just a name, not evaluated
-- Production API token scope for actual implementation (current token is
-  Catalogs-read-only, research-purpose) — needs a proper scope decision
-  before any live Tracking-Links-API use, though Track A's static-formula
-  approach doesn't actually need this
+- Monitor the Impact dashboard for real click/action/referral/commission data — André checking tomorrow (2026-09-18) as the first real data point. As of the last check, balance and pending were both $0.00, with zero real clicks/actions recorded (expected, since no live traffic had gone through Impact links yet at that point).
+- Confirm the first real attributed activity appears correctly in Impact once live traffic starts flowing through the new links.
+- Compare early Impact performance against the former CJ baseline (referenced in `STRATEGY_EDMUNDS_CJ_AFFILIATE_PARTNERSHIP_20260902.md`) once there's enough data to compare meaningfully.
+- Spot-check that VIN links, fallback/similar-vehicle links, and any category links all attribute correctly under real traffic, not just the manual tests already done.
+- Watch for any unexpected redirects or rejected Edmunds destinations under real-world volume/variety of listings.
+- Keep CJ active during this entire monitoring period as a safety fallback — no reason to disable it yet.
+
+## Phase 7 — Final CJ retirement — ⬜ TO BE DONE (after Phase 6 proves Impact is working)
+
+- Decide a formal CJ retirement date once Impact's performance is proven at real volume — not before.
+- Remove remaining CJ-specific application links, website links, and documentation references once retirement is decided.
+- Update any disclosures or affiliate-network wording that names CJ specifically, if any exist.
+- Remove or archive obsolete CJ constants/tests in the codebase (note: `lib/edmunds-cj.ts`'s filename itself still contains "cj" — deliberately left unchanged during Phase 3 due to the cost of renaming every import across the repo for marginal accuracy gain; revisit this decision if/when CJ is fully retired and the filename's history becomes purely legacy).
+- Confirm no `anrdoezrs.net` links remain live anywhere in production surfaces (app or website) before considering this phase complete.
+- Keep historical CJ records/data for reporting and comparison purposes even after retirement — do not delete.
 
 ---
+
+## Separate, related, but non-blocking gates
+
+These are real open items tracked elsewhere that touch the same infrastructure but are not blockers to this migration specifically:
+
+- Anthropic support (Marco) still needs to confirm the pending CarClever listing has been changed to the new branded MCP URL (`carclever-anth.getcarwise.app`) — a separate request, tracked in `ADMIN_RECORD_ANTHROPIC_SUBMISSIONS.md` and `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md`.
+- Proposed Vercel project renames (`ccfmc-dev-v2` → `carclever-openai`, `carclever-find-my-car` → `carclever-anthropic`) remain deferred until the above is confirmed.
+- Old/duplicate Vercel project cleanup (`ccfmc-dev`, `ccfmc-dev-v3`, `carclever-v2-schema-probe`, `car-clever`, and any others found) remains deferred, tracked in `PLAN_CARCLEVER_VERCEL_NAMING_AND_RELEASE_HYGIENE_20260916.md`.
+- Both platforms' app-review status (OpenAI, Anthropic) must continue to be monitored each session per `STATE.md`'s standing instruction.
+
+---
+
+## Bottom line
+
+**The core Find My Car application CJ→Impact migration (Phases 1-4) is complete, live, and independently verified on both platforms** — not just claimed via dashboard state, but confirmed via raw protocol calls, real tool calls through both standing connectors, and real manual click-throughs to live Edmunds listings.
+
+**What's genuinely left:** website/old-CarClever migration (Phase 5, a separate workstream), real-traffic monitoring (Phase 6, starts tomorrow), and eventual CJ retirement once Impact is proven (Phase 7, not time-sensitive).
+
+---
+
+## Full session history (detailed investigation log, preserved for reference)
+
+*The material below is the original, detailed, chronological session-by-session record of this investigation — kept for anyone who needs the full reasoning, dead ends, troubleshooting detail, or exact evidence trail behind the phased summary above. The phased summary above is the canonical current-status reference; this log is supporting detail, not a competing source of truth.*
 
 ## Why this doc exists
 
