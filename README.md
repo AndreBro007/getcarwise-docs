@@ -2,7 +2,7 @@
 
 **Purpose:** Persistent storage for session documentation, investigations, strategies, submission records, testing ledgers, and reference materials.
 
-**Organization:** Root-level files with structured naming for easy search and categorization.
+**Organization:** Root-level files with structured naming. Flat by design — no folders, no archive tiers, no manually maintained index.
 
 ---
 
@@ -20,61 +20,44 @@ Common TYPE categories include:
 - **TEST_** — manual/automated validation records
 - **SUBMISSION_** — platform submission snapshots and status records
 - **STATUS_ / CURRENT_** — current operational state
-- **DECISION_ / STRATEGY_** — approved or proposed strategic records
+- **DECISION_ / STRATEGY_ / REVIEW_** — approved or proposed strategic records
 
-DATE uses `YYYYMMDD`.
+DATE uses `YYYYMMDD` and records when the file was **created**. It is not a currency signal — several documents have been substantially updated well after their filename date. Use the document's own content and explicit supersession statements to judge authority, never the filename date alone.
 
 ---
 
-## Cross-Referencing System
+## Where Current State Lives
 
-Core administrative state remains in `carclever-widget` (`STATE.md`, `TASKS.md`, `DECISIONS.md`, `PLAYBOOK.md`, `REFERENCE.md`). Session research, audits, testing and submission records live here.
+**Core administrative state lives in `carclever-widget`** (`STATE.md`, `TASKS.md`, `DECISIONS.md`, `PLAYBOOK.md`, `REFERENCE.md`). Session research, audits, testing and submission records live here.
+
+**This README deliberately does not carry release status, SHAs, endpoints or open checks.** A duplicated status block previously drifted stale here (it listed a superseded Anthropic endpoint for several days). Read `STATE.md` for current state — it is the single source of truth.
 
 Older dated documents are historical evidence. When a newer `CURRENT_`, `STATUS_` or `SUBMISSION_` file explicitly supersedes a stale status statement, use the newer file for current operational state while preserving the older file as history.
 
 ---
 
-## Current CarClever / Find My Car state — 2026-09-12
+## Session Startup Rule (effective 2026-09-18)
 
-The active submitted release is **V2** from `AndreBro007/carclever-find-my-car` branch `release/v2`, exact SHA:
+Agreed by both AI lanes. Full rationale and evidence: `REVIEW_DOCS_ORGANIZATION_AND_SESSION_STARTUP_20260918.md`.
 
-`b8b07d8542f5d3f2a12e00433e089dde28ae5792`
+1. **Discover fully, every session.** Dynamically list every file in this repository root via the GitHub API and print the complete inventory. Never hardcode a filename list and never narrow discovery.
+2. **Read what you have not seen.** Compare **your own lane's** recorded `getcarwise-docs` checkpoint SHA (in `STATE.md`'s checkpoint table) against `main`, and read every added, modified or renamed file in full. Inspect renames and deletions for affected references.
+3. **Read what today's task needs, regardless of age.** Follow references from `STATE.md`/`TASKS.md` and search the full inventory. Age never determines relevance.
+4. **Fall back to a full fetch** whenever your checkpoint is missing, empty, uncertain, or the comparison fails. Never guess a lookback window. Never treat the other lane's checkpoint as your own.
+5. **At session close,** record the two SHAs you actually reviewed in `STATE.md`'s checkpoint table, updating **only your own lane's row** from a fresh read.
 
-V2 is now in review on **both platforms** through separate production origins:
-
-- **OpenAI:** `https://carclever-oai.getcarwise.app/mcp` — V2 resubmitted 2026-09-12, status **REVIEW**.
-- **Anthropic:** `https://carclever-find-my-car.vercel.app/mcp` — existing production project deliberately promoted to V2 at the exact SHA above; server rescan/listing update saved 2026-09-12, status **IN REVIEW**.
-
-V1/main remains preserved and V3 remains paused.
-
-### Start here
-
-- `CURRENT_V2_STATE_20260909.md` — current operational source of truth, updated Sep 12.
-- `TEST_CARCLEVER_RELEASE_VALIDATION_LEDGER_20260910.md` — living release/test ledger, updated through both Sep 12 submissions.
-- `SUBMISSION_CARCLEVER_OPENAI_V2_RESUBMISSION_20260912.md` — final OpenAI V2 submission record.
-- `SUBMISSION_CARCLEVER_ANTHROPIC_V2_UPDATE_20260912.md` — Anthropic production cutover, rescan, listing update and current cache-retest item.
-- `STATUS_CARCLEVER_3_APP_PORTFOLIO_20260912.md` — current three-app portfolio companion to the older historical `CARCLEVER_3_APPS_STRATEGIC_ANALYSIS.md`.
-- `SESSION_CARCLEVER_DUAL_PLATFORM_CLOSEOUT_20260912.md` — Sep 12 session closeout and next-session checklist.
-
-### Current remaining checks
-
-1. Claude connector/cache reset and retest: confirm base connector now advertises V2 (`vehicleNeeds`/electrification fields, no `goals`), then CR-V baseline + exact-VIN Buyer Check.
-2. Confirm long-term Vercel production-branch/release behavior for the Anthropic project so a future V1 `main` push cannot silently supersede the manually promoted V2 production release.
-3. Freeze V2 during both platform reviews except for platform-requested or evidence-backed corrections.
+Documents are never moved or archived. Everything stays at a stable, predictable path.
 
 ---
 
-## Session access / closeout
+## Session Close
 
-At session start, dynamically list this repository root and fetch every returned file; do not maintain a hardcoded filename list. At session close, write material findings here, re-fetch every changed file, and verify expected content before claiming completion.
-
-See `carclever-widget/PLAYBOOK.md` and `PROTOCOL_SESSION_END_20260826.md` for the broader operating procedure.
+Write material findings here, re-fetch every changed file, and verify expected content before claiming completion. See `carclever-widget/PLAYBOOK.md` and `PROTOCOL_SESSION_END_20260826.md` for the broader operating procedure.
 
 ---
 
 ## Repository Info
 
 - **GitHub:** https://github.com/AndreBro007/getcarwise-docs
-- **Managed by:** GetCarWise Business/Strategy + Engineering documentation workflows
-- **Strategy:** root-level dated files, structured naming, cross-referenced from core state/admin records
-- **Last Updated:** 2026-09-12
+- **Managed by:** GetCarWise Business/Strategy (ChatGPT lane) + Engineering (Claude lane)
+- **Strategy:** flat root-level dated files, stable paths, cross-referenced from core state/admin records
