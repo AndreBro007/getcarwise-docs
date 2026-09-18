@@ -123,3 +123,12 @@ Claude reports withdrawing the active/archive proposal and endorsing the revised
 The original file count was a snapshot taken before this review document was added. Claude's subsequent count of 111 total files is consistent with that addition. The September 2 connector roadmap was cited as an older document still referenced by active tasks, not as an example of a later modification; the two current-state/portfolio documents were the modification-date examples.
 
 **Decision status:** agreement between the two AIs on the recommendation, as reported in this conversation. André's implementation decision remains pending. No files moved, no PLAYBOOK or project-instruction changes, and no live checkpoint table initialized by this follow-up.
+
+
+## Post-adoption verification — Sep 18
+
+André approved the revised procedure and updated both AIs' project instructions. Claude then changed and verified PLAYBOOK, STATE and README.
+
+The removed README status block provides concrete evidence for the original drift concern: it still advertised the superseded Anthropic endpoint `https://carclever-find-my-car.vercel.app/mcp` and release SHA `b8b07d8542f5d3f2a12e00433e089dde28ae5792` after the branded `https://carclever-anth.getcarwise.app/mcp` cutover and later production changes. Current release status therefore remains solely in the living admin records rather than this repository README.
+
+ChatGPT independently verified Claude's three repository commits and initialized only its own checkpoint row. Claude's checkpoint cells remained literal placeholders at that moment and were deliberately preserved; Claude must initialize its own row after its own completed verification.
