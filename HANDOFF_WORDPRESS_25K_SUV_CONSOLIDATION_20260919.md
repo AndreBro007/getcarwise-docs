@@ -3,7 +3,7 @@
 **Date:** 2026-09-19  
 **From:** ChatGPT — Business/Strategy lane  
 **To:** Claude — authenticated WordPress execution lane  
-**Status:** **EDITORIAL/ARCHITECTURE PACKAGE COMPLETE — André approved consolidation direction. Deploy only after the PHEV treatment, on a separate calendar date.**
+**Status:** **EDITORIAL/ARCHITECTURE PACKAGE COMPLETE — André approved consolidation direction. Same-day execution is explicitly authorized if fresh URL-level T0 baselines are captured immediately before implementation.**
 
 ## Target URLs
 
@@ -34,13 +34,21 @@ Do not redirect first.
 
 # 1. Timing / experiment isolation
 
-The $30k treatment went live on Sep 19, 2026.
+The $30k treatment and PHEV rebuild are already live.
 
-The PHEV rebuild is the next treatment and must deploy on a separate date.
+André has explicitly approved continuing with the $25k consolidation in the same local/UTC day rather than waiting for an arbitrary calendar boundary.
 
-Deploy this $25k consolidation **after the PHEV rebuild and on another separate calendar date**. Do not launch both PHEV and $25k on the same date.
+**Same-day execution is acceptable** because this treatment is being measured as a separate URL-level consolidation with its own fresh T0 baselines.
 
-This lets Search and Google Generative AI movement be attributed page-by-page.
+Immediately before any $25k edit or redirect:
+
+- capture fresh Search and Google Generative AI baselines for **both** $25k URLs;
+- record the exact implementation timestamp;
+- preserve both rollback copies.
+
+Measurement must remain page-specific. Do not blend the $25k result with the $30k or PHEV treatment metrics.
+
+A one-day delay is not required and would not materially isolate a 14/28/56-day SEO/GEO treatment.
 
 ---
 
