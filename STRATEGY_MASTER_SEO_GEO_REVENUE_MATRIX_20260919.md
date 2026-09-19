@@ -1,5 +1,7 @@
 # GetCarWise Master SEO / GEO / Revenue Matrix
 
+> **Priority-0 strategy revision — Sep 20, 2026:** Monetization is now a mandatory page-level funnel contract, and tool-led decision utility is the preferred differentiation strategy. The canonical operating design is `STRATEGY_TOOL_LED_SEO_GEO_MONETIZATION_SYSTEM_20260920.md`. Apply it before creating or materially rebuilding any commercial page. Existing treatment windows remain protected; new tool/Impact modules require separate dates and measurement.
+
 **Date:** 2026-09-19  
 **Owner lane:** ChatGPT — Business/Strategy  
 **Status:** Working control matrix. Measured baselines are factual; prioritization scores and treatments are proposed until André approves implementation.
