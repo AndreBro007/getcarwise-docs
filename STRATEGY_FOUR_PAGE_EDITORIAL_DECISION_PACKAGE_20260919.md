@@ -1,14 +1,14 @@
 # Four-Page SEO/GEO Editorial Decision Package — Sep 19, 2026
 
 **Owner:** ChatGPT — Business/Strategy lane  
-**Status:** **PROPOSED — pending André approval before WordPress implementation**  
+**Status:** **APPROVED BY ANDRÉ — 2026-09-19. Values cross-checked before implementation; see `RESEARCH_WEB_VALUE_CROSSCHECK_20260919.md`.**  
 **Evidence inputs:**  
 - `ANALYSIS_FOUR_PAGE_SEO_GEO_FORENSIC_20260919.md`
 - `RESEARCH_SEO_GEO_DATA_EVIDENCE_RESULTS_20260919.md`
 - `STRATEGY_MASTER_SEO_GEO_REVENUE_MATRIX_20260919.md`
 - `REVIEW_WEEKLY_SEO_GEO_REPORT_20260919.md`
 
-No WordPress, application, Vercel, MCP, redirect, canonical, or production changes are authorized by this document.
+André approved the four editorial directions on 2026-09-19. WordPress implementation should use the value-normalization rules and corrected figures in `RESEARCH_WEB_VALUE_CROSSCHECK_20260919.md`; no application/MCP/Vercel changes are authorized by this document.
 
 ---
 
@@ -171,40 +171,42 @@ The opening should communicate this logic, with the exact model winners finalize
 
 Do not pick a single universal winner.
 
-## 3.4 Current new-SUV evidence
+## 3.4 Current new-SUV evidence — web cross-checked
 
-As of Sep 19, current official U.S. manufacturer pages support the following starting-MSRP evidence:
+The value cross-check changed the eligibility rule:
 
-| Model | Current starting MSRP | Editorial treatment |
+> For a page promising **new SUVs under $30,000**, eligibility is based on the starting price **including mandatory destination/freight**, not merely the OEM headline MSRP before destination.
+
+Full evidence and source disagreements: `RESEARCH_WEB_VALUE_CROSSCHECK_20260919.md`.
+
+### Core current choices genuinely under $30k including destination
+
+| Model | Publication-safe starting price | Cross-check status |
 |---|---:|---|
-| Chevrolet Trax | **$21,700** | Comfortable room below cap |
-| Nissan Kicks (2027 current lineup) | **$22,790** | Comfortable room below cap |
-| Chevrolet Trailblazer | **$23,300** | Comfortable room below cap |
-| Kia Seltos (2027) | **$24,990** | Comfortable room below cap |
-| Hyundai Kona (2026) | **$25,500** | Comfortable room below cap |
-| Mazda CX-30 (2026) | **$26,375** | Under cap before destination |
-| Honda HR-V (2026) | **$26,500** | Under cap before destination |
-| Kia Niro Hybrid | **$29,890** | Edge case — destination/options push over cap |
-| Nissan Rogue (current 2026.5 lineup) | **$29,490** | Edge case — destination/options push over cap |
-| Hyundai Tucson (2026) | **$29,700** | Edge case — destination/options push over cap |
+| 2026 Chevrolet Trax | **$23,495** | OEM base + OEM destination; independently corroborated |
+| 2027 Nissan Kicks | **$24,335** | OEM base + OEM destination; Cars.com corroborated |
+| 2026 Chevrolet Trailblazer | **$25,095** | OEM base + OEM destination; C/D/Cars.com corroborated |
+| 2027 Kia Seltos | **$26,485** | OEM base + destination; KBB/C&D corroborated |
+| 2026 Hyundai Kona | **$27,100** | OEM base; KBB + Edmunds agree on destination-inclusive sticker |
+| 2026 Mazda CX-30 | **$27,970** | Current OEM base + Aug 11, 2026 destination charge; live Edmunds inventory corroborates |
+| 2026 Honda HR-V | **$28,050** | OEM base + OEM destination; C/D corroborated |
 
-Authoritative sources reviewed:
-- Chevrolet Trax: https://www.chevrolet.com/suvs/trax
-- Chevrolet Trailblazer: https://www.chevrolet.com/suvs/trailblazer
-- Nissan current lineup: https://www.nissanusa.com/vehicles/new.html
-- Kia Seltos: https://www.kia.com/us/en/seltos
-- Hyundai Kona: https://www.hyundaiusa.com/us/en/vehicles/kona
-- Mazda CX-30: https://www.mazdausa.com/vehicles/cx-30
-- Honda HR-V: https://automobiles.honda.com/2026/hr-v
-- Kia Niro Hybrid: https://www.kia.com/us/en/niro
-- Hyundai current lineup/pricing: https://www.hyundaiusa.com/us/en/technology
+### Optional / inventory-dependent
 
-**Important editorial rule:** manufacturer starting MSRP usually excludes destination, taxes, title, options and dealer charges. A vehicle whose base MSRP is $29.5k–$29.9k should **not** be described casually as a "sub-$30k purchase." Label it as an **MSRP edge case**.
+- **2026 Kia Niro Hybrid — $28,885** including destination. Use only if meaningful remaining 2026 new inventory exists at publication time.
 
-This creates a useful decision distinction:
+### Do not classify as true current new “under $30k”
 
-- **comfortably below $30k MSRP:** Trax / Kicks / Trailblazer / Seltos / Kona / CX-30 / HR-V;
-- **technically below base MSRP but likely over $30k delivered:** Niro Hybrid / Rogue / Tucson.
+- **2027 Kia Niro Hybrid — $31,385 including destination**
+- **2026.5 Nissan Rogue — about $31,035 including destination**
+- **2026 Hyundai Tucson — current OEM base MSRP $29,700 excludes freight; independent current sticker sources place it above $30k**
+
+### Source-normalization cautions
+
+- Mazda's current CX-30 destination charge is **$1,595** effective Aug 11, 2026; older third-party pages may still show the previous lower destination charge.
+- Niro must always carry a model year: 2026 can fit under $30k; 2027 does not once destination is included.
+- Tucson pricing has moved during 2026. Use the current OEM base price and avoid a falsely precise destination-inclusive figure unless rechecked immediately before publication.
+- Recheck all new-car prices immediately before WordPress publication.
 
 ## 3.5 Used-market evidence format
 
@@ -569,15 +571,16 @@ Keep monetization/inventory UI experiments on separate dates.
 
 ---
 
-# 10. Approval gates
+# 10. Approval status
 
-André confirmation is required before:
+André explicitly approved the four editorial directions on 2026-09-19:
 
-- editing WordPress;
-- changing title/H1/meta;
-- consolidating/redirecting $25k URLs;
-- changing structured data;
-- implementing internal-link changes as part of this package.
+- $30k controlled evidence-led refresh;
+- PHEV evidence-led rebuild;
+- $25k consolidation into `/tools/best-compact-suv-under-25000/`;
+- minimal factual/source correction of the 3-row benchmark.
 
-The evidence/research phase is complete enough to make those decisions.
+The subsequent multi-source value cross-check is complete and did not overturn those directions. It **did** tighten the $30k new-vehicle eligibility rule to require starting price including destination.
+
+Implementation should now be prepared in controlled batches, with pre-change baselines preserved and new monetization/inventory-module experiments kept on separate dates.
 
