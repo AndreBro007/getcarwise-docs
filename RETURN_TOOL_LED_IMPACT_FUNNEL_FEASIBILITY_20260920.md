@@ -7,6 +7,17 @@
 **Governing handoff:** `HANDOFF_CLAUDE_TOOL_LED_IMPACT_FUNNEL_FEASIBILITY_20260920.md`  
 **Governing strategy:** `STRATEGY_TOOL_LED_SEO_GEO_MONETIZATION_SYSTEM_20260920.md`
 
+## Correction — agreement review and André confirmation (2026-09-20)
+
+This section supersedes the original rights-gate language elsewhere in the first version of this return.
+
+- André confirmed that the contracting GetCarWise business is based in the United States; his personal location in Australia does not change the business's primary place of business.
+- The current Edmunds/Impact agreement routes users through unchanged Required Tracking Links to Edmunds-hosted listing and lead-submission experiences. GetCarWise does not collect or submit the lead.
+- The intended module performs a read of advertiser-supplied Product Catalog records and displays selected records using returned fields and URLs. It does not modify Edmunds creative or the returned tracking link.
+- Prior Impact support guidance recommended downloading the approximately 1.2–1.334 million-record catalog. That account-specific guidance is consistent with Catalog consumption being an intended partner use; GetCarWise proposes a much narrower query/read pattern.
+- Filtering or selecting returned records is not treated here as modification of an Approved Ad. Any GetCarWise analysis or scoring must remain visually and semantically separate from the catalog-supplied listing content.
+- No new permission enquiry is required before the read-only C1–C8 account tests. The remaining gates are fresh authenticated behavior evidence, geography limitations, attribution/consent, and controlled pilot design.
+
 ## 1. Executive recommendation
 
 GetCarWise can build a reusable tool-led monetization system, but the correct status is **conditionally feasible** rather than build-ready.
@@ -19,13 +30,12 @@ The recommended system is:
 4. static Impact New, Used, and optional Trade-in destinations remain the always-available fallback;
 5. a small first-party event contract connects landing context, tool use, outbound clicks, Impact action reporting, and commission reporting without collecting VINs, emails, or other unnecessary personal data.
 
-This architecture is technically credible because the Partner Catalog API exposes per-catalog item queries and returns price, condition, stock state, images, and a partner-specific tracked product URL. Prior verified account work also found an Edmunds catalog of roughly 1.334 million records, with dealer/model/body-style mappings usable for discovery. It is commercially incomplete because three gates remain unresolved:
+This architecture is technically credible because the Partner Catalog API exposes per-catalog item queries and returns price, condition, stock state, images, and a partner-specific tracked product URL. Prior verified account work also found an Edmunds catalog of roughly 1.334 million records, with dealer/model/body-style mappings usable for discovery. Agreement review plus André's account-specific facts remove the previously proposed separate permission enquiry. Two material evidence gaps remain:
 
-- **Public-display and derivative-use rights:** API access alone does not establish the right to republish, cache, aggregate, rank, or transform Edmunds listing data on GetCarWise.
 - **Fresh account-level verification:** authenticated Impact access was blocked in this session by a Cloudflare human-verification loop, so condition filtering, current counts, latency, current limits, and thin-market behavior could not be re-run.
 - **Geographic precision:** the documented Partner Catalog model has no supported ZIP, latitude/longitude, radius, or distance filter. A local-inventory promise is therefore not supportable from Catalog alone.
 
-The safest next step is **not a production page**. It is a two-stage internal prototype: first a fixture-backed, noindex/password-protected module shell; then, only after written data-use confirmation and restored account access, a live internal Catalog probe with no persistent inventory cache. An eventual production pilot should be a single page, isolated from the current $30k, PHEV, $25k, midsize-sedan, and Tools-hub work. The first candidate should be chosen only after Task #68 closes and baseline conflicts are checked.
+The safest next step is **not a production page**. Restore authenticated access and run C1–C8 read-only, then use the results to finalize a noindex/password-protected prototype specification. An eventual production pilot should be a single page, isolated from the current $30k, PHEV, $25k, midsize-sedan, and Tools-hub work. The first candidate should be chosen only after baseline conflicts are checked.
 
 Publisher Tag should not be installed for the first prototype. It does not replace already-affiliated links, is not required for Catalog-returned tracked URLs, introduces consent/governance work, and only unlocks page-level reporting when paired with Trackonomics Essentials. Revisit it after the basic module and attribution contract prove value.
 
@@ -51,7 +61,7 @@ Repository inspection found no current runtime that queries the Impact Catalog, 
 | Mechanism | What it can do | What it cannot safely be assumed to do | Recommendation |
 |---|---|---|---|
 | Static tracking link | Send a user to an approved Edmunds destination with Impact attribution. A permitted `u` parameter can deep-link to a destination path. | It does not expose inventory data or prove that an arbitrary destination is allowed. Hand-editing can damage required parameters. | Use Impact-generated/managed New, Used, and Trade-in links as fallbacks. Preserve all existing CJ links until a separately authorized migration. |
-| Catalog item `Url` | Official schema describes it as a tracking URL unique to the partner account. Prior account evidence found working pre-tracked listing links. | It does not establish public-display rights, inventory completeness, geographic accuracy, or a stable vehicle schema. | Preferred outbound URL for a displayed Catalog result after rights and live tests pass. Never reconstruct it client-side. |
+| Catalog item `Url` | Official schema describes it as a tracking URL unique to the partner account. Prior account evidence found working pre-tracked listing links. | It does not establish inventory completeness, geographic accuracy, or a stable vehicle schema. | Preferred outbound URL for a displayed Catalog result after live tests pass. Use it unchanged; never reconstruct, wrap, mask, or proxy it. |
 | Product Catalog query | Per-catalog `/Items` accepts a `Query`; cross-catalog `ItemSearch` accepts a keyword. Returns structured item fields. | Generic public docs do not guarantee Edmunds-specific semantics for `Text1`, `Manufacturer`, or every returned field as queryable. No documented ZIP/radius query. | Use a server-side adapter with a feed-field mapping registry, allowlist, validation, caching only if permitted, and static-link fallback. |
 | Publisher Tag link transformation | Converts eligible direct joined-brand links to tracking links while preserving the landing page. | It respects existing affiliate links and does not replace their tracking; therefore it will not migrate existing CJ links. | Not needed for first prototype. Consider later for approved direct Edmunds links. |
 | Publisher Tag impression tracking | Sends one impression per unique URL on page load; basic integration supports impression tracking. | It adds client-side marketing measurement and consent work. | Evaluate only after legal/consent review and a proven production use case. |
@@ -142,7 +152,7 @@ The prior 3,600 requests/hour and 20,000-result traversal cap are planning const
 
 ### 5.2 What the evidence does not support
 
-The documented Partner Catalog item schema does not expose a standard latitude, longitude, ZIP-radius, or distance field/filter. `ServiceAreas` is catalog-level metadata, not proof of vehicle-level proximity. A dealer address can be displayed or normalized only if rights permit; it does not create a trustworthy radius search by itself.
+The documented Partner Catalog item schema does not expose a standard latitude, longitude, ZIP-radius, or distance field/filter. `ServiceAreas` is catalog-level metadata, not proof of vehicle-level proximity. A returned dealer address can support transparent location labeling or bounded post-selection, but it does not create a trustworthy radius search by itself.
 
 Therefore the first module must not claim:
 
@@ -156,28 +166,32 @@ Therefore the first module must not claim:
 
 For the first module, ZIP should be optional and described as “used to continue your search on Edmunds,” not “filter this inventory near you,” unless a live test proves an approved downstream deep link accepts it. Do not send ZIP to GA4. If GetCarWise later adds geocoding, that is a separate data source, cost, caching, accuracy, and privacy decision; it still would not solve missing inventory coverage.
 
-## 6. Rights and data-use findings
+## 6. Agreement interpretation and operating guardrails
 
-**Rights are the principal go/no-go blocker.** Neither API availability nor a working authenticated response proves permission to republish inventory on a public SEO page.
+Agreement review and André's account-specific confirmation support proceeding with Catalog-read feasibility without a new permission request:
 
-Written confirmation is required from Impact/Edmunds for each of these uses:
+- the contracting GetCarWise business is US-based;
+- users follow the returned, unaltered Required Tracking Link to an Edmunds-hosted listing and lead-submission experience;
+- GetCarWise reads advertiser-supplied Catalog records rather than modifying an Edmunds creative;
+- prior Impact support guidance recommended downloading the full catalog, confirming Catalog consumption as an intended partner workflow;
+- GetCarWise proposes narrow queries and 3–6 returned records, not mass republishing.
 
-| Use | Required answer before public pilot |
+The initial module should nevertheless use conservative operating guardrails:
+
+| Area | Guardrail |
 |---|---|
-| Public display | May GetCarWise show dealer/listing names, vehicle details, prices, stock status, and images outside Edmunds? |
-| Caching | May responses and images be cached? If yes, maximum TTL and deletion/staleness duties? |
-| Aggregation | May GetCarWise combine, deduplicate, sort, filter, or summarize multiple Edmunds records? |
-| Transformation | May feed-specific fields be relabeled into year/make/model/trim/body style/dealer? |
-| Ranking | May GetCarWise present “best match,” “top options,” or price-ranked cards? |
-| Search indexing | May inventory-derived content appear in crawlable HTML, structured data, snippets, or sitemaps? |
-| Branding | Required Edmunds/Impact labels, logos, disclosures, proximity to links, and image attribution? |
-| Freshness | Required refresh/removal windows for price, availability, sold vehicles, and images? |
-| Storage/logging | May item IDs and response samples be retained for debugging and measurement, and for how long? |
-| Cross-source use | May the feed be combined with Auto.dev or first-party editorial scoring? |
+| Display | Show only Catalog-supplied listing fields needed for the decision/continuation module. |
+| Tracking | Use the returned Impact URL unchanged; never reconstruct, wrap, proxy, mask, or obscure it. |
+| Creative | Do not rewrite Edmunds creative. Keep independent GetCarWise analysis visibly separate from Catalog content. |
+| Selection | Filtering, bounded selection, deduplication, and neutral ordering may be used to surface relevant returned records. Any proprietary score must have its own documented methodology and must not imply Edmunds endorsement. |
+| Freshness | Refresh inventory appropriately; label price/availability as changeable; remove or suppress dead/stale results. |
+| Coverage | Describe the feed as complementary Edmunds inventory, never complete US inventory. |
+| Geography | Do not claim ZIP/radius or “nearest” behavior until C1–C8 or later approved evidence proves it. |
+| Storage | Avoid a bulk persistent mirror for the first pilot. Retain only sanitized evidence needed for testing and debugging. |
+| Indexing | Keep prototype output noindex. Decide production rendering/indexing in the later SEO/pilot review, avoiding thin feed-derived pages. |
+| Attribution | Maintain affiliate disclosure and `rel="sponsored"`; measure first-party context without changing the returned URL. |
 
-Until answered, the safe assumption is **no public caching, aggregation, or indexable display**. Static approved links remain usable under existing program terms, but those terms should still be checked for required disclosures and destination restrictions.
-
-Recommended rights request: send a short, use-case-specific question to Impact/Edmunds describing a 3–6-card GetCarWise module, fields displayed, refresh interval, sorting, fallback, and intended public pages. Obtain a written response and retain it with project evidence. Do not ask only whether “API use” is allowed.
+A new Edmunds/Impact support enquiry is unnecessary unless later implementation departs materially from this catalog-read pattern or encounters a concrete agreement/API contradiction.
 
 ## 7. Architecture comparison
 
@@ -226,7 +240,7 @@ Security and operational rules:
 - sanitize all returned text and validate outbound URLs against approved Impact/Edmunds hosts;
 - module failure must never break the editorial page;
 - accessibility, responsive height, keyboard behavior, and no-layout-shift behavior are acceptance criteria;
-- inventory-derived HTML remains non-indexable unless explicit rights and SEO review approve it.
+- prototype inventory output remains non-indexable; production indexing requires a separate SEO quality review and must not create thin feed-derived pages.
 
 ## 9. First inventory-continuation module specification
 
@@ -244,17 +258,17 @@ Help a reader move from “I understand the decision” to “show me plausible 
 
 ### 9.3 Output
 
-Render at most 3–6 result cards. Each usable card should include only rights-approved fields:
+Render at most 3–6 result cards. Each usable card should include only Catalog-supplied fields needed for the module:
 
 - year/make/model/trim or feed name;
 - condition;
 - current price and currency;
 - stock state or “availability may change” wording;
-- dealer name/location if permitted;
-- image if permitted and available;
+- dealer name/location when returned;
+- image when returned and available;
 - clearly labeled “View on Edmunds” action using the returned `Url` unchanged except for platform-approved reporting parameters.
 
-Do not present a GetCarWise score or rank until rights and methodology permit aggregation/ranking. Default ordering should be neutral and explicitly labeled.
+Default ordering should be neutral and explicitly labeled for the first pilot. Any later GetCarWise score must use a documented methodology, remain separate from Edmunds-supplied content, and avoid implying Edmunds endorsement.
 
 ### 9.4 Required states
 
@@ -378,7 +392,7 @@ Publisher Tag page-level reporting is not required for this first contract. If l
 | VIN/deal-score continuation | Useful post-evaluation bridge | Exact VIN search is explicitly unsupported in verified project evidence | Used inventory fallback | Cannot search the Catalog by VIN/MPN | Low for exact continuation; static fallback only |
 | True cost of ownership | High evidence value | Inventory is a secondary continuation, not core | Used/New plus optional Trade-in | Risk of distracting from calculator answer | Medium-high |
 | Trade-in readiness/value bridge | High ownership intent | Catalog not required | Trade-in lead | Must avoid valuation promises | High as optional bridge |
-| Broad “cars near me” directory | Potential search demand | Catalog does not support credible ZIP/radius completeness | Inventory | Rights, geography, thin/duplicate content | Not feasible now |
+| Broad “cars near me” directory | Potential search demand | Catalog does not support credible ZIP/radius completeness | Inventory | Geography, thin/duplicate content | Not feasible now |
 
 ## 13. Safest prototype and eventual production pilot
 
@@ -386,11 +400,11 @@ Publisher Tag page-level reporting is not required for this first contract. If l
 
 **Stage A — fixture prototype:** Build only after André authorizes implementation. Use a noindex, password-protected Vercel route with synthetic or manually sanitized fixture data. Test interaction states, disclosures, accessibility, event payloads, responsive embed behavior, and kill switch. Make no Impact call and create no public page.
 
-**Stage B — live internal probe:** Proceed only after written public-display/caching guidance and authenticated account access are restored. Use a noindex, access-controlled route; server-side credentials; no persistent inventory cache unless expressly permitted; 3–6 results; and the exact ledger in Section 4. Record sanitized evidence. Do not install Publisher Tag.
+**Stage B — live internal probe:** Proceed after authenticated account access is restored. Use a noindex, access-controlled route; server-side credentials; no bulk persistent inventory mirror; 3–6 results; and the exact ledger in Section 4. Record sanitized evidence. Do not install Publisher Tag.
 
 Prototype exit gates:
 
-- rights response covers every displayed field and intended transformation;
+- module displays Catalog-supplied fields without rewriting Edmunds creative or altering tracked URLs;
 - C1–C8 have recorded results;
 - required-field completeness is acceptable for the selected family;
 - p95 latency and error rate meet the agreed budget or the fallback is fast enough;
@@ -426,7 +440,6 @@ Pilot success metrics:
 
 | Priority | Risk/blocker | Effect | Required resolution |
 |---|---|---|---|
-| P0 | Public-display, caching, aggregation, ranking, and indexing rights unresolved | Prevents a public inventory module | Written Impact/Edmunds confirmation for the exact use case |
 | P0 | Authenticated Impact unavailable in this session because Cloudflare remained in a human-verification loop | Prevented fresh query, count, latency, field, rate, and tracking tests | André completes challenge/refreshes access; rerun C1–C8 read-only |
 | P0 | No documented vehicle-level ZIP/radius capability | Prevents “near me” claims and reliable local filtering | Constrain UX or separately approve a geographic data source |
 | P1 | Edmunds feed uses non-semantic mappings (`Manufacturer` for dealer, `Text1` for model) | Schema drift can silently corrupt search | Versioned mapping tests and fail-closed validation |
@@ -444,16 +457,15 @@ WordPress authenticated inspection had a separate blocker: after the Impact atte
 
 No implementation is authorized by this return. André and ChatGPT should decide:
 
-1. whether to request written Edmunds/Impact data-use approval now, using the concrete 3–6-card use case;
-2. who will restore authenticated Impact access and run/observe the exact C1–C8 test ledger;
-3. whether ZIP remains only a downstream continuation input or whether a separate geography provider merits investigation;
-4. whether the first build should be the fixture-only inventory-continuation module specified here;
-5. which page becomes the eventual isolated pilot after Task #68 and active treatment windows close;
-6. whether Trade-in is included in the first pilot or held for a second measurement phase;
-7. whether Publisher Tag is deferred (recommended) or evaluated later as a distinct consent/measurement project;
-8. the pre-registered pilot thresholds for valid leads, revenue, latency, errors, thin results, and organic/CWV protection.
+1. who will restore authenticated Impact access and run/observe the exact C1–C8 test ledger;
+2. whether ZIP remains only a downstream continuation input or whether a separate geography provider merits investigation;
+3. whether the first build should be the fixture-only inventory-continuation module specified here;
+4. which page becomes the eventual isolated pilot after Task #68 and active treatment windows close;
+5. whether Trade-in is included in the first pilot or held for a second measurement phase;
+6. whether Publisher Tag is deferred (recommended) or evaluated later as a distinct consent/measurement project;
+7. the pre-registered pilot thresholds for valid leads, revenue, latency, errors, thin results, and organic/CWV protection.
 
-Recommended decisions: authorize only the rights request and a fixture-based internal prototype plan; defer live/public build approval until the P0 gates are closed.
+Recommended decision: proceed to the authenticated read-only C1–C8 evidence run when Impact access is available; keep implementation and any public pilot separately authorized.
 
 ## 16. Explicit change and boundary statement
 
