@@ -17,6 +17,19 @@ https://carclever-meta.getcarwise.app/mcp
 
 Meta’s public materials do not state that each connector must have a unique URL. This is a GetCarWise release-control requirement: it prevents Meta review/testing and any later repair from being silently coupled to the OpenAI or Anthropic public endpoints.
 
+## Account, availability and subscription preflight
+
+This must happen before infrastructure work.
+
+1. Open https://muse.ai in a normal browser and create or sign in to one controlled GetCarWise owner account. Use an inbox André controls and can retain for review correspondence; the connector form has been reported to prefer a work email.
+2. Do not use a VPN or attempt to bypass a regional rollout. Meta’s launch announcement says Muse is rolling out in the United States. André is operating from Australia, so the first outcome may be a normal availability restriction even though GetCarWise serves the U.S. market.
+3. If access is available, complete only the minimal profile/account steps and enable account security, including two-factor authentication if offered. Do not connect email, calendar, social accounts, payment methods, Link, or any other personal service merely to submit CarClever.
+4. Review privacy settings before testing. Meta says users can opt out of having Muse interactions used to train its models; choose the appropriate setting intentionally.
+5. Keep the free tier initially. Meta says Muse is free for most use, with subscription plans for people who want to do more. Meta does not currently publish the free limits, paid price, or whether a paid plan is required for connector review/testing. The subscription page is login-gated. No plan or payment method should be purchased until the live account shows a concrete limit that blocks this submission or its acceptance tests.
+6. From the same account, open https://muse.ai/platform and click Submit a connector. Confirm the account can reach the form, the exact live terms, authentication choices, and whether any verified-business requirement appears. Stop there; do not submit before the Meta endpoint exists and the later gates pass.
+
+**Decision rule:** a free account with form access is sufficient to continue the preflight. A regional/access block is an external gate to record and revisit; it is not a reason to create a different identity or circumvent availability controls.
+
 ## What Meta currently requires or asks for
 
 ### Publicly confirmed by Meta
