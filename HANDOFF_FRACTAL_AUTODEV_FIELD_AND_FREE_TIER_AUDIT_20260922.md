@@ -1,100 +1,79 @@
-# Handoff — Fractal: Auto.dev Field and Free-Tier Audit
+# Handoff — Fractal: Current API and Field Inventory
 
 **Use:** Tomorrow's one Fractal code-agent request  
-**Purpose:** establish an evidence-based old-CarClever fallback decision before any downgrade, cancellation, or implementation.  
-**Mode:** read-only audit. Do not change code, deployment, subscription, credentials, prompts, UI, or app settings.
+**Purpose:** create a factual inventory of every API the current old CarClever project uses and every field it actually uses.  
+**Mode:** read-only. Do not change code, deployment, subscription, credentials, prompts, UI, or app settings.
 
 ## Send this prompt to the Fractal code agent
 
-> Perform a **read-only, code-evidence audit** of this old CarClever Fractal project for a possible Auto.dev Growth → Free downgrade. Do not implement or change anything.
+> Perform a **read-only, code-evidence inventory** of the current old CarClever Fractal project.
 >
-> The previous report says the app uses Auto.dev Listings and Photos (Free), and Specs, Recalls, APR, Payments and TCO (Growth), with graceful fallbacks. We need to verify that claim from the **actual current code and actual response shape**, not documentation or assumptions.
+> This is **not** a Free-tier, subscription, pricing, downgrade, call-budget, capability-guard, or implementation task. Do not assess plans or recommend changes. We first need one factual answer: **which APIs does the current project use, and which fields from each does it actually use?**
 >
 > ### Deliver one complete report in chat
 >
-> Start with a one-page decision summary:
+> #### 1. Every API currently used
 >
-> - **Works on Auto.dev Free unchanged**
-> - **Works but becomes an estimate/fallback**
-> - **Absent/broken unless changed**
-> - **Unknown — state exactly what evidence is missing**
+> Find every outbound API/service call that can be reached by the currently deployed project, including direct calls, helper/client wrappers, server routes, background/startup work, and fallback paths.
 >
-> Then provide the following evidence.
+> For each API, provide:
 >
-> #### 1. Exact endpoint and external-service inventory
+> | Provider / host | Method | Exact endpoint/path template | Code file and function/call-site | Triggering user tool/action | Current status |
+> |---|---|---|---|---|---|
 >
-> List every outbound data endpoint/host currently callable by the project. For each: method, exact path/template, code file + function/call-site, Auto.dev plan class (Free/Growth/not Auto.dev), which user tool/action can invoke it, caching, retry/parallel behaviour, and whether it is production-reachable or dead/unused code.
+> “Current status” must say **used in the live execution path**, **fallback path**, **startup/background path**, or **present but not called/dead code**.
 >
-> Include all Auto.dev calls and all NHTSA, Zippopotam, and other external calls. Do not omit a call just because it is a fallback.
+> Include every provider, not just Auto.dev: NHTSA, Zippopotam, and any other external data/service API. Enumerate the actual user-facing tools/actions from the code rather than relying on a previous list.
 >
-> #### 2. Field-by-field provenance matrix
+> #### 2. Every field actually used
 >
-> Cover every response/display field in these user-facing actions/tools:
+> For each API response, list every field that the current project reads, maps, calculates from, returns through a tool, or displays to the user.
 >
-> - search-used-cars
-> - get-vehicle-details
-> - analyze-deal-risk
-> - calculate-affordability
-> - vehicle comparison, garage, dealer-resolution, and any other user-facing tool present
+> Use this matrix:
 >
-> For each field, show:
+> | Provider / endpoint | Raw response field path | Code file + exact usage | Used for / user-facing label or output path | Direct, derived, fallback, or internal-only | Notes |
+> |---|---|---|---|---|---|
 >
-> | User-facing field / label | Exact code output path | Primary source endpoint + response path | Plan | Fallback source + condition | Result on Free | Code evidence |
+> Cover all fields, not only headline vehicle fields. In particular, verify whether the current code uses:
 >
-> Specifically trace, even if absent:
+> - price, mileage, year/make/model/trim, VIN, photos, dealer and location;
+> - vehicle history, accident history, owner count and title status;
+> - engine, horsepower, torque, displacement, cylinders, drivetrain, transmission, fuel, body style, colours and seating;
+> - **MPG city/highway/combined**, fuel-tank capacity, **EV range**, dimensions, curb weight and payload;
+> - safety features/ratings, warranty and recalls;
+> - APR, taxes, fees, loan amount, out-the-door price, payment and all TCO components.
 >
-> - price, mileage, year/make/model/trim, photos, dealer, vehicle history, accidents, owners/title;
-> - engine, horsepower, torque, displacement, cylinders, drivetrain, transmission, fuel/body style, colour, interior colour, seating;
-> - **MPG city, highway and combined**, fuel tank capacity, **EV range**, dimensions, curb weight and payload;
-> - safety equipment/features and crash ratings;
-> - warranty;
-> - recalls, explicitly distinguishing VIN-specific from model-level;
-> - APR, taxes, fees, loan amount, out-the-door price, monthly payment;
-> - TCO insurance, fuel, maintenance and depreciation.
+> For **MPG and EV range**, do not infer that a field exists from documentation or a TypeScript type. Show the actual response-path reference in current code and say whether it reaches a user output. If the code never reads it, state **not used**. If it is only declared in a type, state **declared but not used**.
 >
-> For MPG and EV range in particular: prove each claimed listing fallback with (a) its exact code property path and (b) a redacted fixture, recorded response, type/schema, or one controlled sample response. If no evidence exists, mark it **not proven/absent**. Do not infer availability from Auto.dev documentation.
+> #### 3. Complete source-to-output tracing
 >
-> Clearly distinguish a field that is merely read internally, declared in a type, or in dead code from one that actually reaches a tool response/UI.
+> For each user-facing tool/action currently available, provide a compact source map:
 >
-> #### 3. Capability guard and 402 behaviour
+> | Tool/action | Output field/section | Source API + response path, or local/static calculation | Code evidence |
+> |---|---|---|---|
 >
-> Audit every Growth endpoint individually:
+> Distinguish:
 >
-> - startup probe contents, timing, cache/TTL and cold-start behaviour;
-> - every caller and guard condition;
-> - what happens after 402 FEATURE_NOT_AVAILABLE;
-> - whether Specs is included in the probe/guard;
-> - whether unsuccessful 402 responses are cached, retried, or repeated for each vehicle request;
-> - user-visible wording and whether it correctly says estimate/model-level/VIN-specific.
->
-> Call out any path that would create repeat 402s or a misleading user claim on Free.
->
-> #### 4. Call-budget calculation
->
-> From code, calculate the minimum and realistic worst-case API calls for:
->
-> - one cold start;
-> - one search;
-> - one vehicle-details view;
-> - one deal-risk analysis;
-> - one affordability calculation; and
-> - the website CarClever Lite journey, if this project serves it.
->
-> Separate calls by endpoint/plan and include retries, fan-out, probes and cache misses. State how much of a shared 1,000-calls/month Free cap each action consumes. If usage logs are available, report exact 7-day and 30-day counts by app/key/status; otherwise say logs are unavailable rather than estimating from memory.
+> - API fields actually used in a live result;
+> - API fields read only for an internal calculation;
+> - locally derived/static/default fields;
+> - fallback-only fields; and
+> - fields/types/endpoints present in the repository but not reached by current execution.
 >
 > #### Evidence rules
 >
-> - Prefer static code inspection, existing fixtures, typed schemas and existing logs.
-> - If a vital field cannot be resolved that way, make **at most one** low-volume, read-only verification request per unverified endpoint, with no new credentials or billing changes; redact VINs, keys, user data and dealer identifiers. Do not run bulk tests.
-> - Quote code locations/function names and concise relevant excerpts, not just conclusions.
-> - No code/config/subscription/API key/UI/deploy changes, and no pull request.
+> - Base conclusions on the current code, not memory or provider documentation.
+> - Quote concise code locations/excerpts or give exact function and property paths.
+> - Use existing fixtures, logs or schemas where available. If a raw response shape is essential and unavailable, make at most one low-volume read-only verification request; redact keys, VINs and personal/dealer data.
+> - Do not make any code, configuration, data, subscription, UI, deployment, key, prompt, or pull-request change.
 >
-> End with:
+> End with only:
 >
-> 1. a prioritized list of the smallest required changes for a truthful Free-tier standby (separate “required” from “optional”);
-> 2. a clear recommendation: **safe to downgrade now / safe only after named fixes / not safe**, with reasons; and
-> 3. any dependency that would make Fractal cancellation break CarClever Lite or another live website journey.
+> 1. the complete API list;
+> 2. the complete field-use matrix;
+> 3. the fields that were claimed previously but are **not actually used**; and
+> 4. any uncertainty that cannot be resolved from the project.
 
 ## Decision use
 
-This audit is not approval to downgrade Auto.dev, change Fractal, or alter the website. It is the evidence gate for André's end-of-month decision.
+This inventory is factual groundwork only. Any later assessment of plans, fallbacks, or Fractal retention will be a separate request after the inventory is reviewed.
