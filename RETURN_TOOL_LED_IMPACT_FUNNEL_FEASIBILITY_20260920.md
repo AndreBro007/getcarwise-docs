@@ -1,3 +1,35 @@
+# Completion addendum — successful C1–C8 evidence (2026-09-21)
+
+This addendum supersedes the authentication and unverified-capability statements in the original return below.
+
+André completed the bounded C1–C8 run from a separate local Python client. The final evidence is in `RETURN_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md`.
+
+The Catalog layer is now **feasible with material constraints**:
+
+- exact model filtering through `Text1` works;
+- category plus maximum-price filtering works;
+- the feed-specific dealer mapping through `Manufacturer` works;
+- thin and empty results are structurally safe;
+- the traversal window is 20,000 items;
+- the observed item-endpoint allowance is 3,000 requests/hour;
+- returned URLs are structurally valid Impact/Edmunds tracking URLs;
+- there is still no proven ZIP/radius capability;
+- most importantly, `Condition` is missing from sampled items and rejected as an unknown search field.
+
+Therefore Sections 8–14 below must be interpreted with these corrections:
+
+1. remove the New/Used/Either selector from the first Catalog prototype;
+2. never display or infer New/Used/CPO from Catalog or vehicle model year;
+3. keep separate approved static New and Used CTAs aligned to the host page’s editorial intent;
+4. describe cards neutrally as a complementary set of current Edmunds listings;
+5. retain the no-ZIP/radius boundary;
+6. treat NHTSA as optional VIN specification validation only—not ownership, title or sale-condition evidence;
+7. proceed only to the private/noindex prototype specified in `HANDOFF_CLAUDE_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md`; public launch remains separately gated.
+
+The earlier blocked browser-session attempt is retained in the historical record, but it is no longer the controlling feasibility conclusion.
+
+---
+
 # Return: Tool-Led Impact Funnel Feasibility
 
 **Task:** #69  
