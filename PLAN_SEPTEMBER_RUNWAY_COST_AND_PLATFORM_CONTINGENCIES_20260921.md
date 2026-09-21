@@ -31,11 +31,11 @@ The current Tool Stack Reference was last bank-verified on 2026-08-28 and record
 |---|---:|---|---|
 | Auto.dev Growth | 469 | Do not assume another Growth renewal. | Downgrade to Free if the shared-cap readiness gate passes. |
 | Fractal | 58 | Freeze new Fractal work. | Prefer a genuine $0 plan if available and safe; otherwise retire after website handling. |
-| Claude Team | 78 | Keep while review is open. | Keep the minimum two-seat Team plan for now. |
-| Claude Pro personal backup | 31 | Candidate for immediate reduction after account/connector check. | Downgrade to Free. |
+| Claude Team | 78 | **Must keep** while connector submission/review is open. | Keep the minimum two-seat Team plan. |
+| Claude Pro personal backup | 31 | Candidate for reduction after account/connector check. | Downgrade to Free. |
 | ChatGPT Plus | 28 | Keep. | Live @CarClever distribution and operations workspace. |
 | Google Workspace | 26 | Keep. | Company email, Drive and operating records. |
-| Microsoft 365 | 10 annualised | Do not renew in October unless a real dependency is identified. | Remove at annual renewal. |
+| Microsoft 365 | 10 annualised | **Must keep** as part of the broader business. | Retain; do not count it as a saving. |
 | Porkbun / WordPress / domain / email | 8 | Keep. | Revenue, SEO/GEO and email asset. |
 | Vercel, Impact, CJ, Brevo, GA4, GSC, Bing, Clarity, Semrush | 0 | Keep. | Core free distribution, attribution and web infrastructure. |
 
@@ -44,20 +44,21 @@ The current Tool Stack Reference was last bank-verified on 2026-08-28 and record
 | Scenario | Approx. monthly run-rate | Preconditions / trade-off |
 |---|---:|---|
 | Current | 708 | Existing position; not justified by the observed lead evidence alone. |
-| Immediate non-product cuts | 677 now, then 667 after Microsoft renewal | Claude Pro → Free; Microsoft 365 does not renew. |
-| Lean waiting posture | about 198 | Auto.dev Free; Fractal either retained at $0 or exit decision remains pending. |
-| Fractal-exit survival posture | about 140 | Auto.dev Free, Fractal cancelled only after website dependencies are handled, Claude Pro Free, Microsoft 365 non-renewed. |
+| Immediate non-product cut | 677 | Claude Pro → Free only; Team and Microsoft 365 stay. |
+| Lean waiting posture | about 208 | Auto.dev Free; Fractal retained only if it is genuinely $0; Claude Pro Free. |
+| Fractal-exit survival posture | about 150 | Auto.dev Free, Fractal cancelled only after website dependencies are handled, Claude Pro Free. |
 
-The A$140 figure is a target run-rate, not an assertion that every downgrade is currently safe. It retains Claude Team, ChatGPT Plus, Google Workspace and the website/domain. Potential reduction from the current documented base: approximately A$568/month once conditional changes are safely in effect.
+The A$150 figure is a target run-rate, not an assertion that every downgrade is currently safe. It retains Claude Team, ChatGPT Plus, Google Workspace, Microsoft 365 and the website/domain. Potential reduction from the current documented base: approximately **A$558/month** once conditional changes are safely in effect.
 
 ## What must stay
 
 1. **Website/domain/email:** the owned revenue and SEO/GEO asset.
 2. **ChatGPT Plus:** @CarClever remains the only confirmed live assistant distribution channel.
-3. **Claude Team minimum:** keep through review and the immediate post-decision period. Current Anthropic pricing says Team serves 2–150 seats, so reducing only the QA seat is not available.
+3. **Claude Team minimum:** required to see and allow the connector submission; retain through review and the immediate post-decision period. Current Anthropic pricing says Team serves 2–150 seats, so reducing only the QA seat is not available.
 4. **Google Workspace:** do not disrupt company email, Drive records or operating identity during a transition.
-5. **Vercel and free analytics/affiliate services:** low-cost path to keep testing.
-6. **Auto.dev at Free, if safe:** remove Growth cost rather than shut off inventory.
+5. **Microsoft 365:** part of the broader business operation; retain independently of the CarClever decision.
+6. **Vercel and free analytics/affiliate services:** low-cost path to keep testing.
+7. **Auto.dev at Free, if safe:** remove Growth cost rather than shut off inventory.
 
 ## What can be reduced or stopped
 
@@ -65,7 +66,7 @@ The A$140 figure is a target run-rate, not an assertion that every downgrade is 
 
 Auto.dev Free provides 1,000 calls/month and includes Listings, Photos and VIN Decode. Growth-only products include Specifications, Vehicle Recalls, TCO, Vehicle Payments and Interest Rates.
 
-Find My Car uses only Free/Starter-class endpoints. Old CarClever has reported fallbacks but needs one small guard for Specs and a combined usage/cold-start check.
+Find My Car uses only Free/Starter-class endpoints. Old CarClever has reported fallbacks but needs a field/source and combined usage/cold-start audit before a decision.
 
 **Recommendation:** plan Growth → Free at the existing end-of-month review unless the shared-call evidence proves the cap would be breached immediately. If real post-approval traffic consumes the cap, that is evidence for a measured re-upgrade—not a reason to retain A$469/month without demand.
 
@@ -85,13 +86,9 @@ A public Fractal free-tier/cancellation policy could not be independently verifi
 
 The stack records Claude Pro at A$30.91/month as still active, while Team is the working production account. Current official pricing confirms Free retains web/desktop/mobile chat, memory, Projects, connectors, web search and code execution; it loses Claude Code and higher usage.
 
-**Recommendation:** after checking the personal account’s connector/project count and confirming Team has needed access, downgrade personal Pro to Free.
+**Recommendation:** after checking the personal account’s connector/project count and confirming Team has needed access, downgrade personal Pro to Free. This does not change the required Team subscription.
 
 Source checked 2026-09-21: https://claude.com/pricing.
-
-### Microsoft 365
-
-It is documented as a backup service, A$125/year due in October. Set it not to renew unless a real business dependency is identified.
 
 ## Fractal exit: website consequences and safe fallback
 
@@ -132,18 +129,20 @@ Claude must first verify, current not historical:
 
 For each of the two completed leads, capture if available: event date, programme/network, action type and value/status, tracking link/asset or sub-ID, referrer/device data, and reversal/approval status. Until this exists, treat both leads as **unattributed**, not evidence for retaining Fractal or any single channel.
 
-### B. Auto.dev Free readiness — Claude / Fractal engineering
+### B. Auto.dev Free readiness — Fractal engineering
 
 Return the exact combined 7-day and 30-day calls across Vercel Find My Car, old Fractal CarClever and any remaining Fractal app; status codes; cold starts; and a monthly projection.
 
 Also prove:
 
-- Specs and every Growth-only call are skipped on Free;
+- every Growth-only call, including Specs, is skipped on Free;
 - whether feature-unavailable responses count toward quota;
 - expected calls for a basic Find My Car search, drill-down and old Lite interaction;
 - a clear usage-cap message rather than an indistinct service error;
 - old-CarClever labels remain truthful; and
 - a small real regression bank passes.
+
+The first request is a read-only field-and-source audit, with the precise brief in `HANDOFF_FRACTAL_AUTODEV_FIELD_AND_FREE_TIER_AUDIT_20260922.md`.
 
 ### C. Fractal account — André / dashboard
 
@@ -166,7 +165,7 @@ Return the dependency inventory and a small implementation plan for either keepi
 |---|---|---|---|
 | Now | Freeze new Growth-only and Fractal feature work; record billing renewal dates. | André | No for inspection; yes for changes. |
 | Now | Obtain two-lead attribution records. | André | No. |
-| Next 2–4 days | Complete Auto.dev shared-cap readiness and Fractal-plan facts. | Claude / Fractal agent | No for investigation; yes for modifications. |
+| Next 2–4 days | Complete Auto.dev field/source, shared-cap and Fractal-plan facts. | Fractal agent / André | No for investigation; yes for modifications. |
 | Next 2–4 days | Produce current website dependency inventory and Lite fallback scope. | Claude | No for audit; yes for implementation. |
 | By 30 Sep | Select Free standby, measured Growth renewal or Fractal exit; select Lite retain/replace path. | André | Yes. |
 | After decision | Execute only selected subscriptions and authorised website/app transition; verify each. | André / Claude | Yes. |
