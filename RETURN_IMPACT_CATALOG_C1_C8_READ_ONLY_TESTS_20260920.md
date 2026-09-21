@@ -1,152 +1,713 @@
-# Return — Impact Catalog C1-C8 Read-Only API Tests
+# Return — Impact Catalog C1–C8 Read-Only API Tests
 
-**Task:** #65 - Impact Product Catalog Website Utility Audit + location test
-**Outcome: BLOCKED at D0 (authentication) — no C1-C8 test could be executed**
-**Executed by:** Claude - Engineering lane (authenticated Impact.com dashboard session; API-layer authentication could not be completed)
-**Handoff executed:** `HANDOFF_CLAUDE_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md`
-**Actual execution date/window:** 2026-09-21, approximately 04:00-04:16 UTC
-
-**No API test in the C1-C8 matrix was executed.** D0 (the mandatory discovery preflight) could not be completed because every attempt to authenticate a direct API request returned an error. This return documents the exact blocker per the handoff's own instruction: "Stop immediately and report the blocker if: authentication cannot be completed without exposing a secret."
-
----
+**Task:** #65 — Impact Product Catalog Website Utility Audit + location test  
+**Final outcome:** **COMPLETE — feasible with material constraints**  
+**Successful execution:** 2026-09-21, 08:23:37–08:23:51 UTC  
+**Evidence source:** André’s bounded local Python run using the existing read-only Impact credentials  
+**Supersedes:** the earlier same-filename return that stopped at D0 because Claude’s authenticated browser session collided with direct API authentication
 
 ## 1. Executive verdict
 
-**Blocked.** Not feasible to assess in this session. The evidence gate for Task #65 remains open. No conclusion can be drawn about catalog filterability, condition splitting, price filtering, pagination, rate limits, or tracked-URL quality, because no authenticated API call succeeded.
+The Edmunds Product Feed is technically suitable for a small, complementary inventory-continuation module. It is not suitable as a comprehensive local inventory engine, a VIN-search engine, or a reliable New/Used classifier.
 
-This is an authentication/environment finding, not a finding about the Catalog API's capabilities. The prior Sep 16-17 findings documented in `STRATEGY_IMPACT_WEBSITE_PUBLISHER_TAG_ASSETS_CATALOG_20260916.md` (approximate catalog size, VIN/MPN non-searchability, `Text1`/`Category`/`Manufacturer` field mappings, prior 20,000-result and 3,600/hour observations) remain **not independently reconfirmed** by this session.
+The successful run established:
 
----
+- one accessible Edmunds catalog with 1,352,716 reported items;
+- exact server-side model filtering through `Text1`;
+- combined category and maximum-price filtering;
+- exact dealer filtering through the feed-specific `Manufacturer` mapping;
+- safe thin and empty-result behavior;
+- a hard 20,000-item result-window boundary;
+- stable bounded request behavior and a 3,000 item-requests/hour observed header limit;
+- structurally valid partner-specific `edmunds.sjv.io` tracking URLs.
 
-## 2. Historical clarification
+The key negative finding is decisive: `Condition` is absent in the sampled records and rejected as an unknown search field. The module must not label results New, Used or CPO from this feed alone. NHTSA cannot repair that gap because VIN decoding identifies manufacturer-reported vehicle specifications, not sale condition, ownership or title history.
 
-Per the handoff's Section 2, three separate tests exist and must not be conflated:
+## 2. Historical reconciliation
 
-- **September 3 — Edmunds VIN Search Validation Experiment** (`HANDOFF_EDMUNDS_VIN_SEARCH_EXPERIMENT_20260903.md`): tested constructed CJ-wrapped Edmunds listing URLs against 24 known VINs via direct browser checks and Google-search fallback. Result: 12/24 exact listings, 10/24 unavailable-with-similar-grid, 2/24 unavailable-bare. This is an **app-side destination-resolution test**, not a Catalog API test. Its design was separately approved for engineering implementation and is unrelated to this task.
-- **September 16-17 — Impact Catalog VIN/MPN investigation** (`STRATEGY_IMPACT_WEBSITE_PUBLISHER_TAG_ASSETS_CATALOG_20260916.md`, corrected 2026-09-17): live account testing plus Impact support ticket #882346 established that VIN/MPN cannot be searched or filtered through the Catalog API, that `Text1`/`Category`/`Manufacturer` are the confirmed searchable general fields, and that a full-catalog download was recommended by Impact support as a VIN-search workaround but deliberately rejected. This prior work also recorded (not independently reconfirmed at the time) an approximate 1.2-1.334 million record catalog size, a 20,000-result pagination ceiling, and a 3,600 requests/hour rate limit.
-- **Current test — C1-C8 general catalog feasibility** (this task): intended to test broad model, condition, category, price, dealer, sparse-result, pagination/rate behavior, and returned URL quality via direct authenticated API calls. **This session did not reach the point of running any C1-C8 procedure**, because D0's authentication step failed. No VIN search was attempted or repeated. No bulk catalog download was attempted or requested.
+The earlier Claude attempt remains useful evidence about the dashboard/browser session collision and the disabled `ItemSearch` token scope. It is not evidence that the API itself was unavailable. André’s separate local Python client authenticated successfully and completed the bounded matrix without exposing credentials.
 
----
+This final return keeps three prior efforts distinct:
 
-## 3. Authenticated environment and catalog identity, sanitized
+1. the September 3 constructed-URL browser test;
+2. the September 16 VIN/MPN Catalog investigation and Impact support ticket #882346;
+3. this successful C1–C8 general inventory-feasibility run.
 
-**Impact.com dashboard access:** confirmed authenticated via the existing browser session, logged in as the "Broekman Consulting Pty..." Edmunds media-partner account. This is the same account used successfully in Task #63A for read-only Impact Assets inspection and controlled destination validation.
+No VIN lookup and no bulk catalog download were attempted.
 
-**Account SID (numeric, publicly known from every existing tracking link used across the site this week):** `7765200`.
+## 3. Decision by capability
 
-**Authorized API access token located:** an existing, enabled token named "GetCarWise Engineering - Read Access," created 2026-09-16, described in the account's own UI as: "Read-only research: tracking links + product catalog inspection for CJ-to-Impact migration planning." This token was clearly provisioned in advance for exactly this task, per the handoff's precondition to "use the existing Impact Media Partner account and credentials already stored in the approved secure environment."
-
-**Token scope inspection (read-only, via the dashboard's Scopes tab):**
-
-| Catalog endpoint | Enabled on this token? |
+| Capability | Decision |
 |---|---|
-| Retrieve catalogs (`GET /Catalogs`) | Yes |
-| Retrieve catalog (`GET /Catalogs/{CatalogId}`) | Yes |
-| Retrieve catalog files (`GET /Catalogs/{CatalogId}/Files`) | No |
-| Retrieve catalog items (`GET /Catalogs/{CatalogId}/Items`) | Yes |
-| Retrieve catalog item by ID (`GET /Catalogs/{CatalogId}/Items/{ItemId}`) | No |
-| Search catalog / `ItemSearch?Keyword=` | No |
+| Model discovery | Approved for prototype, using allowlisted exact model tokens and validation |
+| Body style + price ceiling | Approved for prototype, with taxonomy validation and no completeness claim |
+| Dealer filtering | Technically viable, but document `Manufacturer` as a feed-specific dealer mapping |
+| New/Used/CPO split | **Not supported**; do not infer or display condition |
+| ZIP/radius/nearest inventory | **Not supported**; dealer location is not a radius engine |
+| VIN Catalog search | **Not supported** and must not be retried |
+| NHTSA enrichment | Optional after a valid VIN is already present; never a condition classifier |
+| Returned tracking URL | Approved structurally for a private prototype; preserve unchanged |
+| Public production module | Not authorized by this evidence run |
 
-**Finding, independent of the authentication blocker below:** even if D0 had succeeded, the `ItemSearch?Keyword=` endpoint the handoff names in Section 4 and uses in C1's step 3 (comparing field-query results against keyword search) is **not enabled on this token**. This would have required either using only the `Items?Query=` field-expression mechanism throughout (which the handoff's own text treats as acceptable - "use `ItemSearch?Keyword=` only where the test permits it") or stopping C1's step 3 specifically and noting the scope gap. This finding is recorded for completeness; it did not independently block the session, since the authentication failure (Section 5, below) blocked everything before this scope limitation could be tested in practice.
+## 4. NHTSA boundary
 
-**Catalog identity itself was never confirmed**, since the list-catalogs call (D0 step 1) did not return a successful response. No catalog ID was retrieved or redacted, because none was obtained.
+NHTSA vPIC is manufacturer-reported VIN decoding data. Where a returned record contains a valid VIN in an approved server-side field, a later prototype may use NHTSA to validate or enrich:
 
----
+- model year, make and model;
+- body class;
+- engine/fuel/electrification clues when returned;
+- plant/manufacturer identity;
+- inputs needed for separate NHTSA recall-context calls.
 
-## 4. D0 field map and completeness
+It must not be used to claim:
 
-**Not completed.** D0 requires a successful list-catalogs call, catalog metadata fetch, and a 10-item sample pull before a field map can be built. None of these succeeded. No field-completeness counts can be reported.
+- New, Used or CPO status;
+- ownership count;
+- title, accident, odometer or service history;
+- current sale availability;
+- dealer proximity.
 
----
+VIN must remain server-side, must not be logged or sent to analytics, and NHTSA failure must not break the Catalog fallback.
 
-## 5. C1-C8 results table
+## 5. Revised prototype recommendation
 
-**Not applicable — no test was executed.** Every row of the required evidence-ledger schema (Section 7 of the handoff) would be empty for C1 through C8, since D0 itself did not pass. No table is fabricated here; this is recorded as a complete gap.
+Proceed only to a separately implemented private/noindex prototype with:
 
----
+- model or body-style plus price inputs;
+- no condition control and no condition label;
+- 3–6 neutral “Current Edmunds listings” cards;
+- unchanged returned Impact URLs;
+- an explicit complementary-feed and changing-availability disclosure;
+- separate validated static New and Used CTAs chosen by the host page’s editorial intent;
+- optional Trade-in only where replacement intent is present;
+- no ZIP/radius or “near you” claim;
+- fast static fallback, kill switch, redacted logs and no Publisher Tag.
 
-## 6. Full sanitized request ledger
+The prior `RETURN_TOOL_LED_IMPACT_FUNNEL_FEASIBILITY_20260920.md` specification must therefore be read with this correction: remove its user-selectable condition control and all assumptions that `Condition` is returned.
 
-| Test ID | UTC timestamp | Endpoint class | Sanitized query | Page/size | HTTP status | Latency ms | Notes |
-|---|---|---|---|---|---:|---:|---|
-| D0-attempt-1 | 2026-09-21T04:08:03Z (approx.) | Catalogs | `GET /Mediapartners/[REDACTED]/Catalogs` | n/a | 403 | 541 | Default `fetch()` (credentials included) from within the authenticated `app.impact.com` dashboard tab. Response body: `{"Status":"ERROR","Message":"You are already authenticated as another user([REDACTED]). Please log out."}` |
-| D0-attempt-2 | 2026-09-21T04:11:12Z (approx.) | Catalogs | `GET /Mediapartners/[REDACTED]/Catalogs` | n/a | 401 | 189 | Same call with `credentials: 'omit'`. Clean `{"status":401,"title":"Unauthorized"}` response - this attempt used an Auth Token field value that was empty/transient at read time (field-location artifact from an intervening page reload), not the true secret; recorded for completeness of the ledger, not as a valid negative test of the real credential. |
-| D0-attempt-3 | 2026-09-21T04:14:47Z (approx.) | Catalogs | `GET /Mediapartners/[REDACTED]/Catalogs` | n/a | 403 | 341 | Repeated with `credentials: 'omit'`, this time using correctly-located Account SID (34 chars) and Auth Token (32 chars, `type="password"`) fields confirmed to hold real values. Same "already authenticated as another user" error as attempt 1, confirming `credentials: 'omit'` did not resolve the conflict. |
-| D0-attempt-4 (header inspection) | 2026-09-21T04:15:30Z (approx.) | Catalogs | `GET /Mediapartners/[REDACTED]/Catalogs` (same request, inspecting response headers only) | n/a | 403 (headers not captured) | not recorded | This diagnostic call's response-header enumeration was blocked by an automatic content-safety filter on the tool output itself (flagged as containing cookie/query-string-like data), before any header value could be read or recorded. This independently confirms session/cookie-related data is present in the exchange, consistent with the "already authenticated as another user" error being caused by session-state collision between the dashboard login and the API request, not a credential-correctness problem. |
+## 6. Security and scope confirmation
 
-No AccountSID, catalog ID, VIN, MPN, or raw tracked URL is recorded above; all instances are marked `[REDACTED]`. No Auth Token value was ever printed, copied to a visible field, screenshotted while revealed, or transcribed in this document or any tool call's visible output.
+The successful run made 20 bounded GET requests. It saved no credentials, AccountSID, catalog ID, item ID, VIN/MPN, street address, dealer name or raw tracking URL. It opened no affiliate link, submitted no lead, downloaded no bulk feed, made no code or WordPress change and created no public module.
 
----
+## 7. Exact sanitized runner output
 
-## 7. Latency, pagination, and rate observations
+The following appendix is the complete sanitized Markdown emitted by the corrected runner. It is retained verbatim as the request ledger and machine-readable result evidence.
 
-**Not applicable.** No successful request was made to observe pagination metadata, count metadata, or rate-limit headers. The four attempts above returned in 189-541ms, which is a latency observation only for the authentication-failure responses themselves, not for any catalog data request; it is not reported as a meaningful latency baseline for the actual C1-C8 tests, since those never ran.
 
----
 
-## 8. Tracked-URL outcome
+# Impact Catalog C1-C8 — Sanitized Local Results
 
-**Not applicable.** C1-C4 (the tests that would have produced sample items with tracked URLs) never ran, so C8 (tracked-URL/landing validation) has nothing to validate. No controlled click was made or attempted this session.
+- Started: 2026-09-21T08:23:37+00:00
+- Finished: 2026-09-21T08:23:51+00:00
+- Requests: 20 bounded GET requests
+- Credentials, IDs, VIN/MPN, addresses and raw tracking URLs: not saved
+- Affiliate links opened: no
 
----
+## Test summaries
 
-## 9. Geography and freshness limitations
+### D0
 
-**Not applicable to report from this session's own evidence**, since no catalog item was ever retrieved. The handoff's own interpretation rules (Section 8) - "no vehicle-level ZIP/radius filter has been confirmed," "do not infer freshness from 'in stock' alone" - remain in force as standing constraints on any future language about this catalog, independent of this session's outcome.
+```json
+{
+  "verdict": "pass",
+  "catalog_name": "Edmunds Product Feed",
+  "catalog_count": 1,
+  "reported_number_of_items": "1352716",
+  "date_last_updated": "2026-09-21T14:48:18+10:00",
+  "currency": "USD",
+  "sample_size": 10,
+  "field_completeness": {
+    "item_identifier": "10/10",
+    "model_Text1": "10/10",
+    "category": "10/10",
+    "dealer_Manufacturer": "10/10",
+    "condition": "0/10",
+    "year": "10/10",
+    "make": "10/10",
+    "trim": "10/10",
+    "price": "10/10",
+    "stock": "10/10",
+    "dealer_location": "10/10",
+    "image": "10/10",
+    "tracked_url": "10/10",
+    "freshness": "0/10"
+  },
+  "duplicates": 0
+}
+```
 
----
+### C1
 
-## 10. Security/privacy confirmation
+```json
+{
+  "verdict": "pass",
+  "field_query_returned": 10,
+  "field_query_exact_crv": 10,
+  "field_query_total": 20875,
+  "keyword_search_status": "not rerun",
+  "keyword_search_returned": null,
+  "keyword_search_total": null,
+  "keyword_scope_note": "Known token scope limitation: the prior bounded run returned HTTP 403, so this corrected run does not repeat that request.",
+  "duplicates": 0
+}
+```
 
-**Confirmed.** This session:
+### C2
 
-- Never printed, pasted, or transcribed the Auth Token's actual value into chat, a screenshot, GitHub, or this document.
-- Never screenshotted the credentials page while the Auth Token field was in a revealed/plaintext-visible state - all screenshots of that page were taken either before any reveal action or after the value had reverted to masked/empty in the visible viewport.
-- Located credential field values via JavaScript DOM traversal (including shadow DOM) and used them only within the same script execution to construct a Basic Auth header held in browser memory (`window.__impactAuth`), never returned to the tool-call output as a string.
-- One diagnostic step (response-header enumeration) was automatically blocked by a content-safety filter before any value could be read, which is treated here as evidence the underlying data was sensitive, not as a failure to redact after the fact - no unredacted content from that blocked call exists anywhere in this session's output.
-- Did not attempt to log out of the Impact dashboard, open an incognito/alternate browser profile, or transfer the raw secret to a second tab or to bash, since any of those paths would have required either displaying the secret to construct the transfer or accepting an unverified risk of exposure. This is recorded as a deliberate boundary, not an oversight.
-- Made no request that could create a lead, submit a form, or provide personal information - the only requests made were `GET /Mediapartners/{AccountSID}/Catalogs` with no query parameters.
-- Requested no bulk export, downloaded no catalog data, and did not enumerate any portion of the catalog (none was ever successfully retrieved).
+```json
+{
+  "verdict": "qualified/fail",
+  "server_side": {
+    "New": {
+      "status": 400,
+      "returned": 0,
+      "total": null,
+      "condition_values": {},
+      "contradictory": 0
+    },
+    "Used": {
+      "status": 400,
+      "returned": 0,
+      "total": null,
+      "condition_values": {},
+      "contradictory": 0
+    }
+  },
+  "bounded_fallback": {
+    "status": 200,
+    "returned": 20,
+    "total": 384,
+    "condition_values": {
+      "[missing]": 20
+    }
+  }
+}
+```
 
----
+### C3
 
-## 11. Exact blockers or uncertainties
+```json
+{
+  "verdict": "pass",
+  "observed_category_value_redacted": "used exactly as returned; value omitted from report",
+  "ceilings": {
+    "30000": {
+      "status": 200,
+      "returned": 10,
+      "total": 106739,
+      "price_at_or_below_ceiling": 10,
+      "category_matches_observed_value": 10,
+      "missing_or_unparseable_price": 0
+    },
+    "25000": {
+      "status": 200,
+      "returned": 10,
+      "total": 64321,
+      "price_at_or_below_ceiling": 10,
+      "category_matches_observed_value": 10,
+      "missing_or_unparseable_price": 0
+    }
+  }
+}
+```
 
-**Primary blocker: every attempt to authenticate a direct `api.impact.com` request from within the authenticated `app.impact.com` browser session returned `403 - "You are already authenticated as another user... Please log out."`**
+### C4
 
-Root-cause analysis performed this session:
+```json
+{
+  "verdict": "pass",
+  "returned": 10,
+  "total": 301,
+  "same_dealer": 10,
+  "dealer_name_saved": false
+}
+```
 
-1. The error persisted across both default (`credentials: 'include'`, implicit) and explicit `credentials: 'omit'` fetch configurations, ruling out a simple cross-origin cookie-forwarding fix.
-2. A response-header inspection was automatically blocked by a content-safety filter for containing cookie/query-string-like data, independently confirming session-state is present in the exchange even with `credentials: 'omit'` specified - meaning some other Impact-side mechanism (possibly IP/session fingerprinting, or a deliberate security policy preventing simultaneous UI-session and API-credential use from the same browser/network context) is causing the collision, not a client-side cookie-attachment issue that could be fixed with fetch options alone.
-3. A parallel finding in `STATE.md` (an unrelated `api.vercel.com` domain-allowlist case from a prior session) established that this account's infrastructure has previously exhibited "changes require a fresh session to take effect" behavior for a different service - raised here as a possible analogous explanation, but not confirmed for Impact specifically, since no fresh, non-Impact-dashboard-authenticated session was available to test this session without transferring the raw secret (which was avoided per Section 10).
+### C5
 
-**Uncertainty:** it is not established whether this 403 would also occur for a legitimate, non-browser API client (e.g., a server-side script using only the Basic Auth header, with no Impact dashboard session in play at all). This session's method of extracting credentials - reading them out of an already-authenticated dashboard page - may itself be the root cause of the collision, rather than a property of the token or account. This could not be tested without either (a) a genuinely separate, credential-transfer-free calling context, which was not available in this session's tooling, or (b) exposing the secret to move it there, which was avoided.
+```json
+{
+  "verdict": "pass",
+  "cases": [
+    {
+      "case": "thin",
+      "status": 200,
+      "returned": 5,
+      "total": 5,
+      "related_rav4_prime": 5,
+      "structurally_valid_empty": false
+    },
+    {
+      "case": "rarer",
+      "status": 200,
+      "returned": 0,
+      "total": -1,
+      "related_rav4_prime": 0,
+      "structurally_valid_empty": true
+    }
+  ]
+}
+```
 
-**Secondary finding (independent of the primary blocker):** the "Search catalog" (`ItemSearch?Keyword=`) and "Retrieve catalog item" (single-item-by-ID) endpoints are not enabled in this token's scopes. This would have constrained C1's step-3 keyword-search comparison and any test depending on single-item retrieval by ID, regardless of the authentication outcome.
+### C6
 
----
+```json
+{
+  "page1_status": 200,
+  "page1_returned": 20,
+  "reported_total": 1352716,
+  "boundary_requests_made": true,
+  "page1000_status": 200,
+  "page1000_returned": 20,
+  "page1001_status": 400,
+  "page1001_returned": 0,
+  "beyond_boundary_error": "{\n  \"Status\": \"ERROR\",\n  \"Message\": \"Request exceeds the maximum results window of 20000. Please adjust the Page and PageSize parameters.\"\n}"
+}
+```
 
-## 12. Recommendation
+### C7
 
-**Rerun one named test: D0 authentication, from a genuinely separate calling context that does not require reading credentials out of an already-authenticated Impact dashboard browser session.**
+```json
+{
+  "request_count": 5,
+  "statuses": [
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "median_latency_ms": 376,
+  "maximum_latency_ms": 492,
+  "rate_header_names": [
+    "x-ratelimit-limit",
+    "x-ratelimit-limit-hour",
+    "x-ratelimit-remaining",
+    "x-ratelimit-remaining-hour",
+    "x-ratelimit-reset"
+  ],
+  "load_test_performed": false
+}
+```
 
-Specifically, one of the following, chosen by André/ChatGPT based on what the approved secure environment actually supports:
+### C8
 
-1. **Preferred:** if the Auth Token can be placed into a secure environment variable or secret store accessible to `bash_tool` *before* a session starts (so it is never displayed or typed during the session itself), a plain `curl` call to `api.impact.com` from bash - which this session confirmed has working network egress to that host - would avoid the browser-dashboard-session collision entirely and is the cleanest path to test whether the 403 is specific to the browser-extraction method used this session.
-2. **Alternative:** if a separate, dedicated non-interactive API client or server-side test harness already exists in the approved environment for this purpose, use that instead of the media-partner web dashboard as the credential source.
-3. Do **not** attempt to resolve this by logging out of the Impact dashboard mid-session, opening an unauthenticated/incognito context that still requires transferring the secret from the authenticated tab, or by requesting broader token scopes - none of these were attempted this session and are not recommended as a first response to this specific blocker.
+```json
+{
+  "verdict": "qualified structural pass",
+  "scheme": "https",
+  "hostname": "edmunds.sjv.io",
+  "expected_host_family": true,
+  "has_query_string": true,
+  "raw_url_saved": false,
+  "url_opened": false,
+  "landing_behavior": "not tested; controlled click deliberately left blocked for separate authorization"
+}
+```
 
-Once D0 succeeds under a corrected calling context, C1-C8 can proceed using the same procedures and stop conditions documented in the original handoff; nothing about this session's failed attempts should be treated as evidence about the Catalog API's actual filtering, condition, price, pagination, or URL-quality behavior, since no data request ever succeeded.
+## Sanitized request ledger
 
----
-
-## 13. Explicit confirmation: no changes occurred
-
-**Confirmed.** This session performed exclusively:
-
-- Read-only navigation of the Impact.com media-partner dashboard (Settings -> API -> Access Tokens -> token detail view), viewing the existing "GetCarWise Engineering - Read Access" token's Overview, Credentials, and Scopes tabs.
-- Four `GET` HTTP requests to `https://api.impact.com/Mediapartners/{AccountSID}/Catalogs`, all of which failed with 401/403 authentication errors. No request body was sent (no `POST`, `PUT`, `PATCH`, or `DELETE` of any kind was attempted).
-- One JavaScript DOM-traversal script to locate credential input fields (read-only; no field value was ever changed).
-- One attempted click on a UI "reveal" control, which did not register due to stale coordinates from an intervening navigation; no screenshot was taken while any reveal state might have been active.
-
-**No code, WordPress, deployment, Publisher Tag, public module, bulk download, lead submission, or production change occurred.** No catalog data was ever retrieved, so none was published, stored, or used anywhere. No Impact token scope was modified - the token's Overview, Credentials, and Scopes were viewed but never edited or saved. No app, MCP connector, repository code, Vercel project, or domain was touched. This return document and its evidence are being written to `getcarwise-docs` for ChatGPT and Andre's review. Task #65's evidence gate remains open, pending a corrected authentication approach for D0.
+```json
+[
+  {
+    "test_id": "D0-catalogs",
+    "utc_timestamp": "2026-09-21T08:23:37+00:00",
+    "endpoint_class": "Catalog list",
+    "sanitized_query": "none",
+    "page": null,
+    "page_size": null,
+    "http_status": 200,
+    "latency_ms": 1505,
+    "returned_count": 0,
+    "total_count": 1,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "1000",
+      "x-ratelimit-remaining-hour": "997",
+      "x-ratelimit-limit": "1000",
+      "x-ratelimit-remaining": "997",
+      "x-ratelimit-reset": "2181"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "D0-metadata",
+    "utc_timestamp": "2026-09-21T08:23:38+00:00",
+    "endpoint_class": "Catalog metadata",
+    "sanitized_query": "none",
+    "page": null,
+    "page_size": null,
+    "http_status": 200,
+    "latency_ms": 582,
+    "returned_count": 0,
+    "total_count": null,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "1000",
+      "x-ratelimit-remaining-hour": "997",
+      "x-ratelimit-limit": "1000",
+      "x-ratelimit-remaining": "997",
+      "x-ratelimit-reset": "2180"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "D0-sample",
+    "utc_timestamp": "2026-09-21T08:23:39+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "least restrictive safe read",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 545,
+    "returned_count": 10,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2981",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2981",
+      "x-ratelimit-reset": "2180"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C1-field",
+    "utc_timestamp": "2026-09-21T08:23:39+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Text1 = 'CR-V'",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 448,
+    "returned_count": 10,
+    "total_count": 20875,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2981",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2981",
+      "x-ratelimit-reset": "2179"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C2-new",
+    "utc_timestamp": "2026-09-21T08:23:40+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Text1 = 'Outlander PHEV' AND Condition = 'New'",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 400,
+    "latency_ms": 310,
+    "returned_count": 0,
+    "total_count": null,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2981",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2981",
+      "x-ratelimit-reset": "2179"
+    },
+    "error": "{\n  \"Status\": \"ERROR\",\n  \"Message\": \"Unknown search field name: Condition\"\n}"
+  },
+  {
+    "test_id": "C2-used",
+    "utc_timestamp": "2026-09-21T08:23:40+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Text1 = 'Outlander PHEV' AND Condition = 'Used'",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 400,
+    "latency_ms": 298,
+    "returned_count": 0,
+    "total_count": null,
+    "rate_headers": {
+      "x-ratelimit-remaining-hour": "2981",
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2981",
+      "x-ratelimit-reset": "2178"
+    },
+    "error": "{\n  \"Status\": \"ERROR\",\n  \"Message\": \"Unknown search field name: Condition\"\n}"
+  },
+  {
+    "test_id": "C2-bounded-fallback",
+    "utc_timestamp": "2026-09-21T08:23:40+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Text1 = 'Outlander PHEV' (bounded fallback)",
+    "page": 1,
+    "page_size": 20,
+    "http_status": 200,
+    "latency_ms": 495,
+    "returned_count": 20,
+    "total_count": 384,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2979",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2979",
+      "x-ratelimit-reset": "2178"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C3-30000",
+    "utc_timestamp": "2026-09-21T08:23:41+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Category = [observed CR-V category] AND CurrentPrice <= 30000",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 564,
+    "returned_count": 10,
+    "total_count": 106739,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2978",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2978",
+      "x-ratelimit-reset": "2177"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C3-25000",
+    "utc_timestamp": "2026-09-21T08:23:41+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Category = [observed CR-V category] AND CurrentPrice <= 25000",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 2213,
+    "returned_count": 10,
+    "total_count": 64321,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2975",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2975",
+      "x-ratelimit-reset": "2177"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C4-dealer",
+    "utc_timestamp": "2026-09-21T08:23:44+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "Manufacturer = [REDACTED_DEALER_NAME]",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 1903,
+    "returned_count": 10,
+    "total_count": 301,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2974",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2974",
+      "x-ratelimit-reset": "2175"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C5-thin",
+    "utc_timestamp": "2026-09-21T08:23:46+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "RAV4 Prime AND CurrentPrice <= 25000",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 525,
+    "returned_count": 5,
+    "total_count": 5,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2973",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2973",
+      "x-ratelimit-reset": "2173"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C5-rarer",
+    "utc_timestamp": "2026-09-21T08:23:46+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "RAV4 Prime AND CurrentPrice <= 15000",
+    "page": 1,
+    "page_size": 10,
+    "http_status": 200,
+    "latency_ms": 440,
+    "returned_count": 0,
+    "total_count": -1,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2973",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2973",
+      "x-ratelimit-reset": "2172"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C6-broad-page1",
+    "utc_timestamp": "2026-09-21T08:23:47+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0",
+    "page": 1,
+    "page_size": 20,
+    "http_status": 200,
+    "latency_ms": 924,
+    "returned_count": 20,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2972",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2972",
+      "x-ratelimit-reset": "2172"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C6-page1000",
+    "utc_timestamp": "2026-09-21T08:23:47+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; last 20-item page starting below 20,000",
+    "page": 1000,
+    "page_size": 20,
+    "http_status": 200,
+    "latency_ms": 1021,
+    "returned_count": 20,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2972",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2972",
+      "x-ratelimit-reset": "2171"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C6-page1001",
+    "utc_timestamp": "2026-09-21T08:23:48+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; first 20-item page starting at 20,000",
+    "page": 1001,
+    "page_size": 20,
+    "http_status": 400,
+    "latency_ms": 389,
+    "returned_count": 0,
+    "total_count": null,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2970",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2970",
+      "x-ratelimit-reset": "2170"
+    },
+    "error": "{\n  \"Status\": \"ERROR\",\n  \"Message\": \"Request exceeds the maximum results window of 20000. Please adjust the Page and PageSize parameters.\"\n}"
+  },
+  {
+    "test_id": "C7-1",
+    "utc_timestamp": "2026-09-21T08:23:49+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; lightweight serial check",
+    "page": 1,
+    "page_size": 1,
+    "http_status": 200,
+    "latency_ms": 365,
+    "returned_count": 1,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2970",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2970",
+      "x-ratelimit-reset": "2169"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C7-2",
+    "utc_timestamp": "2026-09-21T08:23:49+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; lightweight serial check",
+    "page": 1,
+    "page_size": 1,
+    "http_status": 200,
+    "latency_ms": 402,
+    "returned_count": 1,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-remaining-hour": "2970",
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2970",
+      "x-ratelimit-reset": "2169"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C7-3",
+    "utc_timestamp": "2026-09-21T08:23:50+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; lightweight serial check",
+    "page": 1,
+    "page_size": 1,
+    "http_status": 200,
+    "latency_ms": 492,
+    "returned_count": 1,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2969",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2969",
+      "x-ratelimit-reset": "2169"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C7-4",
+    "utc_timestamp": "2026-09-21T08:23:50+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; lightweight serial check",
+    "page": 1,
+    "page_size": 1,
+    "http_status": 200,
+    "latency_ms": 376,
+    "returned_count": 1,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-remaining-hour": "2967",
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2967",
+      "x-ratelimit-reset": "2168"
+    },
+    "error": ""
+  },
+  {
+    "test_id": "C7-5",
+    "utc_timestamp": "2026-09-21T08:23:50+00:00",
+    "endpoint_class": "Catalog items",
+    "sanitized_query": "CurrentPrice > 0; lightweight serial check",
+    "page": 1,
+    "page_size": 1,
+    "http_status": 200,
+    "latency_ms": 346,
+    "returned_count": 1,
+    "total_count": 1352716,
+    "rate_headers": {
+      "x-ratelimit-limit-hour": "3000",
+      "x-ratelimit-remaining-hour": "2965",
+      "x-ratelimit-limit": "3000",
+      "x-ratelimit-remaining": "2965",
+      "x-ratelimit-reset": "2168"
+    },
+    "error": ""
+  }
+]
+```
