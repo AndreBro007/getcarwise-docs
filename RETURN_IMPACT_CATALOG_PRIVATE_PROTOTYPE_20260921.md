@@ -3,7 +3,7 @@
 **Date:** Sep 21, 2026 (original build), continued same-day for a corrective closeout pass
 **Owner:** Claude (Engineering lane)
 **Authorized by:** André, per the scope in `HANDOFF_CLAUDE_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md`
-**Status:** 🟡 **PARTIALLY COMPLETE — engineering corrections done and verified (62/62 tests, clean build, confirmed client/server isolation); live browser verification and screenshots blocked by tooling; a Vercel project-level setting (`ssoProtection`) was disabled mid-session with André's approval and not yet restored. See Section 14 for the explicit recommendation: REVISE, not stop or promote.**
+**Status:** ✅ **CORRECTIVE CLOSEOUT COMPLETE — 62/62 tests, clean typecheck/lint/build, confirmed client/server isolation, and the authenticated live path verified manually by André. Vercel project-level `ssoProtection` was restored to its original setting after verification. The prototype remains preview-only, unmerged and not authorized for production.**
 
 ---
 
@@ -54,7 +54,7 @@ Per the handoff: "unlinked" alone is not "private." What's actually in place:
 - **`X-Robots-Tag: noindex, nofollow`** set on every response from this route, including 401/503s, plus page-level `robots` metadata (`index: false, follow: false, nocache: true`).
 - **Not linked from any navigation, sitemap, or public content.**
 - Credentials: username `andre`, a 24-character randomly generated password, stored **only** as a Vercel Preview-scoped environment variable (`IMPACT_PROTOTYPE_AUTH_PASS`). Never printed to this chat transcript, never committed to the repo. Retrieve it directly from Vercel → `getcarwise-app` project → Settings → Environment Variables.
-- **Note (Section 11): Vercel's own project-level `ssoProtection` was additionally in front of all of this, and is currently disabled** — see Section 11 for full detail and the required follow-up decision.
+- **Vercel project-level `ssoProtection` was temporarily disabled during diagnosis and then restored to its original `all_except_custom_domains` setting after André completed the live test** — see Sections 11 and 15.
 
 ## 5. Live verification performed in the original build session
 
@@ -68,9 +68,9 @@ Per the handoff: "unlinked" alone is not "private." What's actually in place:
 
 **Build/deploy verification, server-side:** Vercel's own deployment event log confirmed a clean build with zero real errors in the original session.
 
-## 6. Gap noted in the original build — since re-examined in the closeout pass (Section 9.4/11)
+## 6. Original live-verification gap — CLOSED
 
-The original build session could not complete a full browser click-through of the HTTP Basic Auth prompt. The closeout pass attempted to resolve this and found a second, compounding factor (Vercel's `ssoProtection`) — see Sections 9.4 and 11 for the full, current status of this gap, which remains open.
+The original build session could not complete the native HTTP Basic Auth interaction through browser automation. André later completed the test directly: authenticated successfully, ran a real CR-V search and confirmed six rendered cards with real prices, dealers and unchanged Edmunds tracking URLs. No outbound link was clicked. Vercel `ssoProtection` was restored afterward. See Section 15.
 
 ## 7. What's explicitly NOT done (by design, matching the handoff's scope) — still true after the closeout pass
 
@@ -115,7 +115,7 @@ Ran the minimum bounded read required to answer this: **one** live Catalog item 
 
 **Conclusion, per the handoff's explicit instruction for this exact outcome: NHTSA stays disabled and uninvoked.** `lib/impact-nhtsa-enrichment.ts` remains a complete, tested, ready-to-wire adapter that is never called from any live code path — kept in the repo for a future Catalog or feed version that might expose a usable VIN, with this finding now documented directly in the module's own header comment.
 
-### 9.4 — Acceptance evidence — test suite substantially expanded, live evidence partially blocked
+### 9.4 — Acceptance evidence — test suite expanded; interim live gap later closed
 
 Added:
 - 4 kill-switch tests in `tests/impact-catalog.test.ts` (disabled state, enabled-by-default, explicit "true", disabled-wins-over-missing-credentials ordering)
@@ -124,7 +124,7 @@ Added:
 
 **Current total: 62/62 tests pass** (up from 35), clean `tsc --noEmit`, clean `eslint` (0 errors, 0 warnings), clean `next build` — all re-verified after every change, not assumed.
 
-**Not completed — a real, unresolved live-verification gap:** desktop/mobile screenshots of the authenticated prototype, and a full browser click-through of the live 200/healthy-card path, were not obtained. Two blockers compounded:
+**Interim state during Claude's automated pass:** desktop/mobile screenshots and a full automated browser click-through of the live 200/healthy-card path were not obtained. Two blockers compounded:
 1. Chrome's native HTTP Basic Auth dialog sits outside what the browser automation tooling can screenshot or type into without the password appearing in a visible tool call — the same redaction-discipline conflict noted in Section 6 of this document.
 2. **The `getcarwise-app` Vercel project had `ssoProtection: { deploymentType: "all_except_custom_domains" }` enabled**, which very likely intercepted every preview request before my own middleware even ran, producing an unauthenticated **503** on every attempt regardless of credentials — the middleware's own "not configured" 503 and Vercel's own SSO-wall 503 are not distinguishable from the status code alone, and I could not inspect the actual response body before the browser automation tool itself became unresponsive partway through this session. **André approved disabling this setting** to unblock further diagnosis; **it is currently OFF as of this document's writing** and needs a decision on whether to restore it (see Section 11).
 
@@ -161,18 +161,21 @@ Given this, item 4's UI/logic-level tests are complete and passing, but the spec
 | 5 | Original | `Text1 = 'CR-V' AND CurrentPrice <= 30000` (re-run) | Precision correction on the `Condition` field finding |
 | 6 | Closeout | `Text1 = 'CR-V'` (`PageSize=1`) | VIN field-presence probe (Section 9.3) |
 | 7 | Closeout | `Text1 = 'CR-V'` (`PageSize=1`, re-run for field-name verification) | Confirmed field list and VIN-shape substring check |
+| 8 | Final manual verification | CR-V, no price filter | André confirmed the authenticated end-to-end path and six rendered cards; no outbound click |
 
 (Two calls in the original session shared the same query; both counted since each was a separate live HTTP request.)
 
 **No latency instrumentation was added to the adapter itself** — this was not requested in either the original handoff or the closeout instructions, and adding timing/observability code was outside the explicitly authorized scope. Rough, unscientific observation from manual testing: individual Impact API calls returned in well under 1 second each; Vercel preview builds took 30–47 seconds end-to-end (queue + build), consistent across all 5 deployments triggered this session.
 
-## 11. Vercel SSO protection — currently disabled, needs a decision
+## 11. Vercel SSO protection — RESTORED
 
-**Current state, as of this document: `ssoProtection` is OFF** on the `getcarwise-app` project (André approved disabling it mid-session to unblock diagnosis of an unexplained 503). This setting, when on, gates **every** preview deployment on this project behind Vercel's own account-level SSO wall — not specific to this prototype.
+During diagnosis, André approved temporarily disabling the `getcarwise-app` project-level `ssoProtection` setting. After André manually verified the authenticated prototype end to end, Claude restored the setting to its original value:
 
-This was turned off to test a hypothesis (that Vercel's SSO wall, not my own middleware, was the source of a 503 seen when testing the live authenticated path) — **that hypothesis was never actually confirmed**, because the browser automation tool became unresponsive before the test could be completed with SSO off.
+```json
+{"deploymentType":"all_except_custom_domains"}
+```
 
-**Recommendation: before restoring `ssoProtection`, complete the blocked verification first** (Section 9.4) — turning it back on before confirming whether it was the real cause would recreate the exact same blocker for the next session. Once verified either way, decide whether the project-wide SSO wall should be restored (likely yes, since my own middleware's Basic Auth is what's actually meant to gate this specific route regardless).
+The restored value was confirmed through the Vercel API. No Vercel protection setting remains outstanding.
 
 ## 12. Branch / main divergence status (re-confirmed at start of the closeout pass)
 
@@ -190,12 +193,16 @@ If this prototype needs to be fully removed or the branch abandoned:
 
 ## 14. Explicit recommendation
 
-**Recommendation: REVISE, not stop or seek production authorization.**
+**Recommendation: CLOSE Task #71 as a successful private engineering prototype. Stop before production.**
 
-The core engineering work is sound and thoroughly verified: 62/62 tests, clean build, confirmed client/server isolation via two independent methods, a conclusive and correctly-handled NHTSA/VIN finding, and real live Impact API calls confirming the query logic against production data. This is not a design that needs to be abandoned.
+The engineering and live-verification gates are complete: 62/62 tests, clean typecheck/lint/build, confirmed client/server isolation, API-level kill switch, condition-neutral rendering, authenticated real-data test by André, and restored Vercel SSO protection. The branch remains unmerged and the deployment remains preview-only.
 
-What's needed before this can be called fully closed out:
-1. Complete the blocked live browser verification (authenticated 200 path, screenshots) — needs working browser automation tooling, or André's own manual click-through per Section 6's instructions.
-2. Resolve whether `ssoProtection` was the real cause of the observed 503, and restore it if appropriate once that's settled.
+Any public or WordPress use requires a separate production-pilot decision, current-main reconciliation, fresh security and measurement review, and explicit authorization. Do not treat this closeout as permission to merge, promote, publish or alter an active SEO/GEO treatment.
 
-Neither of these reflects a problem with the underlying engineering — they reflect two tooling/infrastructure obstacles encountered near the end of this session. **No production-pilot authorization request is being made** — that remains a separate, later decision per the original handoff's scope, unaffected by this closeout pass.
+## 15. Final manual verification and closure
+
+André opened the Basic Auth-protected preview directly, authenticated with the Preview-scoped credentials and ran a real CR-V search. The module returned six cards spanning 2014, 2026 and 2027 model years, with real prices, dealer names and Edmunds tracking URLs. No condition label was displayed, correctly demonstrating the condition-neutral contract against a genuine mixed result set. No tracking URL was clicked and no lead was submitted.
+
+This manual search is the eighth bounded live Impact read across the build and closeout work. It closed the authenticated 200/rendering gap. No sanitized screenshots were retained; the live visual result was directly confirmed by André and recorded in `DECISIONS.md` as `SYS-20260921-008`.
+
+After the test, Vercel `ssoProtection` was restored to `all_except_custom_domains` and verified. Nothing remains pending within Task #71's private-prototype scope.
