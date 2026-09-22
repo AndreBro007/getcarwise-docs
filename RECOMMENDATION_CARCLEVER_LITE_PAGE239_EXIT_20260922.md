@@ -1,7 +1,7 @@
 # Task #72 — CarClever Lite parallel V2 app recommendation
 
 **Date:** 2026-09-22
-**Status:** Corrected recommendation after André's clarification; strategy/design only.
+**Status:** Corrected recommendation after André's clarification; read-only architecture audit complete; implementation not approved.
 **Decision requested:** Approve the parallel-app direction before any engineering implementation task is issued.
 
 > This document supersedes the earlier static Decision Center replacement recommendation. That recommendation confused the separate page-1160 funnel pilot with the CarClever Lite web app on page 239.
@@ -93,7 +93,9 @@ Do not forecast lead or revenue lift without baseline and attribution. The curre
 - Decision Center page 1160 and active $25k/$40k SEO measurement treatments remain separate and unchanged.
 - The Impact Catalog remains private and unpublished.
 
-## Next action
+## Architecture audit result and next action
 
-Perform Gate 1 as a read-only architecture check. Then return the concrete V2 architecture, feature contract, effort/risk, deployment isolation, and rollback plan for André's decision. Do not give Claude an implementation task until André approves that proposal.
+The read-only Gate 1 audit is complete. The Find My Car repository contains an MCP server with an in-host result-card resource, not a standalone browser chat website. The recommended minimal V2 is a separate page route and API route in `carclever-widget`, with a V2-specific prompt/parser/card adapter calling the independently verified production MCP endpoint server-side. The old page and API routes remain untouched. Full findings, security boundaries, endpoint/review caveats, dependencies and implementation QA gates are recorded in [the architecture audit return](RETURN_CARCLEVER_LITE_V2_ARCHITECTURE_AUDIT_20260922.md).
+
+Before Claude receives an implementation assignment, André should approve this concrete implementation scope and interpretation of “new CarClever frontend.” No code, deployment or page-239 embed change is authorized yet.
 
