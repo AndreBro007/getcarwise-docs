@@ -97,4 +97,11 @@ Use the `carclever-widget` repo and current `carclever-widget` Vercel project, w
 ## Recommendation status
 
 Architecture Gate 1 is complete at the repository-evidence level. The smallest viable design is a separate V2 page/API route and V2-specific results adapter in `carclever-widget`, previewed independently. Before Claude receives an implementation assignment, André should approve that concrete implementation scope and the interpretation that V2 is a new Lite frontend over the Find My Car MCP backend (not a standalone website UI already present in the Find My Car repo).
+## Live endpoint and tool verification — 2026-09-22
+
+- Read-only GET to `https://carclever-anth.getcarwise.app/mcp` returned Vercel HTTP 405 `Method Not Allowed`, with `x-matched-path: /[transport]` and `x-vercel-cache: MISS`. This is the expected response for GET against the Streamable HTTP MCP endpoint and confirms the endpoint reaches the MCP route; it does not identify the served code SHA/version.
+- The connected production CarClever tool integration completed a live inventory search using `find_matching_vehicle` and returned structured results matching the repository output contract, including `meta`, `condition`, `history`, `verification`, `ranking`, `links` and `constraintChecks`.
+- `resolve_dealer_url` completed a live resolution for a result and returned an exact Edmunds affiliate URL plus fallback/link status.
+- Both live tool calls were read-only; no forms, conversions or configuration were changed. They used one inventory search request and one link-resolution request.
+- The connected tool integration does not expose MCP `serverInfo.version` in its result, and this environment does not provide a raw MCP POST client. Therefore an independent `initialize` version comparison remains outstanding and is a mandatory stop/go check for Claude before coding. Do not treat HTTP 405 alone as version verification.
 
