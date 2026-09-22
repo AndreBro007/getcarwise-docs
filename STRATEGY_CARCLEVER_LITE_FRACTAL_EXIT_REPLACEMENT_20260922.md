@@ -1,196 +1,159 @@
-# Strategy — CarClever Lite Fractal Exit Replacement
+# Strategy — Separate CarClever Decision-Center Test Page
 
 **Date:** 2026-09-22  
 **Task:** #72  
-**Status:** **PROPOSED — pending André’s approval; no engineering task authorized**  
-**Scope:** Page 239 / CarClever Lite product and funnel design. No code, WordPress, Vercel, DNS, Fractal, connector, subscription or production changes are authorized.
+**Status:** **PROPOSED TEST PLAN — André has directed that page 239 remain as-is and a separate page be prepared for testing. Claude prompt is pending André’s approval.**  
+**Scope:** Research, design and a reviewable WordPress draft for a separate test page. No public publication, page-239 change, app change, Fractal change or subscription action is authorized.
 
-## Recommendation
+## Confirmed direction
 
-Replace the Fractal-dependent chat experience embedded at WordPress page 239 with a **conversion-focused CarClever Decision Center** in the existing Lite embed. Keep the page URL and embed contract stable. The first release should help visitors choose the next useful task and route them into existing GetCarWise tools or an approved, attributable Edmunds action.
+Leave the existing CarClever Lite page 239, iframe/embed URL, Fractal endpoint, prompt, and current visitor journey unchanged. Test the proposed CarClever Decision Center concept on a separate new WordPress page.
 
-Do not rebuild Lite as a two-tool chatbot in the first release. That would preserve an open-ended prompt but still depend on a model/API layer, and its vehicle-search capability substantially overlaps Find My Car. It would remove the Fractal MCP dependency only after a deliberate rewrite; a URL swap would break unsupported risk, affordability, comparison and detail flows. Build conversational search later only if measured page use justifies its ongoing cost and maintenance.
+This isolates the concept from the live Lite experience and preserves a rollback-free control. The experiment should connect visitors to existing GetCarWise tools and to distinct, verified New, Used and Trade-in actions. It should not rebuild those tools or add a new chatbot.
 
-The first release should not call the Impact Catalog. Its verified data is condition-neutral, has no supported ZIP/radius behavior and is still a private, preview-only prototype. It cannot support a trustworthy local New/Used selector. Retain it as a separately gated future inventory-continuation module.
+The first deliverable should be a WordPress draft, not a published/indexable page. Claude must first check current Search/GEO evidence, page overlap, approved CTA destinations, traffic acquisition and measurement. The draft can be reviewed visually and editorially. André must separately approve publication, indexing and traffic promotion.
 
-**Decision status:** recommendation only, pending André’s approval. Do not give Claude an implementation task until André approves the product direction.
+## Governing SEO/GEO and page strategy
 
-## Why this is the strongest first move
+The test page must follow the same evidence-led approach used on the recent $25k, $30k, PHEV, $40k and three-row SUV work:
 
-The current Lite route calls Fractal and assumes six Fractal tools. Current production Find My Car exposes only find_matching_vehicle and resolve_dealer_url; changing the endpoint alone would break separate risk, affordability, comparison and detail flows.
+- establish one distinct user job and search/AI question before selecting a title or URL;
+- deliver a clear answer first, then useful decision support;
+- use original, structured content rather than a thin list of tool buttons;
+- explain sources, methodology, data limits, and update date;
+- use direct, descriptive headings, a comparison or decision structure where it adds real value, concise FAQs and source links;
+- make recommendations conditional on stated user priorities rather than unsupported universal rankings;
+- build a Page Funnel Contract: primary/secondary lead family, action timing, link mechanism, fallback, attribution and success metric;
+- avoid keyword cannibalization, duplicate content, unsupported facts, fabricated market statistics, or high-volume programmatic variants;
+- keep Search, GEO and commercial outcomes distinct in reporting.
 
-The website already has standalone Deal Score, Price Check and VIN Check experiences that call Auto.dev directly. Recreating them inside Lite would duplicate behavior and maintenance. A decision page can instead connect each visitor’s job to the appropriate existing tool and make the revenue action explicit.
+An indexable page is justified only if the audit finds a distinct search/GEO intent and the draft offers meaningful original utility. If it is mainly a navigation/router page, keep it as a private or noindex experiment and state plainly that it cannot measure organic discovery while noindex. Do not change the Tools hub or an existing treated page just to drive test traffic.
 
-The wider strategy is a useful decision layer followed by a relevant action: Discover → answer/utility → confidence → New, Used or Trade-in action → Edmunds lead. A focused router is more consistent with that funnel than a general chat surface whose feature coverage and lead attribution are unclear.
+## Why page 239 stays unchanged
 
-## Option assessment
+Page 239 is the only website-embedded app identified as directly dependent on Fractal. Its prompt assumes Fractal tools for used-car search, risk, affordability, comparison, vehicle details and dealer URLs. Current production Find My Car exposes only find_matching_vehicle and resolve_dealer_url; a direct MCP URL replacement is not equivalent and would break functions.
 
-| Option | Customer value and differentiation | Functionality and monetization | Cost, risk and durability | Assessment |
-|---|---|---|---|---|
-| **A. Reduced two-tool Lite** | Flexible vehicle discovery remains; useful for open-ended needs. Similar search exists in Find My Car and large marketplaces. | Retains search and dealer resolution. Risk, affordability, comparison and detail flows are lost unless linked elsewhere. New/Used actions possible; Trade-in needs a distinct path. | Requires an actual prompt/flow rewrite, retains model/API cost and orchestration, and overlaps the primary product. | Not first release; reconsider if measured page use shows demand for conversational search. |
-| **B. Broader first-party assistant** | A complete owned decision journey could be useful if every function is reliable and distinct. | Could combine search, risk, price, VIN, affordability and Impact actions, but overlaps four existing tools. | Highest build/maintenance effort; duplicates integrations and may increase Auto.dev calls. LLM and model dependency remain. | Reject for first release. Link to existing tools instead. |
-| **C. Conversion-focused page** | Makes the next step clear and connects independent decision tools. | Routes to Find My Car, Deal Score, Price Check and VIN Check; offers separate New, Used and contextual Trade-in actions once verified. | Lowest new runtime complexity; no Fractal MCP, LLM or Catalog dependency. Main risk is link, consent and measurement readiness. | **Recommended first release.** |
-| **D. Hybrid** | Conversion page first, with a conversational search module only if validated. | Clear routing now; optional search later. | A gated roadmap avoids duplicating chat capability before evidence. | Recommended roadmap: C now, measured search as optional later phase. |
+The website already has Deal Score, Price Check and VIN Check on separate pages. A separate page lets us evaluate navigation, decision content and funnel clarity without changing Lite or duplicating tool logic. It also allows a separate launch date and measurement record if André later approves publication.
 
-## Recommended page and user journey
+This test does not itself remove the site's Fractal dependency and does not make Fractal cancellable.
 
-Keep the WordPress page 239 URL and current embedded widget URL stable. Replace the embedded chat experience with a simple decision center: “What are you trying to do?”
+## Page concept to investigate
 
-1. **Find a vehicle** → existing website Find My Car destination, if verified.
-2. **Evaluate a vehicle I found** → Deal Score, with separate Price Check and VIN Check paths.
-3. **Check a VIN** → VIN Check, with source and scope limits.
-4. **Check whether the price is fair** → Price Check.
-5. **Sell or trade my current vehicle** → a distinct Trade-in action.
-6. **Not sure?** → short guidance and a route to the right tool, not free-form chat in release one.
+Working concept only: a useful “what should I do next before I buy or replace a car?” decision guide that helps a visitor select among vehicle discovery, vehicle evaluation, price review, VIN review and selling/trading a current vehicle.
 
-Show which tool answers which question. Distinguish independent advice/tools from Edmunds inventory or lead destinations. Never imply that Edmunds Catalog cards represent all U.S. inventory or local inventory.
+Do not assume that phrase is the final title, keyword or URL. Claude must inspect current GSC/Search Console and GEO evidence, live pages and internal links, then identify the most supportable distinct user job. If no defensible gap exists, recommend the best non-indexed usability-test page rather than creating an SEO doorway page.
 
-### New, Used and Trade-in placement
+## Page Funnel Contract
 
-- **Used:** primary commercial action after a used-car selection/evaluation task.
-- **New:** separate action only when the visitor selects New or the relevant page has New intent. Do not infer New/Used from Catalog records.
-- **Trade-in:** primary for sell/valuation/replacement intent; secondary after a buying journey only when the visitor has a vehicle to replace.
-- Leave existing CTA links untouched until each destination, approval and attribution parameter is audited. Do not substitute CJ links blindly or invent Impact URLs.
+Before drafting, record:
 
-## First-release feature contract
-
-### In scope
-
-- Stable page-239 and embed URLs, after a pre-change inventory and rollback copy.
-- Clear routes into existing Find My Car, Deal Score, Price Check and VIN Check experiences.
-- A distinct sell/trade-in route shown in the right context.
-- Concise, evidence-based tool descriptions and material data limits.
-- Exact approved existing links only, with distinct event/placement identifiers where supported.
-- Navigation still works when JavaScript or affiliate tracking is unavailable.
-- Consent-compliant measurement for page view, path selection, tool outbound click, lead-family CTA click and confirmed Impact action/revenue where available. Do not send VINs or personal financial inputs to analytics.
-- No changes to the $25k and $40k SEO treatment pages.
-
-### Out of scope
-
-- Fractal MCP calls or a replacement MCP URL swap.
-- New free-form chat or a new risk/price/affordability engine.
-- Rebuilding Deal Score, Price Check or VIN Check inside Lite.
-- Impact Catalog query/display.
-- New VIN intake, accounts, saved garages, lead capture or personal-data collection.
-- Publisher Tag, identifyUser or Trackonomics Essentials dependency.
-- Any change to the old Fractal-hosted @CarClever app, its links, app submission or subscription.
-
-## Legacy function disposition
-
-| Legacy Lite function | First-release disposition |
+| Contract field | Decision needed |
 |---|---|
-| Search used cars | Route to the current website Find My Car destination if verified. Otherwise leave for a later phase; do not use an MCP URL swap. |
-| Deal-risk analysis | Relocate to existing Deal Score. Do not claim equivalent Lite analysis. |
-| VIN / vehicle details | Relocate to VIN Check with source and scope limits. |
-| Price evaluation | Relocate to Price Check. |
-| Affordability | Retire from Lite release one unless an existing tool offers a clearly labeled, supportable estimate. Never label estimates as lender quotes. |
-| Comparison | Retire as a separate Lite function in release one; use Find My Car for discovery. |
-| Free-form automotive Q&A | Retire from Lite release one; retain relevant editorial content on the site. |
-| Edmunds actions | Retain only after a current inventory confirms destination, lead family, tracking validity and attribution. |
+| User job and trigger | The specific car-buying or replacement decision the page helps with |
+| Search/GEO intent | Query families and AI questions supported by current evidence |
+| Unique utility | The concrete answer, sequence, checklist or comparison offered on this page |
+| Primary lead family | New, Used, Trade-in or none, based on intent evidence |
+| Secondary lead family | Only where it naturally follows the visitor's decision |
+| Tool continuation | Exact existing site destination for Find My Car, Deal Score, Price Check and VIN Check, when verified |
+| Impact mechanism | Existing approved static link; no new or reconstructed tracking URL |
+| CTA timing | New/Used after useful decision content; Trade-in as a contextual bridge, not a competing hero CTA |
+| Fallback and trust | What remains useful when a tool/link is unavailable; distinguish independent guidance from Edmunds |
+| Attribution | Page, module, intent, placement and variant identifiers supported by current systems |
+| Success metric | Tool starts/completions, outbound clicks, valid leads and revenue per qualified visit where observable |
+| Experiment isolation | Separate URL/date; no edits to page 239, Tools hub, $25k/$40k, or other current treatments |
 
-## Impact Catalog decision
+## Match the established page pattern
 
-**Do not include Catalog in release one.**
+The recent pages are not merely a set of buttons. The new page should use the appropriate parts of their shared architecture:
 
-The completed C1–C8 work verified model and category/price filtering, safe thin/empty results, a 20,000-item traversal window, an observed 3,000 requests/hour item endpoint allowance and structurally valid partner tracking URLs. Sampled records lacked Condition, Condition was rejected as a query field, ZIP/radius is unsupported, and the prototype is private, unmerged and not authorized for public use. It cannot label cards New/Used/CPO or claim local inventory.
+1. Clear, intent-matched title and one H1.
+2. Concise answer-first opening.
+3. Original explanation of the decision and the order in which the tools help.
+4. A structured “which route fits?” decision table or short steps.
+5. Existing tool cards that state the user question answered and limitations.
+6. New and Used CTAs after the relevant shopping decision; do not blend the two.
+7. Trade-in as a separate lower-page action after replacement intent is established.
+8. Short methodology/source section and visible affiliate disclosure adjacent to affiliate actions.
+9. Useful FAQs drawn from real intent, not filler.
+10. Accurate title/meta, self-canonical and schema proposal only if publication/indexing is approved.
 
-A future public pilot requires separate production-pilot approval, current-main reconciliation, security and measurement review, and a host-page decision. If later approved, describe results as neutral complementary Edmunds listings, use returned tracking URLs unchanged, keep static New/Used destinations separate and make no geographic or condition claim.
+Use the relevant current page as a pattern reference, not as copy to duplicate. Page 828's integrated funnel is an example: New primary, Used secondary, Trade-in lower and contextual, tool continuation retained, exact Impact URLs, rel="nofollow sponsored noopener", target="_blank", disclosure and no guarantee of availability/value. The $25k page likewise preserves existing CTA and Lite block. Do not alter any of those pages.
 
-## Monetization and attribution
+## Known approved commercial links
 
-The page is a router, not a lead-generation form. Users complete leads on Edmunds.
+These exact Impact-managed assets were validated in the site destination audit and used on the $40k page. If used in the draft, use them unchanged and confirm current suitability with the audit; do not recreate or hand-edit them.
 
-1. New and Used use separate approved Impact destinations aligned to selected intent.
-2. Trade-in is distinct on the sell/replace path and optional after a buying decision.
-3. Prefer the exact approved destination; otherwise use an approved category/model destination; show a clear fallback if unavailable.
-4. Before implementation, define page/module/lead-family/placement identifiers that can be carried through allowed tracking or reporting fields. Do not assume Publisher Tag or a report dimension exists.
-5. Distinguish outbound clicks from valid leads, approved actions and commission; report separately by lead family and placement where dashboards permit.
-6. Identify Edmunds inventory as partner inventory; keep CarClever analysis distinct and disclose the affiliate relationship near the action.
-7. Respect consent. Do not send VINs, detailed budget/credit inputs, names, emails or unnecessary identifiers to GA4, SubIDs or logs.
+| Family | Approved link | Draft placement |
+|---|---|---|
+| New | https://edmunds.sjv.io/c/7765200/3949597/52125 | Primary only where the page establishes New intent |
+| Used | https://edmunds.sjv.io/c/7765200/3949600/52125 | Separate alternative where Used is relevant |
+| Trade-in | https://edmunds.sjv.io/c/7765200/3949601/52125 | Contextual lower-page sell/replace bridge |
 
-## Operating cost and review dependencies
+Use appropriate sponsored/no-follow attributes, clear labels and the existing affiliate disclosure. Do not submit forms or leads. Existing Impact CTA click reporting is not fully confirmed: the $40k completion report says a real consent-granted visitor session is still required to verify GA4 CTA attribution.
 
-- **Fractal:** the first release removes page 239’s runtime dependency after the replacement is verified. It does not authorize Fractal cancellation.
-- **Anthropic API:** the proposed deterministic page has no per-message model/API usage. Actual savings require checking current Lite API usage and cost.
-- **Auto.dev:** existing tool pages keep their current usage. Do not duplicate endpoint calls in the router.
-- **Impact:** exact link availability and event/report support must be confirmed; do not predict revenue without a baseline.
-- **Platform review:** no OpenAI/Anthropic/Meta approval is needed for an independent website router, unless a later stage changes a reviewed assistant endpoint. The page must not imply pending apps are approved.
-- **Catalog:** no production dependency in release one.
+## Test and measurement limits
 
-## Measurement and evidence gap
+Current records describe two completed leads whose sources are unattributed. The new page has no established traffic baseline. Do not claim a revenue forecast or assert that the page improves conversion before it has evidence.
 
-There is not enough evidence to quantify revenue: the records report two completed leads with no source attribution and no verified page-239 conversion/CTA baseline. Expected impact is directional: fewer broken-tool paths, lower runtime complexity, direct routing to existing useful tools, and measurable New/Used/Trade-in actions.
+Before proposing a live pilot, Claude should report:
 
-Before build, complete one bounded page-239 audit:
+- page-239 and candidate-page 28/90-day GSC Search and available GEO measures;
+- page/session sources and available GA4 engagement/outbound data;
+- existing tool-link and CTA performance where available;
+- whether the two historic leads can be attributed;
+- current Consent/GA4 behavior and whether page-level CTA events actually register;
+- a plausible traffic source for the separate page without changing the Tools hub or active treatment pages;
+- what a noindex draft can test (content, clarity, usability) and cannot test (organic reach, indexation, real-market conversion).
 
-- GA4/GSC sessions, sources, engagement and outbound clicks over available recent 28- and 90-day windows;
-- current WordPress page and embedded-widget link/CTA inventory, destination and lead family;
-- whether either historic completed lead can be attributed to page 239 or the old app;
-- current approved Impact New/Used/Trade-in links and supported attribution dimensions;
-- existing consent/event behavior across WordPress and the embedded app;
-- current Lite Anthropic API use/cost and exact Fractal dependency path.
+If analytics/attribution is unavailable, identify the smallest specific check and label it unresolved. Do not add new trackers, Publisher Tag or personal-data collection as a shortcut.
 
-This is the smallest evidence package to freeze the feature contract and quantify a business case. If attribution is unavailable, mark it as such; do not invent a baseline.
+## Active treatment protections
 
-### Success measures
+Do not change, add links to, alter canonical/schema, edit CTAs, redirect, update text on, or otherwise disturb:
 
-- Each job reaches its intended existing tool in one clear action.
-- Each outbound click has a stable, consent-compliant page/module/lead-family label where supported.
-- New, Used, Trade-in clicks and confirmed actions are reported separately.
-- Tool routing errors and broken destinations are zero in acceptance checks.
-- Compare the first 28/90 days after release to the recorded page-239 baseline. Report outbound click rate and valid action/revenue per page session; treat small counts as directional.
-- Keep $25k/$40k page text, links, canonical data, structured data and treatment unchanged. Record page-239 widget release as a separate intervention.
+- page 934: retained $25k compact-SUV page, recently consolidated and under measurement;
+- page 828: new $40k midsize-sedan rebuild with integrated New/Used/Trade-in funnel, whose content and CTA effects are bundled in the current treatment;
+- the $30k SUV, used PHEV and three-row benchmark pages under their separate measurement plans;
+- the Tools hub, which has demonstrated GEO visibility and is treated as a protected router.
 
-## Staged plan
+Do not drive traffic through these pages without a separately approved experimental design. Record any proposed test-page publication date as its own intervention.
 
-### Stage 0 — André approval and evidence audit
-Approve/reject the direction, then complete the bounded page-239 audit. No implementation.
+## Options assessment, now applied as a test
 
-### Stage 1 — engineering design
-Claude checks current page/widget links and embed inventory, confirms target destinations, defines events/consent, and returns a minimal same-URL UI and rollback plan. No production edits.
+- **Reduced two-tool Lite:** not suitable for this test; page 239 remains unchanged.
+- **Broader first-party assistant:** not justified; duplicates current tools and adds maintenance/API use.
+- **Conversion-focused page:** test as a separate content-led draft with useful unique guidance and existing-tool paths.
+- **Hybrid:** if the separate page proves useful, conversational search can be considered later as its own measured follow-up.
 
-### Stage 2 — isolated build and acceptance
-If separately authorized, build on an isolated branch/preview. Remove Fractal assumptions only from page 239. Test every route, family label, consent state, screen size, keyboard path, empty/offline state and rollback. Do not alter other widgets or reviewed MCP apps.
+The Impact Catalog remains out of scope. Its current data is condition-neutral and lacks supported ZIP/radius filtering; its prototype remains private and unapproved for public use.
 
-### Stage 3 — controlled publish
-After preview review, André separately authorizes publication. Preserve page 239 URL and embed URL unless separately approved. Keep $25k/$40k treatments unchanged and measure from the recorded launch date.
+## Claude task proposed for André’s approval
 
-### Stage 4 — Fractal-exit gate
-Only after all Fractal dependencies are inventoried and the live page-239 replacement is verified may André decide whether to retain a verified $0 tier, keep a time-bounded paid tier or cancel. Verify old-app links, account retention, shared Auto.dev usage/credentials and rollback independently.
+1. Perform a fresh read-only audit of current page strategy, GSC/GA4/GEO evidence, candidate query gap, destinations, event/consent behavior, and treatment-page overlap.
+2. Return the Page Funnel Contract and recommend whether the test page should be a WordPress draft for a later indexable pilot or remain noindex/private.
+3. If the audit finds a safe, non-cannibalizing page concept, create a **new WordPress page in Draft status only** with full evidence-led copy, title/meta proposal, structured decision utility, existing tool destinations and approved CTA links. Do not publish, schedule, add it to menus/sitemaps, or modify internal links from current pages.
+4. If there is no defensible page intent, no verified destinations, or a conflict with current measurement, do not create the draft; return the evidence and a revised proposal.
+5. Return the page ID, preview route, exact links, page outline, source ledger, SEO/GEO and funnel rationale, risks, measurement plan, and confirmation of untouched assets.
+6. Wait for André’s separate approval before publication, indexing, internal-link promotion, analytics changes, widget/code work, or Fractal/Auto.dev decisions.
 
-### Stage 5 — optional search
-Consider a two-tool first-party search experience only if page-239 usage demonstrates conversational search demand. Compare incremental completed search/actions against LLM/API, Auto.dev and maintenance costs. Requires separate scope approval.
+## Independent decisions remain separate
 
-### Stage 6 — optional Catalog pilot
-Separate from release one; requires explicit production-pilot authorization and its own gates. No condition/locality claims.
-
-## Rollback
-
-- Preserve current page/embed URLs and deployment while replacement is in preview.
-- Capture current widget deployment/config and WordPress embed/copy before authorized release.
-- Use a reversible feature switch or retain the old experience as a redeployable release artifact.
-- If routing, consent, analytics or approved destinations fail, restore the prior page-239 widget; do not change Fractal or other tools as rollback.
-- Verify restored experience and links.
-- Keep Fractal endpoint, old app and credentials intact through the rollback window.
-
-## Independent decisions — do not bundle
-
-1. **Page 239 replacement:** proposed decision center; pending André approval.
-2. **Old Fractal-hosted @CarClever app retirement:** separate links and app-status decision; unchanged.
-3. **Fractal subscription cancellation:** separate account/renewal decision, gated by dependency, safe replacement and billing/account facts; unchanged.
-4. **Auto.dev Growth vs Free:** separate shared-usage/quota/cold-start/guard decision; unchanged.
-5. **Impact Catalog public deployment:** separate pilot/production authorization; unchanged.
+1. Page 239 / Lite replacement: unchanged; no replacement is selected by this experiment.
+2. Old Fractal-hosted @CarClever ChatGPT app retirement: separate distribution/link decision; unchanged.
+3. Fractal subscription cancellation: separate cost/account decision; unchanged.
+4. Auto.dev Growth-versus-Free: separate shared-use/quota decision; unchanged.
+5. Public Impact Catalog deployment: separate pilot authorization; unchanged.
 
 ## Explicitly unchanged
 
-- Find My Car remains the primary active app and under platform review unless André reports a new status.
-- Task #70 remains live/complete; Task #71 remains a private preview prototype; Task #73 remains submitted and awaiting Meta review.
-- No code, WordPress, Vercel, DNS, Fractal, app, connector, subscription or affiliate-link changes.
-- Old Fractal app and its links are not retired.
-- Auto.dev Growth is not downgraded; Fractal is not cancelled.
-- Catalog stays unmerged, private and unpublished.
-- Active $25k and $40k SEO measurement treatments stay untouched.
+- Page 239 and its Fractal-dependent chat remain live as-is.
+- The old Fractal @CarClever app and all platform submissions remain unchanged.
+- Deal Score, Price Check, VIN Check, Find My Car and their code/routes remain unchanged.
+- No existing WordPress page, menu, internal link, CTA, canonical, schema, sitemap or affiliate link is changed.
+- No Auto.dev or Fractal plan/account change is made.
+- The Impact Catalog remains private, unmerged and unpublished.
+- All active SEO/GEO treatment pages remain untouched.
 
-## Approval gate
+## Approval requested
 
-André’s approval is required for the product direction before Claude receives an implementation task. Approval would authorize only the bounded audit/engineering-design step, not production implementation or account/platform changes.
+André’s approval of the Claude prompt authorizes only the read-only audit and, if its stated conditions pass, creation of one new WordPress Draft. It does not authorize publishing, indexing, promoting traffic, changing existing pages, code/deployment, or any platform/subscription change.
