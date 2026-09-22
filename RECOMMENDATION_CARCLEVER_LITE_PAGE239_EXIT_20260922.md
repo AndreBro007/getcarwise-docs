@@ -1,100 +1,99 @@
-# Recommendation — CarClever Lite Fractal Exit (Page 239)
+# Task #72 — CarClever Lite parallel V2 app recommendation
 
-**Date:** 2026-09-22  
-**Task:** #72  
-**Status:** Business/strategy recommendation prepared; no implementation approved  
-**Decision sought:** Approve or reject the recommended replacement product before any Claude engineering task is issued.
+**Date:** 2026-09-22
+**Status:** Corrected recommendation after André's clarification; strategy/design only.
+**Decision requested:** Approve the parallel-app direction before any engineering implementation task is issued.
+
+> This document supersedes the earlier static Decision Center replacement recommendation. That recommendation confused the separate page-1160 funnel pilot with the CarClever Lite web app on page 239.
+
+## Scope — the actual app
+
+The target is the CarClever Lite web app embedded on WordPress page 239. The existing site-wide audit found this Lite app is the web-app consumer that calls the old Fractal CarClever backend. Deal Score, Price Check and VIN Check are separate tools and call Auto.dev directly. The Decision Center page (page 1160) is a separate content/funnel pilot and is not the Lite replacement.
 
 ## Recommendation
 
-Replace the Fractal-backed CarClever Lite chat embedded on WordPress page 239 with a **first-party, content-led decision and conversion page**, using the newly published CarClever Decision Center (page 1160) as the tested starting point.
+Keep the current page-239 Lite app and its Fractal-backed V1 intact. Build a separate CarClever Lite V2 web app using the new CarClever frontend and the currently supported production Find My Car tools. Test V2 at a separate preview/staging URL. Once the new app passes agreed checks and André separately approves the cutover, change only page 239's embed target to V2. Keep V1 and its Fractal path available for immediate rollback.
 
-Keep page 239 live and unchanged while page 1160 is observed. If the Decision Center proves to be the clearer route and its content is ready to become the canonical page, consolidate the final content onto page 239 (preserving its existing URL) and retire or redirect page 1160 in a separate SEO-reviewed change. Do not leave two near-duplicate indexable pages. Do not remove the page-239 embed or redirect either page until André separately approves that implementation.
+This avoids stripping features out of the current app, gives us a known-good control, and creates a clean place to add capabilities as the new CarClever/V3 contract becomes production-ready. Do not point the old six-tool prompt at a two-tool backend.
 
-Do **not** preserve a general-purpose chat merely to preserve the old interface, and do not swap the Fractal MCP URL under the existing prompt. The value of the replacement is a reliable route to existing specialist tools and monetized actions, not another layer that repeats those tools.
+## Feature contract for first V2 release
 
-## Why this is the best fit
+- Reuse the actual new CarClever frontend if it is available and appropriate to embed. A short read-only architecture check must confirm what frontend/source is meant, whether it is reusable, and the supported deployment pattern.
+- Initially support only the production tools verified for the intended backend: `find_matching_vehicle` and `resolve_dealer_url`. Confirm endpoint/version and tool schemas during the architecture check.
+- Design the prompt and interface around those two tools. Do not imply that affordability, standalone deal-risk, broad vehicle comparison, or vehicle-details tools are available unless the checked production contract confirms them.
+- Where useful, link to existing GetCarWise Deal Score, Price Check and VIN Check pages instead of reimplementing them inside V2. Keep their Auto.dev routes independent.
+- Keep page-239-specific branding, purpose and conversion cues recognizable. Preserve clear New/Used/CPO condition presentation, dealer link resolution, error handling and a usable mobile layout.
+- Add future capabilities only when their API/tool contract is approved, deployed in the intended environment, and separately validated. Maintain a versioned capability list so V2 never promises tools that are only experimental.
 
-The existing Lite /api/chat route assumes six Fractal tools: used-car search, deal risk, affordability, comparison, vehicle details and dealer URL resolution. Production Find My Car currently exposes only find_matching_vehicle and resolve_dealer_url. A URL-only swap would break Lite's unsupported flows.
+## Funnel and product fit
 
-The website already has separate Deal Score, Price Check and VIN Check pages. The Decision Center links visitors to those tools, Find My Car, and distinct Edmunds New, Used and Trade-in destinations. Its three affiliate CTAs have been verified live and carry distinct Impact Sub IDs. This produces a clear tool-to-lead path without duplicating calculations, adding an AI layer, or increasing Auto.dev calls.
+The app's primary job remains helping a visitor discover matching inventory and continue to a relevant dealer/listing action. Its conversion path should be:
 
-The runway plan reports only two historical completed leads, with no attribution to Fractal or another channel, and identifies Auto.dev as a shared dependency. This supports reducing unnecessary Fractal-specific complexity; it does not establish that Fractal generated those leads or that any particular replacement will earn more.
+1. Visitor describes needs and constraints.
+2. V2 searches matching live inventory through `find_matching_vehicle`.
+3. V2 presents explainable matches with condition labels and appropriate next actions.
+4. V2 resolves the dealer destination through `resolve_dealer_url`.
+5. For a specific listing needing additional evaluation, link to the relevant existing GetCarWise tool (Deal Score, Price Check, or VIN Check) where the destination and handoff are verified.
+6. Preserve New, Used and Trade-in pathways only where they fit the visitor's intent; do not make the affiliate funnel displace the app's core vehicle-discovery job.
 
-## Options
+Track app opens, search starts/completions, result-to-dealer actions, existing-tool referrals, and New/Used/Trade-in outbound actions when available. Identify V2 distinctly from V1. Do not add analytics or personal-data collection without separate approval; record current event, consent, and attribution limits before implementation.
 
-| Option | Benefit | Main cost or loss | Assessment |
-|---|---|---|---|
-| A. Rewrite Lite as a two-tool chat | Retains conversational vehicle discovery and can use the current Find My Car contract | Removes integrated risk, affordability, comparison and detail flows; still needs a maintained chat/API path and model-provider usage | Viable fallback only if visitors clearly value chat/search on page 239 |
-| B. Build a broader first-party conversational replacement | Could preserve selected capabilities in one interface | Rebuilds or duplicates existing tools; raises API, Auto.dev quota, consent, support and maintenance burden | Not justified for first release |
-| C. Replace the Lite chat with a decision/funnel experience | Uses the already-built Decision Center and existing tools; simplest Fractal exit and clearest New/Used/Trade-in funnel | Gives up open-ended chat; page 1160 needs observation and final SEO consolidation planning | **Recommended** |
-| D. Hybrid page plus two-tool chat | Offers guidance and interactive search | Combines the maintenance of A and content upkeep of C before evidence shows the chat is needed | Defer unless the pilot shows demand for both |
+## Parallel architecture and release gates
 
-## Page 239 replacement contract
+### Gate 1 — read-only architecture check
 
-The replacement should:
+Confirm:
+- exact source/repository and ownership of the 'new CarClever frontend' intended for this Lite experience;
+- whether it is a web UI that can be reused/embedded, or whether the Lite interface must be recreated;
+- the production endpoint and exact schemas/version for `find_matching_vehicle` and `resolve_dealer_url`;
+- safe server-side invocation/authentication, secrets handling, CORS/embed constraints, and allowed model provider/cost if applicable;
+- how to isolate V2 deployment/config from Find My Car V1/V2/V3 and from page 239's current V1 app;
+- page 239's current embed dimensions/behavior and the exact one-field/one-embed rollback method;
+- the current Fractal consumer inventory and whether any old @CarClever distribution is separate.
 
-1. Explain the visitor's next step in plain language.
-2. Route vehicle discovery to Find My Car when available; retain useful alternatives if its platform review changes availability.
-3. Route a specific listing to Deal Score, Price Check or VIN Check according to the visitor's question.
-4. Offer New and Used Edmunds actions as separate choices after useful guidance.
-5. Show Trade-in as a lower, contextual action for someone replacing a current vehicle.
-6. Preserve clear affiliate disclosure, the validated Impact destinations and sponsored/nofollow attributes.
-7. Avoid making an unsupported “best car,” market coverage, valuation or lead-acceptance promise.
-8. Remain useful if any one tool is unavailable: provide static links and a graceful explanation.
+Return evidence and the smallest implementation proposal. No code or platform changes during this gate.
 
-The Impact Catalog prototype does not belong in this first release. Its prototype remains private; condition-neutral inventory and unsupported ZIP/radius filtering make it unnecessary and potentially misleading for this page.
+### Gate 2 — V2 build and isolated verification
 
-## Funnel and measurement
+After André approves the architecture and implementation scope, Claude may build V2 on a separate branch/project/URL. Verify realistic search requests, correct tool selection and arguments, result rendering, dealer resolution, unsupported-intent handling, empty/error states, mobile layout, privacy/logging behavior, and that page 239/V1 remains unchanged.
 
-Measure the sequence: Decision Center visit → tool-path click or search continuation → New/Used/Trade-in outbound click → Impact action → valid lead → commission. The primary business outcome is attributable valid leads and revenue per qualified visit, not Rank Math score or raw clicks.
+Use a private or noindex preview. Do not change the live embed during this gate.
 
-Page 1160 has distinct Impact Sub IDs for New, Used and Trade-in. Its earlier verification found no GA4 outbound-click event in MonsterInsights Lite. Use the Impact click/action reports for affiliate outcomes; report GA4 pageviews only where consent and collection permit. Do not claim a conversion or revenue lift without attributable actions.
+### Gate 3 — page-239 cutover
 
-Observe page 1160 at the 14-day directional and 28-day primary checkpoints. The last user-provided Rank Math screenshot showed **Index checked** and **No Index unchecked**, but the current live robots directive and sitemap inclusion have not been independently re-verified after the user's edits. Confirm those before interpreting organic exposure. No Search Console impressions are guaranteed; without sufficient impressions, the test cannot establish organic demand.
+Only after V2 verification and André's separate approval, switch page 239's embed target to V2. Record the prior embed value and exact rollback steps. Monitor the V2 route and user path. Roll back by restoring the prior V1 embed if the V2 app fails or materially degrades the journey.
 
-Before replacing page 239, compare its current 28/90-day Search Console and available analytics data with page 1160; check query overlap and internal links. Keep active $25k/$40k and other treatment pages unchanged.
+### Gate 4 — additive V3 capabilities
 
-## Costs, approvals and maintenance
+Add tools only when the desired capability is present in the approved, deployed backend contract and its costs, UX, safety and failure behavior are understood. Add one capability at a time, update the capability list and test both the new path and existing search behavior.
 
-- **Fractal:** A static first-party replacement removes page 239's live Fractal call only after that embed/route is actually retired. Subscription cancellation remains a separate decision after every Fractal consumer is inventoried and removed or intentionally retained.
-- **Anthropic/OpenAI/Meta:** No conversational model is required for the recommended first release, so the replacement does not depend on new model approval. Existing tool/platform availability should be stated accurately.
-- **Auto.dev:** The static funnel adds no Auto.dev calls. Auto.dev Free/Growth remains a separate decision because the key is shared with other consumers.
-- **Catalog:** No public Catalog call or deployment.
-- **Maintenance:** Low; review destination links, disclosure and tool availability periodically. Avoid new code unless an essential interaction requirement emerges and is approved.
+## Separate decisions — not bundled
 
-## Staged plan
+1. **Page 239 Lite V1 → V2 embed cutover:** only after separate approval and successful preview verification.
+2. **Old Fractal-hosted @CarClever ChatGPT app retirement:** separate distribution decision; page-239 migration does not retire it.
+3. **Fractal subscription cancellation:** separate decision after all consumers (including old app distribution) are inventoried and any needed rollback window is complete.
+4. **Auto.dev Free vs Growth:** separate shared-key/quota decision; changing Lite does not decide this.
+5. **Public Impact Catalog deployment:** separate authorization; prototype stays private.
+6. **Decision Center page 1160:** independent funnel/content test, not the replacement Lite app.
 
-1. **Now — observe page 1160.** Keep page 239 untouched. Confirm its current robots directive, sitemap status, live snippet, and Impact Sub ID reporting. Review at day 14 and day 28. No paid or external traffic acquisition is assumed.
-2. **Decision gate — verify intent and page overlap.** Review page 239 and 1160 query/page data, existing protected treatments, visitor paths and whether the current Decision Center provides enough distinct utility.
-3. **If approved — prepare one reversible page-239 replacement.** Capture a restorable copy of the current page content/embed and widget/backend references. Use the Decision Center contract above, preserve page 239's URL, and keep page 1160 from becoming a competing duplicate (appropriate consolidation/redirect decision must be approved).
-4. **Verify before closing Fractal.** Confirm page 239 no longer requests the Fractal-backed endpoint, tool links still work, New/Used/Trade-in links retain their exact tracking and attributes, mobile/accessibility behavior is acceptable, and rollback is practical.
-5. **Only then consider Fractal account cancellation.** Re-inventory all Fractal-hosted apps and references, including old @CarClever distribution. Treat its retirement and subscription cancellation as separate approvals. Rotate/remove shared credentials only after actual dependencies are understood.
+Fractal cancellation should not be considered until V2 has replaced the page-239 Fractal call, every other Fractal consumer is accounted for, the old app decision is explicit, and the rollback/retention period has passed.
 
-## Rollback
+## Expected impact and limits
 
-Before any future page-239 edit, save the exact existing page content, embed URL, relevant widget version and date. If the new route fails or causes a material SEO/user-path problem, restore the original page-239 content/embed while the Fractal service is still available. Do not cancel Fractal as part of that page edit; cancellation needs its own dependency and reversibility check.
+The strongest expected benefit is reduced coupling to Fractal for the website app while preserving a working version and allowing capability growth without deleting the legacy implementation. The user journey retains live inventory search and dealer continuation. The main risk is assuming a reusable 'new frontend' exists when the new CarClever may currently be delivered only through MCP/platform integrations; Gate 1 resolves that. The two-tool contract also means V2 should not promise parity with V1's broader Fractal prompt.
+
+Do not forecast lead or revenue lift without baseline and attribution. The current historical lead attribution is limited; collect a distinct V2 baseline before drawing business conclusions.
 
 ## Explicitly unchanged
 
-- Page 239 and its Fractal-backed Lite experience remain unchanged pending separate approval.
-- Page 1160 remains a separate live pilot; this recommendation does not authorize further WordPress/Rank Math changes.
-- Old Fractal-hosted @CarClever retirement remains separate.
-- Fractal subscription cancellation remains separate.
-- Auto.dev Growth-versus-Free remains separate.
+- Page 239 stays on the existing Fractal-backed Lite V1 until the separate cutover approval.
+- V1 code/config, Fractal endpoint/prompt, and rollback path stay intact.
+- Deal Score, Price Check, VIN Check and Find My Car production behavior remain unchanged.
+- No Vercel, WordPress, DNS, connector, Fractal, Auto.dev, Meta, or subscription changes are authorized by this recommendation.
+- Decision Center page 1160 and active $25k/$40k SEO measurement treatments remain separate and unchanged.
 - The Impact Catalog remains private and unpublished.
-- No code, deployment, Vercel, connector, DNS, subscription, or existing SEO-treatment change is authorized by this recommendation.
 
-## Sources
+## Next action
 
-- [Task #72 dependency investigation](INVESTIGATION_CARCLEVER_LITE_FRACTAL_EXIT_DEPENDENCY_20260921.md)
-- [September runway and platform contingencies](PLAN_SEPTEMBER_RUNWAY_COST_AND_PLATFORM_CONTINGENCIES_20260921.md)
-- [Old CarClever Auto.dev Free-tier assessment](ASSESSMENT_OLDCARCLEVER_FRACTAL_AUTODEV_FREE_TIER_20260921.md)
-- [Tool-led SEO/GEO monetization strategy](STRATEGY_TOOL_LED_SEO_GEO_MONETIZATION_SYSTEM_20260920.md)
-- [Impact funnel feasibility return](RETURN_TOOL_LED_IMPACT_FUNNEL_FEASIBILITY_20260920.md)
-- [Task #72 separate-page test strategy](STRATEGY_CARCLEVER_LITE_FRACTAL_EXIT_REPLACEMENT_20260922.md)
-- User/Claude live pilot report pasted Sep 22, 2026
+Perform Gate 1 as a read-only architecture check. Then return the concrete V2 architecture, feature contract, effort/risk, deployment isolation, and rollback plan for André's decision. Do not give Claude an implementation task until André approves that proposal.
 
-## Approval gate
-
-André must approve the recommended page-239 replacement product before Claude receives any implementation task. Approval of this recommendation does not approve page edits, code, deployment, model/API changes, platform submissions, or subscription actions.
