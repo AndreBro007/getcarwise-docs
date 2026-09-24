@@ -1,5 +1,7 @@
 # Task #78 — Draft acquisition-first CarClever app-awareness pilot
 
+**Superseded for acquisition planning:** André identified prior substantial Reddit effort and weak engagement. See [the Sep 24 distribution and revenue reset](ADDENDUM_TASK78_DISTRIBUTION_REVENUE_RESET_20260924.md). Retain this file only as a possible app/page copy and measurement reference; do not execute its community contribution proposal.
+
 **Date:** 2026-09-24 · **Status:** Reviewable proposal only. No WordPress, app, analytics, publishing, outreach, ad, or subscription change. The user-directed no-discretionary-development/testing pause runs to the Sep 30 checkpoint.
 
 ## 1. Exact task and intended outcome
