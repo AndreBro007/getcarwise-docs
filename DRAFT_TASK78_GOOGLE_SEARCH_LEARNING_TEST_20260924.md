@@ -2,11 +2,17 @@
 
 **Date:** 2026-09-24. **Status:** Reviewable, unlaunched campaign. This is the preferred acquisition direction after André's Sep 24 correction. No Google Ads account/campaign, spend, WordPress, analytics, outreach, subscription, owner-generated traffic or production change has been made. The passive no-discretionary-testing period remains through the Sep 30 checkpoint. This draft supplements `ADDENDUM_TASK78_DISTRIBUTION_REVENUE_RESET_20260924.md`, replacing partner outreach as the first distribution test.
 
+## Sep 24 positioning update — preferred route conditional on old app survival
+
+[Old CarClever ad-positioning brief](BRIEF_TASK78_OLDCARCLEVER_AD_POSITIONING_20260924.md) reviewed the August competitor analysis and current old-app tools. **Preferred first concept after Sep 30:** a used-car *decision* query, not generic SUV ranking, pointing to [Try CarClever](https://getcarwise.app/try-carclever/) if Fractal remains live and the current app feature path is truthful. Candidate exact-match terms: `[check used car deal]`, `[compare used cars]`, `[used car buying assistant]` (subject to actual Keyword Planner demand/CPC and current SEM terms). Candidate headlines: “Check a Used Car Before You Buy”, “Compare Used Car Choices”, “Review Risk & Ownership Cost”, “CarClever in ChatGPT”. Description candidates: “Search U.S. used listings and compare price, risk flags and estimated costs.” / “See the trade-offs before contacting a dealer. Open CarClever in ChatGPT.” Verify Ads character limits and final page/product match. No claim of a history report, VIN-specific recall, guaranteed price, financing offer or automatic invocation.
+
+**Commercial measurement gate:** GA4 paid landing and ChatGPT app-link clicks can be observed immediately if collection works; the platform connection and tool use may be unobservable. A cost-per-*approved*-lead test requires an actual paid-source marker to survive old app → Impact click/action reporting. If that is unavailable, this concept is an app-interest test only and must not be represented as a monetization test. In that case, the existing Page 827 → Impact campaign below is the narrower monetization fallback after separate destination/copy review. If Fractal retires or Free-tier behavior breaks the promised path, do not run the old-app concept. No automatic switch to the fallback. Do not buy traffic to the older `/carclever-guide/` while its new/demo and recall claims conflict with the old-app scope/current `/try-carclever/` disclosures.
+
 ## Exact outcome
 
-Buy a bounded amount of US search traffic from one clear used-SUV decision intent, and observe ad click → eligible landing → useful action → tagged Edmunds outbound → pending/approved Impact action. The test can measure traffic immediately; it cannot establish profitable lead economics on day one, because Impact approval can lag and the two historical leads have unknown source.
+Buy a bounded amount of US search traffic from one clear used-car decision intent, selecting one of the two conditional destinations only after the Sep 30 product and attribution gates, and observe ad click → eligible landing → useful action → tagged Edmunds outbound → pending/approved Impact action. The test can measure traffic immediately; it cannot establish profitable lead economics on day one, because Impact approval can lag and the two historical leads have unknown source.
 
-## Campaign prepared for review, not launch
+## Fallback Page 827 campaign prepared for review, not launch
 
 | Setting | Draft |
 |---|---|
