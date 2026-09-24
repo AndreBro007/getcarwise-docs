@@ -67,7 +67,7 @@ The supplied Edmunds agreement §3.A disallows direct PPC to Edmunds and restric
 ## 9. Concrete deliverables and ownership
 
 - **André:** review this direction; at Sep 30 choose weekly hours, cash-at-risk ceiling and Fractal keep/test-downgrade/retire choice. Explicitly approve each external publication, outreach, account creation that triggers a promotion clock, ad/billing, or production implementation after a concrete draft.
-- **Claude engineering, first small task:** read-only Task #78 measurement and routing audit with a route-by-route gap table and exact implementation/acceptance/rollback steps. [Engineering handoff](HANDOFF_CLAUDE_TASK78_MULTIROUTE_MEASUREMENT_READINESS_20260924.md). Coordinate with Task #79; no generated test traffic until the pause ends.
+- **Measurement audit complete:** [Read-only Task #78 audit](AUDIT_TASK78_MULTIROUTE_MEASUREMENT_READINESS_20260924.md) maps observed and unverified route gaps; ChatGPT completed it without generating traffic. The earlier [Claude engineering handoff](HANDOFF_CLAUDE_TASK78_MULTIROUTE_MEASUREMENT_READINESS_20260924.md) is historical for this first task. Claude continues Task #79; request later Task #78 engineering only for a specific approved implementation after the gates.
 - **Marketing preparation:** build one G1 campaign specification using page 934 and approved creative/keyword exclusions, then an app-awareness and Reddit founder ad specification, each with a distinct cash cap and success measure. Present reviewable drafts before activation.
 - **Administration:** update Task #78 and STATE.md with verified decisions and evidence after each completed task. This document is an execution proposal; it does not revise the four completed research/strategy phases.
 
