@@ -2,6 +2,37 @@
 
 **24 Sep 2026 · Review draft, no launch or account changes.** This supplements, rather than rewrites, the completed strategy phases. André wants several acquisition routes: Google to a useful owned page; traffic and awareness for the live CarClever app; a revised Reddit Ads experiment; and Impact-supported social/creator routes. Preserve the no-discretionary-testing period through Sep 30 and separate approval for ads, spend, publishing, account creation, social profiles, production and subscription changes.
 
+## Three brand layers, three destinations, three approved-lead classes — Sep 24 correction
+
+The original four-route table below lists campaigns, but the customer architecture is broader. **Brands:** GetCarWise is the independent owned-site decision service; CarClever is the recognisable app family (old live Used/CPO and separately scoped newer pending apps); Edmunds is the known third-party shopping/dealer destination. Use its name only in an existing approved asset/link and permitted owned disclosure. The supplied Edmunds agreement §3.A and §3.E prohibits its mark in paid search and organic/paid social or implying Edmunds endorsement. A deliberate co-branded ad would need Edmunds' express permission; don't call GetCarWise “Edmunds-backed.”
+
+**Destinations:**
+1. **Owned page** is a hub, not a single compulsory CTA: useful answer → buyer chooses guided app, relevant New/Used Edmunds listing route, or contextual Trade-in. Page 934 currently has the Impact Used CTA and CarClever Lite, but do not assume an old ChatGPT-app link already exists there. Page 828 has primary New, secondary Used, contextual Trade-in and CarClever paths. Decision Center page 1160 has New/Used/Trade-in CTAs with distinct Impact Sub IDs. Any new choice layout is a later approved WordPress change.
+2. **Direct CarClever app link** from a permitted channel bypasses the site and demonstrates the full old Used/CPO journey. App connection/invocation and source→Impact lead attribution may be unobservable. The pending newer apps cannot be promoted as available. Old app availability depends on Fractal/Auto.dev decision.
+3. **Direct Edmunds tracking link** is a possible *customer destination* from a permitted owned property/context with the exact approved Impact asset. It is **not** a universal acquisition link: supplied §3.A.IV bars direct PPC ad→Edmunds; §3.B bars social Approved Ads or otherwise driving traffic to Edmunds and social-source commissions absent written email approval. Organic owned-page CTA is the established path; a stand-alone direct-link placement elsewhere requires its own source/property/channel review. No masking or redirect to pretend social/PPC traffic is owned organic.
+
+**Offer mapping, already verified in Task #63A and used in Task #70/#72:**
+
+| Buyer job | Relevant live surface | Impact asset / landing class | Payout for an *approved* qualifying action | Truthful route |
+|---|---|---|---:|---|
+| Used/CPO buyer with budget, shortlist or listing | Page 934 or other Used guide, Decision Center, old live CarClever | Used Car Listings **3949600** → Edmunds Used Cars | US$10 | Compare/check; when ready, click approved Used asset and complete a qualifying dealer request. |
+| New-car buyer | Page 828 New-car guide or Decision Center; pending newer app only after approval | New Car Listings **3949597** → Edmunds New Cars | US$10 | Compare new choices; contextual dealer request. Old live CarClever is Used/CPO, not a new-car promise. |
+| Buyer replacing a car / genuine seller | Page 828's contextual Trade-in or Decision Center; a dedicated seller journey only if built/approved | Sell Your Car **3949601** → Edmunds sell/instant-offer path | US$3.50 | Separate VIN-owned-vehicle appraisal/instant-offer qualification; not a substitute for a Used buyer lead. |
+
+The three validated assets are existing Impact-managed links, not promises that every click qualifies. The supplied agreement requires specified forms, unique US consumers and approval; “Appraisals” is a separate asset and was not selected as the validated Trade-in action. Prior static mapping: `RETURN_WORDPRESS_IMPACT_STATIC_DESTINATION_MAPPING_20260921.md`. Page 828 return: `RETURN_WORDPRESS_MIDSIZE_SEDAN_40K_NEW_CAR_REBUILD_20260921.md`. Task #72 records Decision Center's three distinct CTAs.
+
+**Acquisition × destination decision:**
+
+| Acquisition | Owned page | CarClever direct | Edmunds direct |
+|---|---|---|---|
+| Google Search paid | Candidate first commercial test on an intent-matched substantive page. Buyer may choose app or approved relevant asset. | Separate app-awareness test; no approved-lead claim until app handoff is traced. | **Prohibited** by §3.A.IV. |
+| Organic search/direct owned navigation | Primary compounding answer/choice hub. | Directory link can teach connection and exact product scope. | Approved asset on disclosed owned property may be offered in context; verify page/offer and destination. |
+| Reddit paid or organic social | Founder-led GetCarWise/CarClever awareness may point to a truthful non-Edmunds educational/app route only after end-to-end source review. | Possible app-awareness route, but old app contains Edmunds dealer links; do not claim a permitted monetized social→Edmunds path without written approval. | **Prohibited** by §3.B absent written Edmunds permission; a page detour must not hide social origin. |
+| ChatGPT/Claude/Muse user-discovery | App may point to owned explanation where supported; host behavior unverified. | Native app experience after actual discovery/connection/approval. | Partner handoff only where app rules and disclosed source/Edmunds placement allow; platform review and action reconciliation outstanding. |
+| Publisher/partner referral | Contextual owned decision route, with disclosed affiliate next step and source tagging. | Direct app link if audience wants the app. | Only after placement/property/contract approval; no sub-affiliate or source masking assumption. |
+
+**Brand-to-revenue funnel:** GetCarWise helps a person understand a concrete buying job; CarClever is the guided product when they want to search/check/compare; Edmunds is the labelled outside action when the person is ready. New, Used and Trade-in are *different jobs and forms*, not three buttons shown everywhere or three payouts for the same buyer. Route selection follows user intent and channel permission. Measure acquisition→qualified use→chosen path→tagged click→approved/rejected action separately by brand/channel/offer. Promotional credits buy eligible media inventory after qualifying spend, not guaranteed outcomes.
+
 ## Decision and channel architecture
 
 | Route | Audience promise and destination | Primary observation | Revenue treatment |
