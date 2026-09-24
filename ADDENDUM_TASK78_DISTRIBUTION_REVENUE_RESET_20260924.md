@@ -1,5 +1,7 @@
 # Task #78 — Distribution and revenue reset (Sep 24, 2026)
 
+**Sep 24 decision update:** André prefers quickly measurable Google Search traffic over partner outreach for the first active channel. [The capped Search test draft](DRAFT_TASK78_GOOGLE_SEARCH_LEARNING_TEST_20260924.md) is now the preferred first distribution preparation. The partner channel below remains a secondary hypothesis, not the immediate launch sequence. Ads and spend still require a separate concrete approval after the Sep 30 no-testing/cost gates.
+
 **Status:** Execution proposal for André's decision. This corrects the acquisition recommendation in `DRAFT_TASK78_CARCLEVER_APP_AWARENESS_PILOT_20260924.md`; it does not reopen the four completed research/strategy phases. No campaign, outreach, publication, ad, subscription, production or owner test is authorized by this document. The existing no-discretionary-testing/no-owner-noise pause through Sep 30 remains in force.
 
 ## Decision in one page
