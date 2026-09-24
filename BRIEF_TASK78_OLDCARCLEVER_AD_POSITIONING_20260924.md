@@ -4,7 +4,7 @@
 
 ## Evidence boundary
 
-The August `carclever_chatgpt_competitive_report_ai_readable.md` primarily scores the *future-state CarClever – New & Used Cars* against CARFAX, CarGurus, Autotrader and CarMax. That Fractal all-inventory product was withdrawn from OpenAI and is **not** the old live Used/CPO @CarClever. Its 10/10 scores and feature list cannot be transposed to the live app or presented as current competitor facts. Its useful directional insight is that a decision workflow—rather than another listings feed—could differentiate CarClever.
+The August `carclever_chatgpt_competitive_report_ai_readable.md` primarily scores the *future-state CarClever – New & Used Cars* against CARFAX, CarGurus, Autotrader and CarMax. That Fractal all-inventory product was withdrawn from OpenAI. André clarified that **the old live Used/CPO @CarClever has substantially the same buying tools**, while the newer app added new-vehicle inventory; old CarClever's Recommended ordering was also improved. The August 10/10 scores are historical, not current verified competitor rankings. Its full decision-journey assessment applies directionally to positioning the live old app.
 
 The old live app's actual workflow is documented on the current [Try CarClever](https://getcarwise.app/try-carclever/) page, the old app's Sep 14 OpenAI resubmission and 20-row live search regression, and the worked August [user guide](https://getcarwise.app/carclever-guide/). It covers:
 1. natural-language **used/CPO** inventory search and Deal Score;
@@ -17,9 +17,9 @@ This is a broad connected workflow for a buyer weighing an actual purchase. It i
 
 ## Message hierarchy for the paid test
 
-**Buyer problem:** “I found a used car or shortlist. Is it worth pursuing and can I afford it?”
+**Buyer problem:** “I do not know where to start with a used car, or which shortlist option is worth pursuing and affordable.”
 
-**Promise:** “Search used cars, compare the trade-offs, review risk flags and estimated ownership cost before contacting a dealer.”
+**Promise:** “Compare used-car choices, review risk flags and estimated costs before contacting a dealer.”
 
 **Proof:** show one short, truthful path from an existing live test: search → one listing's Deal Score/risk → two-car comparison or cost estimate → labelled dealer destination. Screenshots/examples must be checked against the post-Sep 30 surviving product. Keep the ad itself narrower than the page.
 
@@ -49,3 +49,5 @@ This evidence materially improves the ad **positioning**, but also changes the l
 - Library: `carclever_chatgpt_competitive_report_ai_readable.md` (Aug 2026; future-state focus, old app context).
 - GitHub: `getcarwise-docs/SUBMISSION_CARCLEVER_OLD_OPENAI_V3_RESUBMISSION_20260914.md`; `TEST_LOG_OLDCARCLEVER_20260914.md`; `ASSESSMENT_OLDCARCLEVER_FRACTAL_AUTODEV_FREE_TIER_20260921.md`; `CHECKPOINT_SEPTEMBER_SCALE_DOWN_FEASIBILITY_20260923.md`.
 - Live public pages read-only Sep 24: `/try-carclever/`, `/carclever-guide/`.
+
+**Sep 24 correction and route analysis:** See `BRIEF_TASK78_EDMUNDS_IMPACT_PAID_SEARCH_ROUTES_20260924.md` for three acquisition/measurement routes and the unverified current Impact SEM/asset gate.
