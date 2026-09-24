@@ -1,5 +1,8 @@
 # Task #78 — Draft Google Search traffic and lead learning test
 
+> **Launch block — supplied Edmunds Impact terms (Sep 24):** The separate agreement bars direct PPC to Edmunds (§3.A.IV) and limits affiliates to a US primary place of business (§1.A), apparently conflicting with this Australia-based company despite the active Impact contract. All Google/Edmunds spend proposals below are **on hold** until Edmunds confirms eligibility and the exact owned-page placement in writing, and the operative documents are reconciled. The View Ads column is not a PPC waiver. See `BRIEF_TASK78_EDMUNDS_IMPACT_PAID_SEARCH_ROUTES_20260924.md`.
+
+
 **Date:** 2026-09-24. **Status:** Reviewable, unlaunched campaign. This is the preferred acquisition direction after André's Sep 24 correction. No Google Ads account/campaign, spend, WordPress, analytics, outreach, subscription, owner-generated traffic or production change has been made. The passive no-discretionary-testing period remains through the Sep 30 checkpoint. This draft supplements `ADDENDUM_TASK78_DISTRIBUTION_REVENUE_RESET_20260924.md`, replacing partner outreach as the first distribution test.
 
 ## Sep 24 positioning update — preferred route conditional on old app survival
