@@ -1,0 +1,41 @@
+# Task #78 — Edmunds Impact assets and paid Search routes
+
+**24 September 2026 · Decision brief · No ads, site, app, account, billing, production or test-traffic action.** This supplements the completed strategy phases and the unlaunched Search draft.
+
+## Product position
+
+André clarified that the **live old CarClever has substantially the same buying tools** as the withdrawn New & Used Cars app; the latter added new inventory. Old CarClever now has improved **Recommended** car ordering. Lead with the buyer's journey: “Compare used-car choices, review risk flags and estimated costs before contacting a dealer.” This helps a buyer who does not know where to start. The August competitive scorecard is historical and cannot substantiate a *current* numeric superiority claim, but its full-journey differentiation is relevant to the old live app. Avoid implying vehicle-history reports, verified condition, VIN-specific recalls or guaranteed financing.
+
+## Three routes to compare
+
+| Route | What paid traffic buys | Observable chain | Main issue |
+|---|---|---|---|
+| A. Google Search → `/try-carclever/` → old ChatGPT app → Edmunds | Differentiated guided used-car experience and app awareness | Google click/GA4 landing and app-link click; Impact outcome only if paid source survives app handoff | ChatGPT connection/tool usage and source→approved-lead attribution unverified; old Fractal and Auto.dev scale-down must preserve promised features |
+| B. Google Search → an existing owned buyer page with a **clearly labelled Impact Used CTA** → Edmunds | A useful first-party decision page and measurable commercial handoff | Ad cost → page session → tagged Impact outbound → pending/approved Used action, subject to live analytics and Sub ID verification | Extra click and page relevance; inspect exact page/CTA and current SEM permission |
+| C. Google Search → Edmunds directly via a specific Impact asset/tracking link | Shortest route to Edmunds' own relevant product page | Google click/cost and Impact asset/Sub ID clicks/actions, subject to tagging and approval delay; no first-party page analytics | No CarClever journey; may compete for costly generic terms; program SEM/direct-link permission and Google destination/tracker compliance unverified |
+
+**Recommendation:** Prepare B as the first *monetization* experiment if the current Edmunds terms allow paid Search, a page-to-Impact Sub ID can be verified, and the page meets the query. Keep A as a separately measurable app-acquisition experiment if its source-to-approved-lead chain can be proven and the old app remains viable after Sep 30. Compare C only when a specific approved asset reaches a relevant Edmunds page and its **actual** Google CPC versus approved-lead payout can be evaluated. Do not blend these three routes in one ad group; their denominators and value propositions differ. The previously drafted US$150 total is a possible bounded learning loss for **one** chosen experiment, not US$150 per route or a launch authorization.
+
+## What “Find an Ad to Promote” does and does not show
+
+Impact says **Content → Assets** lists advertiser-uploaded assets; selecting one shows its tracking link, landing page and optional Sub IDs. A program may disallow deep links in general or for a particular asset. Performance by Ad can report asset-level results; a distinct link/Sub ID is needed to separate a paid placement. An asset's presence is **not evidence** that Edmunds permits PPC, brand bidding, direct-linking from Google, altering copy, or payout for that traffic.
+
+The authenticated [directory](https://app.impact.com/secure/mediapartner/ads/searchAdsDirectoryMP.ihtml#adType=all) returned a security-verification challenge to this session and did not clear on one retry; it was reported and not bypassed. Thus we have **not** seen Edmunds' current asset inventory, exact destinations, approved creative, terms, payout restrictions, tracking permissions or ad ID. The user screenshot establishes only an approved Edmunds application and displayed US$10 New/Used and US$3.50 trade-in lead values. The archived 2025 **CJ** terms warn of protected Edmunds terms, non-compete valuation/trade-in phrases, and ad-copy restrictions, but cannot stand in for the current Impact contract.
+
+Read-only account evidence needed before finalizing: **(1)** Discover → My Brands → Edmunds → View And Manage Contract: full General Terms, promotional methods/SEM, prohibited bids/copy, payout restrictions/caps, lead definition, referral and approval periods; **(2)** Content → Assets filtered to Edmunds: titles/types, landing URLs, Tracking Link tab and deep-link availability for the relevant Used/New/Trade-in creatives; **(3)** any Edmunds-specific paid-search keywords/product offers shown elsewhere in the program. A screenshot/export of those panels is sufficient; do not click tracking links or create tests during the quiet period. Only use a trade-in creative for a genuine *seller/trade-in* query and contract-permitted flow, not as a substitute payout for used-buyer traffic.
+
+## Direct-link mechanics and economics
+
+For direct-to-Edmunds Google Ads, the **final URL/display domain must reflect the real Edmunds landing domain**; putting an Impact short tracking URL in the final URL, or a GetCarWise page that immediately redirects to Edmunds, risks Google's destination mismatch rules. Impact's Google Ads guidance and Google's tracking-template requirements need to be checked against the actual asset and Google Ads preview; do not assume a link copied from Impact is suitable as the final URL. The exact tracker configuration, any certified click-tracker requirement, parallel tracking and Sub ID propagation are implementation gates. For owned-page routes, the Google final URL is `getcarwise.app`; the user chooses the separately labelled affiliate outbound.
+
+At the screenshot's **US$10 per approved Used lead**, media break-even CPC before overhead is payout × approved leads **per paid ad click**: 2% → $0.20, 5% → $0.50, 10% → $1.00. These conversion rates are illustrative. At $3.50 per approved trade-in lead the corresponding CPCs are $0.07/$0.175/$0.35; that offer is unlikely to justify broad buyer keywords without strong evidence. Google spend, Impact clicks, pending actions and **approved** actions must be reported separately. The 18 Impact clicks/zero actions from the prior screenshot, likely heavily affected by owner tests, cannot estimate any route's conversion rate.
+
+## Gate order
+
+1. Capture current **Edmunds Impact contract and selected asset details** read-only; decide which paid-search sources/keywords/creatives are allowed.
+2. Preserve Sep 28 GSC cohort observation and Sep 30 passive cost/usage checkpoint. No new owner traffic before then.
+3. After Sep 30, with specific approval, confirm old-app survival and narrow measurement for the selected route: paid landing or direct destination, distinct Impact placement ID and click→action reporting; verify Google destination policy/preview.
+4. Obtain exact Keyword Planner CPC/volume and one route-specific ad, destination, currency, **total** budget/end date for André's separate launch and spend approval. No live campaign from this brief.
+5. Judge immediate cost/search terms/qualified handoff; judge economics only after Impact actions mature and are approved.
+
+**Official references checked 24 September:** Impact [Create Tracking Links](https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/tracking/tracking-links/create-and-manage-links/create-tracking-links), [Contracts Explained](https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/working-with-brands/contracts/contracts-explained-for-partners), [Tracking Link reporting parameters](https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/tracking/tracking-links/create-and-manage-links/add-reporting-information-to-your-tracking-links), [Performance by Ad](https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/reporting-for-partners/performance-reports-for-partners/performance-by-ad-report-for-partners); Google [Destination mismatch policy](https://support.google.com/adspolicy/answer/16428020), [Final URL/tracking template](https://support.google.com/google-ads/answer/6273460).
