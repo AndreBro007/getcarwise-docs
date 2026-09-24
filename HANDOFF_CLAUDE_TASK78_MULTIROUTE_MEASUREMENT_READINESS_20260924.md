@@ -1,7 +1,9 @@
 # Claude handoff — Task #78 multi-route measurement and route readiness
 **24 September 2026. Status:** engineering preparation only. Read [the execution plan](PLAN_TASK78_MULTIROUTE_MARKETING_EXECUTION_20260924.md), Task #78 and Task #79 in `carclever-widget/TASKS.md`, and `carclever-widget/STATE.md` using the normal lane checkpoint. Do not redo the completed research phases. Preserve the passive no-discretionary-testing period through September 30 and coordinate with the concurrent Task #79 Free-tier work.
 
-## Exact first task and outcome
+> **Superseded first task (Sep 24):** ChatGPT completed the read-only audit in [AUDIT_TASK78_MULTIROUTE_MEASUREMENT_READINESS_20260924.md](AUDIT_TASK78_MULTIROUTE_MEASUREMENT_READINESS_20260924.md). Do not send Claude the “exact first instruction” at the bottom of this historical brief or duplicate the audit. Claude should continue Task #79 independently; any later Task #78 engineering implementation requires a specific prioritized gap and André's separate approval.
+
+## Historical first-task specification (completed by ChatGPT)
 
 **Perform a read-only audit** of current repository code, deployed configuration already documented in GitHub, analytics/event definitions and existing landing links for the routes below. Produce a concise evidence-backed gap table. No development, testing, ad or production action is requested in this first task.
 
