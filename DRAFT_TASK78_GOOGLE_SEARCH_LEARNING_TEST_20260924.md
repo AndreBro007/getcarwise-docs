@@ -1,5 +1,8 @@
 # Task #78 — Draft Google Search traffic and lead learning test
 
+> **Sep 25 simplified measurement decision (supersedes earlier source-tagging launch gates below):** The first capped Google → page 934 test is a **directional demand test**. Confirm existing GA4 can report page-934 landing sessions and engagement by `google / cpc`; monitor Google Ads cost/searches and Impact Used action statuses **separately**. Keep the verified existing Impact CTA unchanged. A campaign-specific Impact Sub ID, custom outbound event and full source→approved-lead chain are optional later work if the first signal warrants it. Do not attribute aggregate Impact actions to the ad or calculate its ROAS. [Claude's minimal report setup](HANDOFF_CLAUDE_TASK78_MINIMAL_MEASUREMENT_SETUP_20260925.md) checks/saves the two reports without traffic, production or ad changes. Sep 28/30, contract/keyword, offer and explicit campaign/spend approval still apply.
+
+
 > **Sep 24 contract correction:** André clarified the business runs out of the US; his personal residence in Australia is not an eligibility block. Continue preparing Google Search to a substantive GetCarWise buyer page with an approved, unmodified Impact Used link, subject to SEM/asset rules, site and source disclosure, Sep 28/30 gates and separate spend approval. The supplied agreement §3.A.IV **prohibits direct PPC to Edmunds**, so do not use the View Ads tracking link as a Google ad destination. See `BRIEF_TASK78_EDMUNDS_IMPACT_PAID_SEARCH_ROUTES_20260924.md`.
 
 
