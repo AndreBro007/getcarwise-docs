@@ -1,4 +1,6 @@
 # Task #78 — Read-only multi-route measurement and routing audit
+**25 September decision update:** The code/report findings below stand, but the recommended *campaign-specific Impact Sub ID before any G1 spend* was too strong. The first capped G1 run is a directional demand test: Google Ads cost and GA4 paid landing/engagement, with Impact Used actions reported separately as aggregate context. No ad-level approved lead or ROAS claim without later source-specific attribution. Claude's limited [GA4/Impact report setup](HANDOFF_CLAUDE_TASK78_MINIMAL_MEASUREMENT_SETUP_20260925.md) replaces immediate engineering. Sections 3–4 below describe what would be needed for a **later source-specific ROI test**, not a launch blocker for the initial learning test.
+
 **24 September 2026. Status:** completed as a desk audit by ChatGPT. No synthetic visit, app invocation, API/affiliate click, ad account, dashboard setting, code deployment or live edit was made. This does **not** certify live analytics collection or a source-to-approved-lead chain.
 
 ## 1. Scope and evidence
