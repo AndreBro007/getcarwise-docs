@@ -1,5 +1,23 @@
 # Task #78 — Draft Google Search traffic and lead learning test
 
+## Sep 27 Keyword Planner readout — US, account AUD, no campaign
+
+In Google Ads account `310-034-4276`, used **Tools → Planning → Keyword Planner** to save a three-term research plan and set the **United States** in historical metrics, forecast and idea views. No campaign was created; Campaigns showed zero campaigns and the planner's separate “Create campaign” control was not used. Planner estimates are ranges, not actual CPCs or guaranteed traffic.
+
+| Phrase | US avg. monthly searches | Competition | Top-of-page bid range shown |
+|---|---:|---|---:|
+| `best used suv under 25000` | 100–1K | High | A$0.30–A$3.83 |
+| `used compact suv under 25000` | — | — | — |
+| `compare used suvs under 25000` | — | — | — |
+| `used suv under 25000` (ideas seed) | 100–1K | High | A$0.86–A$4.48 |
+| `suv under 25k` (broader idea) | 1K–10K | High | A$2.41–A$10.07 |
+
+The saved three-keyword plan's **Oct 1–31** forecast displayed **0 clicks / 0 impressions** at its default A$40 average daily budget even after its separate location control was set to United States. Treat this as no usable forecast for the narrow exact-match pilot, not evidence that no one searches. The historical and idea metrics provide the narrower directional signal; a live CPC is unknown. The broader phrases are more costly and lose used-only intent, so they are not a reason to expand this A$150 test.
+
+**Recommendation revision for the final launch review:** retain `[best used suv under 25000]`, replace one no-data phrase with `[used suv under 25000]`, and omit the other no-data phrase initially. Keep exact match, one used-only ad group and page 934. The US$10 **approved** lead payout offers a low break-even CPC in USD after conversion loss; do not compare it numerically with AUD bids without dated FX or assume this is profitable. At A$150 this remains a small demand/landing learning test, with no campaign-specific approved-lead attribution. If the final preview still predicts negligible delivery or bids require a poor-quality query, return for a route/budget decision rather than launch.
+
+**Remaining review gates:** exact Edmunds §3.A phrase/exact negative list and approved asset/source placement, Sep 28 GSC cohort, Sep 30 cost/product viability or explicit observation-window revision, final budget/targeting/ad preview, then separate owner launch/spend approval.
+
 ## Sep 27 review addendum — first G1 Search pilot, unlaunched
 
 **Owner decision:** André accepted a preparation envelope of **up to A$150 total over seven days**, with about 3–4 hours for setup/review and 15 minutes/day for monitoring. This is an acceptable learning-loss ceiling for one Google test, not an instruction to create or enable an ad. No Google credit is attached in Billing → Promotions, so budget on the full cash amount. The old illustrative **US$150** figures in this historical draft do not override the current **A$150** decision. Sep 28 (Brisbane) is a GSC cohort checkpoint, not a reason to defer preparation; Sep 30 remains a product/cost checkpoint. The passive no-owner-testing window is unchanged absent a specific revised owner decision.
