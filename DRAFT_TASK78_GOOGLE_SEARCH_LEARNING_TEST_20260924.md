@@ -1,5 +1,7 @@
 # Task #78 — Draft Google Search traffic and lead learning test
 
+**Sep 28 Impact access checkpoint:** Read-only attempt to inspect the signed-in Edmunds asset and Impact publisher profile from the cloud browser hit Impact/Cloudflare's repeated “Performing security verification” page, including one reload. No asset detail or publisher property was observed and no tracking link was clicked. The previously verified page href and Task #63A asset ID 3949600 do not close this live account gate. Before final Ads review, André can share screenshots of **Content → Assets → Edmunds → Used Car Listings (3949600)** showing asset approval, destination/landing page and unmodified tracking link, plus the Impact **publisher profile/properties** view listing `getcarwise.app` and the intended Search source. If the asset routes to a general inventory page rather than an Edmunds-native lead request, assess it against agreement §§2.A–B/6.B before monetization claims. Do not infer permission from a generic platform help article. No launch approval yet.
+
 ## Sep 28 Edmunds agreement check — exact Search exclusions (read-only)
 
 Source: André-supplied 13-page `Edmunds terms(1).pdf` in the GetCarWise project, §§1–4, especially §3.A.I–IV (PDF pp. 2–3); this is the current Impact agreement reviewed for G1, not the archived CJ terms. No Google campaign or Impact asset was changed.
