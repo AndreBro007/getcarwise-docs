@@ -1,5 +1,35 @@
 # Task #78 — Draft Google Search traffic and lead learning test
 
+## Sep 27 review addendum — first G1 Search pilot, unlaunched
+
+**Owner decision:** André accepted a preparation envelope of **up to A$150 total over seven days**, with about 3–4 hours for setup/review and 15 minutes/day for monitoring. This is an acceptable learning-loss ceiling for one Google test, not an instruction to create or enable an ad. No Google credit is attached in Billing → Promotions, so budget on the full cash amount. The old illustrative **US$150** figures in this historical draft do not override the current **A$150** decision. Sep 28 (Brisbane) is a GSC cohort checkpoint, not a reason to defer preparation; Sep 30 remains a product/cost checkpoint. The passive no-owner-testing window is unchanged absent a specific revised owner decision.
+
+**Account readiness verified by screenshots:** Google Ads account `310-034-4276` (GetCarWise) has zero campaigns; AU billing/AUD, Brisbane time and Broekman Consulting Pty Ltd Organisation payer. GA4 property `Getcarwise.app Analytics` (`532413608`) and its `https://getcarwise.app` MonsterInsights web stream are linked; app/web metrics on, audience import off, auto-tagging enabled. Task #78 saved exploration filters page 934 landing sessions by source/medium. The Impact Used status report remains a separate aggregate series, not an ad-attributed lead report.
+
+### Proposed campaign for owner review
+
+| Setting | Exact proposal or launch check |
+|---|---|
+| Name / route | `G1_US_USED_SUV_25K_PAGE934_2026`; Google Search → substantive GetCarWise guide → buyer-selected app or disclosed Used affiliate link. No direct PPC to Edmunds. |
+| Destination | `https://getcarwise.app/tools/best-compact-suv-under-25000/?utm_source=google&utm_medium=cpc&utm_campaign=used_suv_decision_g1`; exact live page/trailing slash was checked in Task #78. Existing Impact Used CTA remains unchanged. |
+| Ad group / keywords | One ad group, exact-match starting candidates `[best used suv under 25000]`, `[used compact suv under 25000]`, `[compare used suvs under 25000]`. Use only feasible terms after read-only Keyword Planner volume/CPC review; inspect actual search terms and same-meaning matches daily. No broad match. |
+| Target | United States, English. Set location option to **Presence** (people in or regularly in the US), rather than the broader default that includes location interest. Search Network only; turn off Search Partners and Display expansion. |
+| Budget / dates | **A$150 campaign total budget**, seven-day start/end window in account Brisbane time, subject to the option actually appearing on the final campaign screen. Google states a total budget has no daily cap but billed campaign spend will not exceed the total; average daily budget is not a substitute for a strict seven-day ceiling. Verify any tax/charges and exact final screen with André before activation. Start date TBD after specific approval and gates. |
+| Bid / goal | Initial candidate Maximize Clicks with an explicit CPC ceiling only if available and supported at the confirmed forecast; otherwise return for decision. Do not optimise for pageviews as if they were approved leads. |
+| Exclusions | Start with irrelevant `jobs`, `rental`, `parts`, `wholesale`; before launch transcribe **all exact and phrase negative terms required by current Edmunds §3.A** from the supplied agreement into the campaign and verify the final list. Do not bid protected marks. No Edmunds, manufacturer or competing brand terms in SEM copy. |
+| No extra assets | No automatically generated copy, sitelinks or business/logo assets until their destination and text have been reviewed for this narrow first cohort. Review Google's final ad preview and campaign defaults. |
+
+**Responsive Search Ad copy candidates** (character counts checked against the usual 30-character headline and 90-character description fields; final Ads preview remains required):
+
+- Headlines: `Used SUVs Under $25,000` (23); `Compare Used SUV Choices` (24); `Used SUV Buying Guide` (21); `GetCarWise SUV Guide` (20); `Shop Smarter Under $25K` (23); `Know What to Check First` (24).
+- Descriptions: `Compare used compact SUVs under $25k. See trade-offs and what to check before you buy.` (86); `Start with a shortlist and buying checklist. Explore the next step when you're ready.` (85).
+
+The guide, not the app, is the ad promise. The ad does not claim verified vehicle history, guaranteed price or auto-invocation. The buyer may choose the CarClever path or existing affiliate CTA after reading; the paid test's immediate score is qualified page engagement and downstream choices, while Impact pending/approved/reversed actions are reported separately. Without campaign-specific Impact attribution, **do not claim campaign ROAS or cost per approved paid lead**.
+
+**Not launch-ready until:** (1) Sep 28 protected page/query readout and Sep 30 operating/product decision, or André explicitly revises the passive observation window; (2) read-only Keyword Planner forecast and CPC feasibility; (3) current Edmunds exact/phrase negative list and approved asset/source placement check; (4) final campaign budget/targeting/ad preview and explicit owner approval to create/enable/spend. If any screen lacks a true A$150 total cap or the CPC/intent is poor, return to André with a revised proposal. No account campaign was created by this addendum.
+
+**Platform references rechecked Sep 27:** [Google total budgets](https://support.google.com/google-ads/answer/10486938) (new Search, minimum three days, total billed limit) and [location options](https://support.google.com/google-ads/answer/1722038) (Presence vs default Presence or Interest).
+
 > **Sep 25 simplified measurement decision (supersedes earlier source-tagging launch gates below):** The first capped Google → page 934 test is a **directional demand test**. Confirm existing GA4 can report page-934 landing sessions and engagement by `google / cpc`; monitor Google Ads cost/searches and Impact Used action statuses **separately**. Keep the verified existing Impact CTA unchanged. A campaign-specific Impact Sub ID, custom outbound event and full source→approved-lead chain are optional later work if the first signal warrants it. Do not attribute aggregate Impact actions to the ad or calculate its ROAS. [Claude's minimal report setup](HANDOFF_CLAUDE_TASK78_MINIMAL_MEASUREMENT_SETUP_20260925.md) checks/saves the two reports without traffic, production or ad changes. Sep 28/30, contract/keyword, offer and explicit campaign/spend approval still apply.
 
 
