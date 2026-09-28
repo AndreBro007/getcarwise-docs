@@ -49,3 +49,36 @@ Edmunds pays **US$10 per approved Used lead**, not per click. At an illustrative
 3. André separately approves campaign creation/activation and A$150 spend. Then implement, verify live settings and monitor daily. No account campaign or spend is authorized by this document.
 
 **Recommendation:** prepare the final Ads settings now; decide at Sep 30 whether to release one bounded G1 test, revise it or hold media while reducing operating costs.
+
+
+## Ready-to-enter settings sheet (prepared Sep 28; not entered in Ads)
+
+| Google Ads field | Proposed entry or launch check |
+|---|---|
+| Account | Existing GetCarWise CID 310-034-4276; AUD, Brisbane time. |
+| Campaign | New Search campaign, working name `G1_US_UsedSUV_25k`; Google Search only. Turn off Search Partners and Display expansion. No Performance Max or app-install format. |
+| Location/language | United States; location option **Presence** (people in or regularly in the US), not Presence or Interest. English. |
+| Ad group | One: `Used SUVs under 25k`. Exact keywords only: `[best used suv under 25000]` and `[used suv under 25000]`. No broad-match or automatic keyword expansion. |
+| Destination | The existing page-934 UTM URL in the table above. Display path candidates: `used-suv` / `under-25k`. |
+| Budget/dates | **Campaign total budget A$150**, start only after approval, end seven calendar days later in account time. Google says new Search campaigns support total budgets for Maximize Clicks and that billed spend cannot exceed the total, with no daily cap. Verify this exact budget type in the account; do not substitute average daily budget. |
+| Bidding | Maximize Clicks, with a maximum CPC bid limit reviewed in the final account preview. No unverified numeric CPC promise: the account's earlier Planner top-of-page ranges were broad and a narrow exact-match forecast returned zero clicks. A suggested limit that prevents delivery must come back for a decision, not be silently relaxed. |
+| Goals | Do not optimize to pageviews as if they were approved Edmunds leads. Verify account defaults and any Google-generated assets before activation. |
+| Timing | Sep 30 operating/cash gate, completed page-link rollout and final page check, then a separate approval of final Ads preview and spend. No promotional credit currently appears in Billing → Promotions. |
+
+**Responsive Search ad draft** — independent assets may appear in varied combinations; the copy below remains relevant in any order. Headline lengths are 20–28 of Google's 30-character maximum, descriptions 84–88 of 90. Review the final Google preview, including generated text/assets, before approval. Google supports up to 15 headlines and four descriptions; this small test starts with eight and three, leaving room to improve after the first read.
+
+| Headlines | Descriptions |
+|---|---|
+| Used SUVs Under $25,000; Compare Used SUV Choices; Which Used SUV Fits You?; Find Your Used SUV Shortlist; Know What to Check First; Compare 6 Popular Used SUVs; Start With a Clear Shortlist; GetCarWise SUV Guide | Not sure where to start? Compare six used SUVs under $25k and narrow your shortlist. / See space, AWD and value trade-offs. Know what to check on a real listing before buying. / Choose the SUV that fits your priorities, then explore used listings when you're ready. |
+
+**Campaign-level negatives to enter and verify individually:**
+
+| Match type | Terms |
+|---|---|
+| Exact | `[car value]`, `[used car values]`, `[trade in value]`, `[what is my car worth]`, `[trade in]`, `[trade in value car]`, `[how much is my car worth]`, `[trade in value of my car]`, `[car value estimator]`, `[appraisal]`, `[used car appraisal]`, `[used car appraisal value]`, `[appraise my car]` |
+| Phrase | `"car value"`, `"used car values"`, `"trade in value"`, `"what is my car worth"`, `"trade in"`, `"trade in value car"`, `"how much is my car worth"`, `"trade in value of my car"`, `"car value estimator"`, `"appraisal"`, `"used car appraisal"`, `"used car appraisal value"`, `"appraise my car"` |
+| Additional exclusions | Protected Edmunds/Edmonds brand searches and variants; jobs, rental, parts, wholesale. Check the final protected-term list against the current contract and inspect actual search terms daily; negative close-variant coverage is not assumed. |
+
+**First seven days:** inspect spend, CPC, impressions and actual search terms daily. Read the saved GA4 page-934 landing exploration for `google / cpc` sessions and engagement. Read Impact Used actions separately after its reporting delay, without claiming campaign attribution. At day 3, if query quality or delivery is poor, pause and decide whether to revise or end the pilot. At day 7, judge whether the buyer visits were engaged enough to justify a separately capped follow-on. The A$150 is a learning-loss ceiling, not a projected positive return.
+
+Platform documentation checked Sep 28: [campaign total budgets](https://support.google.com/google-ads/answer/10486938), [advanced location options](https://support.google.com/google-ads/answer/1722038), [Maximize Clicks](https://support.google.com/google-ads/answer/6268626), [responsive Search ads](https://support.google.com/google-ads/answer/7684791), [Search campaign setup](https://support.google.com/google-ads/answer/9510373). This sheet is preparation only; it does not authorize campaign creation or spending.
