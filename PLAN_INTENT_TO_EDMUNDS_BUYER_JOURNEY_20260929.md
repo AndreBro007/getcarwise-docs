@@ -64,8 +64,35 @@ Pre-spend acceptance gate: mobile page loads and gives value without API; five r
 
 ## Sequence and decision rights
 1. Research and prioritise with current US GSC query/page export plus Google Keyword Planner; assess SERPs and the true Search Terms report after launch. Do not treat Ubersuggest estimates as actual paid CPC.
-2. Engineer and QA the exact listing/Impact handoff and data provenance. Determine whether the current Find My Car links truly satisfy the promised specific-Edunds-listing outcome.
+2. Engineer and QA the exact listing/Impact handoff and data provenance. Determine whether the current Find My Car links truly satisfy the promised specific-Edmunds-listing outcome.
 3. Build the intent capsule, single-screen guided search and curated server-rendered page on top of existing Vercel/WordPress infrastructure. Keep the Catalog private until its public contract is truthful and link QA is complete.
 4. Publish useful organic entrance and monitor GSC/indexing and tool outcomes. Prepare matching ad groups, copy, URLs and measurement.
 5. Launch only a capped paid cohort after the path works; review terms and cost daily. Expand intents only when accepted-lead contribution and tool reliability justify it. Negotiate stronger data/partner economics if US$10 approved lead cannot support acquisition.
 No live website, ad, app, or partner account changes are made by this plan.
+
+
+## Addendum — catalog-card-to-Edmunds narrow continuation (Sep 30)
+
+André proposed a two-stage handoff: the GetCarWise page shows a broad set of relevant vehicle examples, and a click on a chosen vehicle carries that narrower preference into Edmunds. This is a useful product pattern, with a precise hierarchy:
+
+1. **Exact product link:** When an Impact Catalog item has a returned tracked product URL and a controlled check confirms it lands on that same Edmunds vehicle, keep that URL unchanged and label the CTA "View this vehicle on Edmunds." The Catalog prototype has shown URLs structurally valid and VIN-shaped strings embedded in their destinations, but did not click them, so the exact landing claim needs the separate click QA.
+2. **Narrow similar-search link:** If the exact destination is absent, stale, or demonstrably wrong, generate an Impact-approved tracked continuation to the narrowest Edmunds search URL that has been verified to work for that combination. Preserve only supported filters: make/model; condition/year/trim as separately validated; ZIP, price and sort only when the actual Edmunds route applies them. Label "See similar [model] on Edmunds." Do not imply the clicked record will be on the results page, appear first, or still be available.
+3. **Curated category link:** If a tested narrow route cannot be generated or has no useful matches, use a valid tracked Edmunds used-SUV-under-$25k page when that deep link is approved and tested, else the existing approved broader Used destination. Label the actual scope. The live untracked category page currently displays Used/CPO, SUV, up to $25,000 and offers ZIP input; it does not establish that a particular affiliate wrapper deep-links there.
+4. **No dead end:** If no tracked partner route is valid, show useful on-site alternatives and an explicitly non-affiliate direct destination where appropriate. Do not create a fake product URL.
+
+The choice of a catalog card gives us *preference information* (year/make/model/trim, price band, perhaps dealer if the record supplies it), even when the exact car no longer exists. That information can produce a helpful narrower search. However, we cannot guarantee that a result from the separate Catalog feed is Used or near the buyer: its Condition is empty, VIN is absent, item-level freshness was absent in the sample and ZIP radius is unsupported. For a paid "used SUV near me" page, only present cards as confirmed Used/local if another verified source or the actual Edmunds destination supplies that evidence. A condition-neutral catalog card may be labelled an Edmunds option with its limitations, but should not silently masquerade as a used local match.
+
+Existing CarClever historical work supports *part* of the fallback pattern: an always-available make/model Edmunds category route was deployed, and later changes corrected condition/year handling; decorative ZIP/price URL parameters were removed because they did not apply the filters, and year+trim together was observed broken. Reuse the validated route-builder and its regression tests rather than inventing URL query parameters. See carclever-widget TASKS.md entries for Aug 17 and Aug 23–24 (SYS-20260817-001/002, SYS-20260823-002, SYS-20260824-001). Verify the current implementation before porting it to a new site flow.
+
+A web click cannot be recovered after the browser has already left for an Edmunds dead page. Perform bounded link checks before offering the exact CTA (at fetch, cache refresh or pre-click where technically viable), and still state that dealer availability can change. Never crawl or scrape Edmunds to assert availability without a permitted, reliable method. Do not alter a Catalog-returned Impact URL to build the fallback; generate a separate approved tracking link for the fallback and inspect its real redirect.
+
+The current Edmunds agreement review recorded a bar on *direct PPC to Edmunds* and specific negative-keyword/copy rules. The paid destination remains a substantive GetCarWise buying experience; the buyer chooses the outbound partner link from it. See getcarwise-docs DRAFT_TASK78_GOOGLE_SEARCH_LEARNING_TEST_20260924.md and the Sep 28 contract review in carclever-widget TASKS.md.
+
+### Click acceptance cases
+- Catalog item URL resolves to same actual vehicle: exact CTA, record item-level outbound.
+- Item URL resolves to a generic page, wrong vehicle, or error: no "this vehicle" promise; offer a validated similar-search CTA.
+- Narrow route preserves model but drops unsupported trim/ZIP/price: the button and landing context reveal the broader scope, and the buyer can set filters on Edmunds.
+- Empty/thin local result: state that coverage is incomplete, show what was found, and offer the verified category/nearby alternative; never silently change a hard budget or condition.
+- Tracking: each tier has a distinct link type and permitted Sub ID/context, and Impact reports clicks/actions; assess exact versus similar versus category conversion separately.
+
+Evidence: live Edmunds category page https://www.edmunds.com/used-suv-under-25000/ ; account tests RETURN_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md and RETURN_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md.
