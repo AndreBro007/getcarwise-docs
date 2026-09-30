@@ -98,3 +98,29 @@ The current Edmunds agreement review recorded a bar on *direct PPC to Edmunds* a
 - Tracking: each tier has a distinct link type and permitted Sub ID/context, and Impact reports clicks/actions; assess exact versus similar versus category conversion separately.
 
 Evidence: live Edmunds category page https://www.edmunds.com/used-suv-under-25000/ ; account tests RETURN_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md and RETURN_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md.
+
+
+## Catalog-first website investigation (Sep 30 clarification)
+
+André's product direction is to use the Edmunds Impact Catalog as the **first candidate source for the website buying flow**, with CarClever's narrow Edmunds search continuation when an exact product destination fails. This is website-only; it does not change the MCP app. The prior "complementary" verdict describes the bounded prototype as tested, not a final architectural ceiling. Dealer location was present in 10/10 sampled items, so proximity is an engineering investigation, not a reason to abandon the Catalog.
+
+### Why this route is attractive
+A Catalog card originates from an Edmunds-supplied feed and carries an item-specific tracked URL. That is substantially better evidence of an Edmunds destination than constructing an unrelated vehicle URL, and it can make the product results and monetization path coherent. It is evidence of feed inclusion at synchronization time, not proof the car is currently for sale: the sample had no item-level freshness, and availability can change between feed updates.
+
+### Data and query work before a local inventory claim
+1. Audit a representative, bounded sample across several regions, body types, price bands, dealers and model years. Record only aggregate completeness for dealer address/city/state/ZIP, price, mileage, stock field, condition, item identity, catalog timestamp and tracked URL. Distinguish dealer location from the vehicle's physical location. Check whether the stock field's value actually predicts a live listing.
+2. Test local retrieval in two ways: (a) discover nearby dealers from a refreshed dealer-location index and query the feed's exact dealer mapping (`Manufacturer`) plus category/price where valid; (b) if this misses too many candidates, evaluate an authorized Impact catalog download or other supported partner feed access, build a server-side geospatial search index and refresh from feed updates. The first 10 national API rows cannot be post-filtered into a credible ZIP result; pagination has a 20,000-item traversal window and observed rate limit. Measure local coverage, recall and refresh costs before choosing.
+3. Normalize and cache dealer geocodes server-side, calculate approximate miles from a user-entered ZIP, and display a proximity claim only when the underlying dealer location is validated. Do not infer the user's ZIP from the ad. Let the user expand radius or browse nationwide explicitly, and expose incomplete coverage.
+4. Resolve the Used condition gap. The sampled `Condition` is empty on all ten records and no VIN field exists. Validate an authorized upstream condition field or a demonstrably reliable, permitted cross-reference. Model year or price alone is not proof. Until solved, do not label a Catalog card "Used" or claim a returned set meets a used-only ad promise; keep the page's comparison/editorial answer and a clearly described Edmunds used-category route useful.
+5. Sample Catalog item links across geography, model and dealer. Classify same live vehicle, unavailable vehicle with alternatives, generic search, error and wrong vehicle; capture aggregate counts and timestamps without logging raw vehicle IDs or URLs. Verify actual Impact click attribution separately. Refresh or suppress stale cards. A link check cannot guarantee dealer availability after the check.
+6. Use the exact returned tracked URL unchanged when the item destination passes QA. If stale, create a separate approved tracked narrow make/model search using the proven CarClever route builder; label it "See similar vehicles." If that fails, use the verified broader category continuation. These tiers must be distinguishable in analytics.
+
+Impact's partner documentation describes catalog downloads via platform/FTP/API and a catalog-level Last Updated time, including once-daily synchronization for brand API changes. This makes a periodically refreshed website read model plausible, subject to access for this particular Edmunds catalog, feed size, permitted use and observed update behavior; it does not certify any individual car as live. Official source: https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/marketing-content/product-marketplace-and-catalogs/download-product-catalogs-as-a-partner
+
+### Decision gates
+- **Catalog-led local cards:** adopt if the dealer index/query or authorized feed path achieves useful local coverage, location accuracy and acceptable refresh cost.
+- **Used-specific cards:** adopt only after an independently verified condition source. Otherwise the UI must not imply used status for individual Catalog records.
+- **Exact vehicle CTA:** adopt when tested item URLs reliably land on the same car; measure the actual rate and maintain the similar-search fallback.
+- **Paid launch:** requires the specific ad promise, landing results and outbound route to agree, plus attribution and acceptable approved-action economics. No campaign is published by this investigation.
+
+Questions for Claude's prior deep dive: Did it inspect the actual dealer-location field format and ZIP completeness beyond ten items? Did it test API filtering on any geographic field, bulk feed access for this Edmunds relationship, changes/deletions across daily snapshots, or exact item-link landing outcomes? Bring its evidence into these gates rather than treating its earlier bounded-prototype scope as a permanent product constraint.
