@@ -4,6 +4,14 @@ Owner: ChatGPT/Codex, per André's explicit instruction
 Status: Technical research completed; implementation direction authorized. Code has not yet been scaffolded or deployed.
 Supersedes: the earlier feasibility review's utility-only recommendation and requirement to complete all commercial setup before any prototype work.
 
+## Phase 0 and minimum-proof update — later October 1
+
+André confirmed the funnel-first approach: native help → tracked Edmunds handoff → buyer enters ZIP, searches locally and submits a qualifying enquiry within the recorded referral window. Locality and VIN are not initial requirements. A click or visual availability check is not itself a payable lead; Impact approved actions remain the commercial measure.
+
+The first technical proof is now deliberately smaller than the roadmap below: one supported model, one or two budgets, three catalog cards and one deliberate Edmunds action. Comparison, buying brief, further models and AI are later iterations based on user fit. Retain the broader vision, but do not require those features to establish the first working native integration.
+
+Detailed setup, tools, ownership and buyer research: [RESEARCH_REDDIT_BUYER_INTENT_PHASE0_20261001.md](RESEARCH_REDDIT_BUYER_INTENT_PHASE0_20261001.md). Phase 0 requires a separate GitHub repo with connector access, a selected Reddit developer owner, CLI OAuth in the build environment, a controlled playtest installation, and secure Impact configuration. Fetch-domain approval is required for live-catalog proof. Custom Software property/source setup proceeds alongside development. No AI key or fund enrollment is required first.
+
 ## 1. Confirmed direction
 
 Build a new, separate native Reddit app using the Impact Edmunds catalog as its only inventory API. Edmunds affiliate commissions drive the business case; Developer Funds are optional upside. No Auto.dev or Fractal dependency. No VIN search. ChatGPT/Codex owns research, strategy and this new build; Claude is not a dependency.
