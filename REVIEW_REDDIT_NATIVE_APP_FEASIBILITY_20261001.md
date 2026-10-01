@@ -2,6 +2,8 @@
 Date: 1 October 2026
 Status: Research review complete; feasibility, permissions and implementation remain unapproved.
 
+> **Direction updated later on 1 October, at André's instruction.** Affiliate revenue is the primary objective and Developer Funds are only a bonus. Proceed toward a separate Impact-catalog-only Reddit app, with no Auto.dev/Fractal dependency and no VIN requirement. ChatGPT/Codex owns the new build. The inventory search/referral proof is the first product; commercial setup proceeds in parallel rather than blocking private prototype work. See [PLAN_REDDIT_CATALOG_APP_BUILD_20261001.md](PLAN_REDDIT_CATALOG_APP_BUILD_20261001.md) for the constructive reassessment, inspected reusable code, current Devvit architecture and implementation milestones. This supersedes the utility-only first-product recommendation and earlier unapproved-implementation status below. Historical technical cautions remain evidence, not objections to starting development.
+
 ## Judgment
 
 A native Reddit buying helper is worth investigating as another GetCarWise distribution channel. It could let people choose a useful interactive tool within their community instead of encountering repeated promotional bot replies. The supplied documents are substantial concept drafts, but their dual-income forecast and implementation claims are not yet reliable enough to authorize a build.
