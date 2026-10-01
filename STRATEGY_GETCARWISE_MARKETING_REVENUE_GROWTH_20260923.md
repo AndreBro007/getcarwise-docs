@@ -235,3 +235,22 @@ Reddit permits targeting by relevant communities, keywords and interests and cha
 6. **Scale by contribution:** winner means repeatable approved net actions and credible cost per approved lead below payout with room for variable cost, not the highest CTR. Retain useful organic pages even if they are not paid winners.
 
 This updates the prior document's rows describing the Catalog as merely a complementary private module and paid Search as categorically deferred. The **investigation priority** is now Catalog-led website inventory; the **launch status** remains held pending truth and measurement gates. Page 934's single-page Search route remains a live option rather than being discarded. The earlier A$150 G1 budget is a proposed ceiling from a draft, not a current selection or an instruction to spend.
+
+## Additional distribution route — October 1: native Reddit buyer utility
+
+At André's instruction, develop a separate CarClever Reddit app as another acquisition and affiliate-income channel. This adds to the existing owned-site/Search/app routes; it does not overwrite their campaign status. ChatGPT/Codex owns this new product's strategy, technical research and build.
+
+Positioning stays consistent with the strategy's second-opinion promise. Help a US buyer narrow a budget/model decision through useful native guidance and catalog examples, then offer a disclosed, deliberate tracked handoff to Edmunds. ZIP search can happen at Edmunds. No Auto.dev or Fractal dependency; Impact catalog is the only inventory API. Developer Funds are optional upside.
+
+First proof is small: one model, one or two budgets, three real catalog cards and one outbound action in a controlled Devvit playtest. Then test buyer guidance and iterate based on use. Comparison, a buying brief and conversational AI remain possible improvements rather than initial prerequisites.
+
+Current exploratory Reddit research supports shortlist validation, practical tradeoffs and questions for the seller. This is qualitative evidence, not a conversion forecast. A human founder voice should emphasize help, disclose GetCarWise ownership and avoid marketing AI as the main benefit. André identifies the existing account as u/CarClever_GPT; a new public account is under consideration, not yet created. Developer ownership and public community identity are separate choices.
+
+Funnel: Reddit intent → useful native help → shortlist/catalog choices → tracked Edmunds visit → local search/availability enquiry → eligible submitted action → Impact approval/commission. The recorded referral window is 30 days with last-click attribution; visits and visual availability checks are not automatically payable leads. Registration of the new Custom Software property and Edmunds-specific source approval proceed alongside development and remain public-monetization setup tasks.
+
+Distribution options: controlled own-community trial, willing moderator pilot, public app listing, permitted founder participation and later a separately approved paid experiment using a verified format/destination. Do not assume large-community acceptance or that a custom interactive post is promotable in every ad format.
+
+Phase 0 and buyer research: [RESEARCH_REDDIT_BUYER_INTENT_PHASE0_20261001.md](RESEARCH_REDDIT_BUYER_INTENT_PHASE0_20261001.md).
+Build architecture and roadmap: [PLAN_REDDIT_CATALOG_APP_BUILD_20261001.md](PLAN_REDDIT_CATALOG_APP_BUILD_20261001.md).
+
+Status: research and setup specifications saved; no new repository, Reddit account, CLI authentication, app code, native upload, outreach or paid campaign completed yet.
