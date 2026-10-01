@@ -1,6 +1,6 @@
 # OpenAI submission process and screens — session checkpoint
 Date: 2 October 2026 (Australia/Brisbane)
-Status: Official-documentation review complete; account-specific screen inspection pending.
+Status: Official documentation and owner screenshots reviewed; corrected package draft and reusable ZIP builder prepared, not uploaded.
 Owner: ChatGPT Business/Strategy.
 
 ## Session verification
@@ -97,7 +97,7 @@ For a new MCP-backed submission: create a complete supported package, including 
 Initial MCP review requires five positive/three negative cases and video; copy nothing untested from historical VIN fixtures. The Find My Car exported starter VIN is an old inventory fixture, so review its usefulness before an eventual listing update. This is not an instruction to run inventory tests now.
 
 ### Practical next steps
-1. Find My Car: use the existing MCPs Rescan button; inspect completed discovery and exact findings. If Complete MCP setup remains, inspect Connect/Reconnect requirements or seek support; do not recreate the plugin or assume annotations need changing.
+1. Find My Car: owner already rescanned and confirmed no tool issues. This step is complete. Application V2 is approved/live; exported package version is 1.0.0. Any remaining Complete MCP setup dot is a separate portal-state question. Do not request another scan or conflate it with old CarClever's rejected package 3.0.0.
 2. Old CarClever: verify current titles/descriptions and the two annotation cautions, then have Fractal apply approved wording. No priority-tier language; preserve functional scope.
 3. Prepare a complete updated package/draft for review when André chooses to proceed. No upload, scan, reconnection, appeal, submission or publication was performed here.
 
@@ -112,3 +112,13 @@ Read current official plugin guidelines, submission/package guides, MCP review a
 Corrected archive discovery: OPENAI_SUBMISSIONS_INDEX.md exists under openai-submissions/, not widget root. Read it and fetched the historical v2 export for title/annotation evidence. Historical statuses remain superseded by today's dashboard screenshots.
 
 No application code, deployment, portal setting, package upload, lead/affiliate click, appeal, public message or spend changed. Original ZIPs remain unchanged.
+
+## Concrete package preparation — owner clarification, later 2 October
+
+Owner clarified Find My Car application V2 was submitted and is live, not V3. Owner already supplied/extracted ZIPs and completed the clean rescan; repeated requests to do those steps were incorrect. Find My Car application V3 remains paused/unsubmitted. Old CarClever package 3.0.0 is the rejected version, with package 2.0.0 published and application code 3.0.0 already live including Recommended sort.
+
+Current submission guide explicitly says rejected packages need a corrected ZIP; update package contents and version. Prepared old-carclever-3.0.1-draft.zip from the supplied old 3.0.0 export, preserving identity/publisher/URLs/category/capabilities and compatibility path. Updated factual listing text/subtitle/prompts and version only. Reopened and verified ZIP integrity, JSON, field lengths and unchanged fields. No server code bundled or changed. Draft not submitted-ready: existing portal icon/review materials and connection need checking on import; URLs preserved, not newly reverified. No portal action performed.
+
+Prepared carclever-zip-toolkit.zip with a reusable Python 3 ZIP builder, factual old listing JSON, instructions for both old/new identities and a concrete Fractal description task. Toolkit is not the portal upload. Both artifacts saved successfully as user-facing files. No special OpenAI generator is needed; Python json/zipfile recreate the exported compatibility format. No new Find My Car package was generated. Future package version is independent of application V3.
+
+Recommended next: remove old search priority directives on server, then upload the 3.0.1 draft to existing old CarClever, verify saved draft/retained connection/assets/review information, submit corrected package and publish after approval. No need to submit solely to deploy compatible Recommended sorting: hosted changes use MCP scans independently. Leaving rejected package unresolved retains published 2.0.0 metadata. No guarantee of future approval implied.
