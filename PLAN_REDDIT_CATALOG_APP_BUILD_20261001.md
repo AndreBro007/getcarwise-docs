@@ -167,3 +167,9 @@ Primary references:
 - [Connect custom software in Impact](https://help.impact.com/partner/what-would-you-like-to-learn-about/account-management/account-settings/connect-media-properties/connect-a-browser-extension-and-custom-software)
 
 Claude's attachment supplies historical live Impact evidence; today inspected the implementation and platform sources, not new authenticated Impact calls. Technical architecture is supported by the platform; the full Devvit-to-Impact integration remains to be proven by steps 3–4. Source and domain permissions are launch/integration tasks, not forecasts of rejection.
+
+## Execution tracking and launch-screen concepts — October 1 evening
+
+The step-by-step working tracker is now [TRACKER_REDDIT_APP_PHASE0_AND_POST_CONCEPTS_20261001.md](TRACKER_REDDIT_APP_PHASE0_AND_POST_CONCEPTS_20261001.md). Use its R0–R4 IDs and evidence-backed statuses for ongoing execution. André proposed `Andre_GetCarWise` as the human-facing account; availability/creation remain unverified. Lead with buyer help, explain AI as an enabling technology, and review homepage copy separately. The 11–14-hour evidence is from the 2023 Cox study's total buying-process time, not research-only time or measured GetCarWise savings.
+
+Four configurable entry concepts were proposed: budget prompt, shortlist helper, buying-discussion starter and ready-to-investigate examples. Implement only the simple budget-prompt native post first; evaluate which entry variant suits each distribution route through observed user use. No account, site or code changes were made by this update.
