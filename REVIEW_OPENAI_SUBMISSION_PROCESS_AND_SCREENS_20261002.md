@@ -141,3 +141,8 @@ Saved reusable [guide](GUIDE_OPENAI_SUBMISSION_ZIP_20261002.md) and [Python 3 bu
 Current submission-error reference still asks for annotation justifications; guideline wording differs. Retain factual justifications wherever requested by portal/reviewer. Earlier guideline-only interpretation must not be read as grounds to ignore the rejection email.
 
 No ChatGPT application code or deployment, affiliate click/lead, new Find My Car submission, publication, subscription or spend change. Remaining action: review outcome, remedy any specific new feedback, publish approved 3.0.1 when André chooses.
+
+
+### New CarClever annotation check — owner closeout clarification, 2 October 2026
+
+New CarClever – Find My Car's two live tools, find_matching_vehicle and resolve_dealer_url, were checked independently: readOnlyHint=true, destructiveHint=false and openWorldHint=true, explicitly set on both and consistent with their current public-data/link-resolution behavior. Owner already completed a clean scan. The submission screen still shows a red/orange MCP-tab dot; no annotation defect was found and the dot alone is not evidence of one. Leave the current live application V2/published package 1.0.0 unchanged. Reassess actual portal findings at the next new-app package submission; do not speculate that a stricter future review has already failed. Future application V3 annotations were not checked and remain outside this live two-tool verification.
