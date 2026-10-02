@@ -4,6 +4,8 @@
 **Lane:** ChatGPT business/strategy.
 **Status:** Recommendations pending André confirmation. Review complete; implementation and live functionality checks not performed.
 
+> **Confirmed André direction — 2 October closeout:** Defer the website Lite V2 migration until Fractal's reply establishes whether old CarClever will continue. Keep this on the to-do list; resolve the decision and, if Fractal will stop, complete the necessary cutover **before 14 October 2026 (Brisbane)** and before service loss. If Fractal continues, reconsider whether migration is still needed rather than automatically replacing the legacy experience. No immediate WordPress edit or migration is authorized. This timing supersedes the immediate staged-migration recommendation below; the page inventory and technical checks remain applicable. Affiliate creative and Google Ads approval remain separate unresolved items.
+
 ## Recommendation
 
 1. Replace fixed website affiliate CTAs with the exact relevant Edmunds-supplied Impact asset text and current Asset Code, including its supplied impression pixel where present. Start with page 934, then audit the other live fixed placements, including post 513. Do not leave custom creative unresolved or make an Edmunds response a prerequisite for using existing supplied creative.
@@ -48,17 +50,20 @@ https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-feat
 
 ## 2. Website Lite migration
 
-| Page ID | Guide | Current embedded route |
+| ID | Current page title | URL |
 |---|---|---|
-| 934 | Compact SUV under $25,000 / G1 | Legacy Lite |
-| 937 | Used PHEV | Legacy Lite |
-| 938 | Used EV | Legacy Lite |
-| 935 | Sedan under $15,000 | Legacy Lite |
-| 936 | Hybrid SUV under $20,000 | Legacy Lite |
-| 830 | Three-row SUV under $50,000 | Legacy Lite |
-| 829 | Full-size truck under $35,000 | Legacy Lite |
-| 828 | New midsize sedan under $40,000 | Legacy Lite |
-| 827 | SUV under $30,000, new vs used | Legacy Lite |
+| 934 | Best Compact SUVs Under $25,000 in 2026: Used Picks Compared | https://getcarwise.app/tools/best-compact-suv-under-25000/ |
+| 937 | Best Used Plug-In Hybrids in 2026: Which PHEV Fits You? | https://getcarwise.app/tools/best-used-phev-plug-in-hybrid/ |
+| 938 | Best Used Electric Cars (EV) 2026: Top Value Picks | https://getcarwise.app/tools/best-used-electric-car-ev/ |
+| 935 | Best Sedans Under $15,000 (2026): Reliable Picks Ranked | https://getcarwise.app/tools/best-sedan-under-15000/ |
+| 936 | Best Hybrid SUVs Under $20,000 (2026): Value & Efficiency | https://getcarwise.app/tools/best-hybrid-suv-under-20000/ |
+| 830 | Best 3 Row SUVs Under 50k | https://getcarwise.app/tools/best-3-row-suv-under-50000/ |
+| 829 | Best Full-Size Truck Under $35,000: F-150 vs Silverado vs Ram | https://getcarwise.app/tools/best-full-size-truck-under-35000/ |
+| 828 | Best New Midsize Sedans Under $40,000 in 2026 | https://getcarwise.app/tools/best-midsize-sedan-under-40000/ |
+| 827 | Best SUVs Under $30,000 in 2026: New vs. Used Picks | https://getcarwise.app/tools/best-compact-suv-under-30000/ |
+| 239 | CarClever Lite – Free AI Used Car Evaluation | https://getcarwise.app/carclever-lite/ |
+
+All ten currently use the legacy route (nine guide embeds plus the main entry page), as verified earlier in this session. Replacement when selected: https://carclever-lite.getcarwise.app/carclever-lite-v2. This is the conditional cutover inventory, not a list of completed migrations.
 
 Lite V2 already exists; no replacement build is recommended. Its main website job—find matching inventory and continue toward a vehicle/dealer—is suitable for these buyer guides. Its new/used/CPO support also fits page 828 more naturally than a legacy used-only route.
 
