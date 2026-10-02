@@ -122,3 +122,22 @@ Current submission guide explicitly says rejected packages need a corrected ZIP;
 Prepared carclever-zip-toolkit.zip with a reusable Python 3 ZIP builder, factual old listing JSON, instructions for both old/new identities and a concrete Fractal description task. Toolkit is not the portal upload. Both artifacts saved successfully as user-facing files. No special OpenAI generator is needed; Python json/zipfile recreate the exported compatibility format. No new Find My Car package was generated. Future package version is independent of application V3.
 
 Recommended next: remove old search priority directives on server, then upload the 3.0.1 draft to existing old CarClever, verify saved draft/retained connection/assets/review information, submit corrected package and publish after approval. No need to submit solely to deploy compatible Recommended sorting: hosted changes use MCP scans independently. Leaving rejected package unresolved retains published 2.0.0 metadata. No guarantee of future approval implied.
+
+
+## Session closeout — 2 October 2026, 13:39 Brisbane — corrected package submitted
+
+This dated update supersedes earlier same-session statements that the draft had not been uploaded or submitted and that server-description work remained pending.
+
+André ran the Fractal agent's small description/AI-visible URL-suppression changes, passed preview testing and deployed to production. He rescanned the old MCP; screenshot showed all nine tools Live and no issues. Independent old-plugin tests: search (six listings), comparison (two), risk and affordability succeeded with dealer_vdp_url absent; temporary garage save/list/remove succeeded, garage-list returned null and final garage was restored empty. Private get-vehicle-details and resolve-dealer-url were not callable in this session; raw Fractal metadata remained 403-blocked. Full all-nine-tool independent verification is not claimed. Session connector descriptions remained cached; they were not treated as current deployed metadata. Internal affiliate resolution was preserved per Fractal's report/owner preview, not independently destination-clicked.
+
+Uploaded 3.0.1 initially reported App icon required: original export had no icon. Corrected ZIP adds root interface.logo and interface.composerIcon pointing to ./assets/carclever-icon.png plus actual image bytes. André selected his existing blue square 128 × 128 PNG; it meets documented ≥48px requirement and portal accepted it. Metadata screen showed No Issues. Original manifest identity, URLs and other fields were preserved; version/listing/release notes reflect the correction.
+
+André submitted on 2 October; final screenshot confirms old CarClever Version 3.0.1 · In review, Publication Version 2.0.0, MCP Configured. Package 3.0.0 remains rejected history. Approval/publication of 3.0.1 is pending. Hosted Fractal application code 3.0.0 was already live, including Recommended sort. New Find My Car application V2 remains approved/live, exported published package 1.0.0; new application V3 paused/unsubmitted.
+
+Documentation says rejected submissions need a corrected ZIP and updates change package version; it does not explicitly promise overwriting a rejected same-version entry. This session used 3.0.1 successfully; same-version uploads corrected its unsubmitted draft. Only one active review allowed; wait for outcome before another upload unless deliberately cancelling review.
+
+Saved reusable [guide](GUIDE_OPENAI_SUBMISSION_ZIP_20261002.md) and [Python 3 builder](scripts/build_openai_submission_zip.py), plus user-facing toolkit containing guide/script/square icon/old listing example/final submitted reference ZIP. Builder now bundles icon assets, validates required image references, preserves unrelated entries, supports explicit same-version draft correction and verifies ZIP integrity. Tested next-version build, same-version draft build, extra-component preservation and missing-icon rejection. Portal/server/policy review remains separate.
+
+Current submission-error reference still asks for annotation justifications; guideline wording differs. Retain factual justifications wherever requested by portal/reviewer. Earlier guideline-only interpretation must not be read as grounds to ignore the rejection email.
+
+No ChatGPT application code or deployment, affiliate click/lead, new Find My Car submission, publication, subscription or spend change. Remaining action: review outcome, remedy any specific new feedback, publish approved 3.0.1 when André chooses.
