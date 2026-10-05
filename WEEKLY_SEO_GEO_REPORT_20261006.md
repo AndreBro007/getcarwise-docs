@@ -38,7 +38,7 @@
 - 7-day geography: US 22, Australia 5, 1 each Germany / Sri Lanka / Russia.
 
 ## 3. GSC detail
-- **Pages (US 28d, clicks/impressions):** `/try-carclever/` 3/39; `/` 2/118; `/carclever-live-in-chatgpt/` 2/16; best-3-row-suv-under-50000 1/77; best-compact-suv-under-25000 1/76; best-compact-suv-under-30000 0/305; best-used-phev 0/107; best-midsize-sedan-under-40000 0/130 (pos 18.2); `/blog/` 0/120 (pos 65.8). Rows below the top 10 were parsed from concatenated strings.
+- **Pages (US 28d, clicks/impressions):** `/try-carclever/` 3/39; `/` 2/118; `/carclever-live-in-chatgpt/` 2/16; best-3-row-suv-under-50000 1/77; best-compact-suv-under-25000 1/76; best-compact-suv-under-30000 0/305; best-used-phev 0/107; best-midsize-sedan-under-40000 0/13 (pos 18.2); `/blog/` 0/12 (pos 65.8). CORRECTED Oct 6 (earlier draft read 130 and 120): rows below the top 10 came back as concatenated strings and were mis-split.
 - **Queries:** brand ("carclever" 4 clicks/21 impr; "car wise" 1/10; "getcarwise" 0/39); zero-click head terms ("ai car finder" 62 impr; "best suvs under 30k" 48; "best suv under 30000" 39).
 - **Question-style queries ranking well (US):** "tools that use ai to compare used cars?" pos 3.5; "do hybrid suvs hold their value better than gas suvs?" 3.5; "does cargurus use ai to rank the best deals for me?" 9.3; several long AI-appraisal / used-car-sourcing questions at positions 2–5.
 - **Indexing (report last updated Sep 21 — stale):** 57 indexed / 84 not indexed (was 83). Redirect 43, 404 19, robots-blocked 5, noindex 4, redirect error 3, 403 1, crawled-not-indexed 8, discovered-not-indexed 1. Not diagnosed page by page.
@@ -48,7 +48,7 @@
 ## 4. Semrush (Chrome UI)
 - **Domain Overview (Oct 5):** organic keywords 117 (Sep 25 snapshot: 77), referring domains 145 (118), backlinks 173 (137), Authority Score 2.
 - **Position Tracking (10 keywords, US Google desktop, tracking restarted Sep 28):** visibility 27.58%, avg position 39.0. Positions: best midsize sedan under 40000 = 1; carclever = 1; car clever = 2; getcarwise = 2; best compact suv under 30000 = 27; best used phev plug in hybrid = 27; best suv under 30000 = 30 (vol 1,300); best 3 row suv under 50000, best suv under 30k, vin check (vol 90,500) = not ranking. The "+27.58%" is largely a baseline artifact (no earlier data).
-- **Site Audit (crawl ~1 week old, 100 pages):** health 93%, AI Search health 85%. 1 error (invalid structured data item — may be stale given GSC shows 0); warnings: 52 low text-HTML ratio, 15 long titles, 9 internal nofollow, 1 missing meta description; notices: 39 permanent redirects, 34 links without anchor text, 23 pages with one internal link.
+- **Site Audit (crawl ~1 week old, 100 pages):** health 93%, AI Search health 85%. 1 error (invalid structured data item — NOT stale: real invalid JSON-LD on the $30k page, see ANALYSIS_SEO_GEO_DIAGNOSIS_AND_ACTION_PLAN_20261006.md); warnings: 52 low text-HTML ratio, 15 long titles, 9 internal nofollow, 1 missing meta description; notices: 39 permanent redirects, 34 links without anchor text, 23 pages with one internal link.
 - **Backlink Audit (re-crawled Oct 6):**
 | Metric | Sep 27 | Oct 6 |
 |---|---:|---:|
@@ -75,7 +75,7 @@
 ## 7. Recommendations
 - **Backlinks:** not urgent; no manual action or security issue found. Disavow (if desired) as a monthly batch; a new Google upload REPLACES the old file, so include the existing 87 + new domains. Recalculate in Semrush once after the next upload. Watch new-domains-per-week (79 → 94).
 - **Hold protected pages** (Sep 28 no-change decision still applies).
-- **Verify before claiming a win:** $40k sedan page 828 (GSC 130 impr at pos 18.2 vs Semrush keyword position 1).
+- **$40k sedan page 828:** GSC shows 13 impr at pos 18.2 (consistent with the Sep 28 snapshot of 10); an earlier draft's "130" was a parsing error. Semrush keyword position 1 is a different measure (US desktop snapshot) — do not read as a win.
 - **Sitemap:** exclude page ID 771 via Rank Math → Sitemap Settings → General → Exclude Posts (does not touch the redirect, retained page or page content).
 
 ## 8. Open / to-do
