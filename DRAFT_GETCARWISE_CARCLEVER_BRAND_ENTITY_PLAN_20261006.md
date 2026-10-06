@@ -4,7 +4,7 @@
 
 ## Which name should describe the publisher and which the product?
 
-Use **GetCarWise** for the publisher and **CarClever** for the product. GetCarWise is the research publisher and website; CarClever is the AI car-shopping product offered through supported assistants and related tools. This matches the company’s own story page and terms, which identify GetCarWise as publisher of CarClever.
+The naming rule is approved: use **GetCarWise** for the publisher and **CarClever** for the product. GetCarWise is the research publisher and website; CarClever is the AI car-shopping product offered through supported assistants and related tools. This matches the company’s own story page and terms, which identify GetCarWise as publisher of CarClever.
 
 Use that distinction consistently in page titles, author and publisher references, About text, app listings, and future structured data. A page about the organization should identify GetCarWise. A page explaining how to search inventory or evaluate a listing may identify CarClever as the tool. Do not use “GetCarWise” as though it were the name of the app, and do not imply that CarClever is a separate publisher.
 
@@ -12,15 +12,15 @@ Sources: [GetCarWise story and methodology](https://getcarwise.app/about-getcarw
 
 ## What is the current source of truth for each name?
 
-Use the official site at [getcarwise.app](https://getcarwise.app/) as the source for publisher identity, product disclosures, and links to CarClever. Use the live [CarClever - Find My Car ChatGPT listing](https://chatgpt.com/plugins/plugin_asdk_app_6a85781882508191b1794888c5bbf728) as a product-directory record. Keep that app listing distinct from a social-media or company profile.
+Use the official site at [getcarwise.app](https://getcarwise.app/) as the source for publisher identity, product disclosures, and links to CarClever. Use the live [CarClever - Find My Car ChatGPT listing](https://chatgpt.com/plugins/plugin_asdk_app_6a85781882508191b1794888c5bbf728) as a product-directory record. The listing currently opens the “CarClever - Find My Car” page and identifies it as a live car-search product. Keep that app listing distinct from a social-media or company profile.
 
 The handoff and Part 3 implementation log report brand confusion in search results for “GetCarWise,” including unrelated businesses with similar names. This is a reason to use the exact domain and consistent publisher/product naming in owned materials, not a reason to associate the brand with unrelated profiles. The observation is documented in the [SEO/GEO strategy handoff](https://github.com/AndreBro007/getcarwise-docs/blob/main/HANDOFF_CHATGPT_SEO_GEO_CONTENT_STRATEGY_BRIEF_20261006.md) and [Part 3 implementation log](https://github.com/AndreBro007/getcarwise-docs/blob/main/IMPLEMENTATION_LOG_SEO_GEO_20261006_PART3.md).
 
 ## Which real profiles are verified for an organization profile list?
 
-The official website is verified as an owned web property. The ChatGPT directory listing for “CarClever - Find My Car” is a real product listing, but it identifies the product rather than serving as a social or company profile for GetCarWise.
+André confirmed on Oct 6, 2026 that GetCarWise and CarClever have no official social or company profiles today. The official website is an owned web property, and the ChatGPT directory entry is a product listing; neither should be represented as a social or company profile.
 
-No independent LinkedIn, X, Instagram, YouTube, Facebook, or review-site profile for GetCarWise was verified in this research. Do not add guessed profile URLs, lookalike “Carwise” pages, or personal accounts to an Organization profile list. If André confirms a real profile, record its exact canonical URL and verify that the profile is controlled by the publisher and uses the same business identity before including it.
+Do not add guessed profile URLs, lookalike “Carwise” pages, or personal accounts to an Organization profile list. Profile creation and app-marketing research are parked for later in [TASK_SOCIAL_PROFILES_AND_APP_MARKETING_RESEARCH_20261006.md](TASK_SOCIAL_PROFILES_AND_APP_MARKETING_RESEARCH_20261006.md).
 
 | Candidate | Current assessment | Action |
 |---|---|---|
@@ -54,6 +54,6 @@ Source: [GetCarWise story and methodology](https://getcarwise.app/about-getcarwi
 
 ## What should happen before any entity implementation?
 
-André should confirm the publisher/product naming rule and provide the canonical URLs for any official profiles that should be associated with the publisher. The owner implementing the site should verify each profile is live, controlled by GetCarWise, and describes the same entity. Then Claude can implement the approved identity references and validate the result against Google’s current documentation.
+The publisher/product naming rule is approved: GetCarWise is the publisher and CarClever is the product. André confirmed there are no official social or company profiles today, so no social/profile URLs should be added to an Organization profile list. Future profile creation and app-marketing research are tracked in [TASK_SOCIAL_PROFILES_AND_APP_MARKETING_RESEARCH_20261006.md](TASK_SOCIAL_PROFILES_AND_APP_MARKETING_RESEARCH_20261006.md). Claude can implement approved identity references and validate the result against Google’s current documentation after André confirms a future implementation request.
 
-Until those checks are complete, the verified profile list contains the owned website and a separate product directory listing. This draft includes no structured-data code and does not authorize implementation.
+The owned website remains the publisher’s canonical web property; the ChatGPT listing remains a separate CarClever product destination. This draft includes no structured-data code and does not authorize implementation.
