@@ -1,0 +1,23 @@
+# SEO/GEO Implementation Log — Part 6 (Oct 6, 2026)
+
+**Continues** `IMPLEMENTATION_LOG_SEO_GEO_20261006_PART5.md`. Owner lane: Claude — Engineering.
+
+## A5 — three thin pages expanded and published — DONE
+- **Source drafts:** ChatGPT's `DRAFT_HYBRID_SUV_UNDER_20000_20261006.md`, `DRAFT_USED_ELECTRIC_CARS_20261006.md`, `DRAFT_SEDANS_UNDER_15000_20261006.md`; each confirmed by André before publishing.
+- **Pages (WordPress IDs):** `/tools/best-hybrid-suv-under-20000/` (936, ~1,640 words, 8 questions), `/tools/best-used-electric-car-ev/` (938, ~1,790 words, 9 questions), `/tools/best-sedan-under-15000/` (935, ~1,820 words, 10 questions). Each keeps its existing title, H1, meta description and the embedded CarClever Lite tool block (preserved byte-for-byte), and gains a visible "Last updated: October 6, 2026" line, the new "Guide" template byline, and single-line FAQPage JSON-LD (one Question per question heading). Stored content equals intended; live checks passed (valid JSON-LD, tool iframe present, no draft labels).
+- **Corrections made to the drafts before publishing:** hybrid: Ford 44/41 mpg qualified as front-wheel drive (AWD 43/40), unverified Ford and Toyota links replaced with confirmed pages (Toyota's 10-year/150,000-mile hybrid-battery warranty for 2020+ confirmed from Toyota). Electric: an unsupported "Level 2 recharges a depleted EV overnight" claim attributed to the Department of Energy was rewritten (DOE says Level 2 suits batteries that need more than overnight; Level 1 is very slow for larger batteries), guessed ENERGY STAR/Nissan/DOE links removed or replaced with the confirmed DOE home-charging page, a mislabeled EPA link fixed. Sedans: an internal note ("Confirm current values before publication") removed; one unsupported FTC attribution reworded.
+- **Not verified by Claude:** Kelley Blue Book prices (KBB blocks automated checks). André spot-checked the KBB links and confirmed they open the right pages.
+
+## Edmunds affiliate links added to the three pages — DONE
+- **Source of truth:** `RETURN_WORDPRESS_IMPACT_STATIC_DESTINATION_MAPPING_20260921.md` (validated Impact assets for Edmunds, account 7765200): Used Car Listings (asset 3949600, `https://edmunds.sjv.io/c/7765200/3949600/52125`) and Sell Your Car / trade-in (asset 3949601, `https://edmunds.sjv.io/c/7765200/3949601/52125`). The New Car Listings asset (3949597) was not used because these guides are used-car only.
+- **Markup copied from existing site pages:** `rel="nofollow sponsored noopener" target="_blank"`; the disclosure sentence used on the existing pages ("Some links on this page are affiliate links. If you use one, GetCarWise may receive compensation at no additional cost to you. Our recommendations remain independent.").
+- **Placement on each page:** disclosure paragraph right after the "Last updated" line (before any affiliate link); "Browse Used Cars on Edmunds" paragraph right after the tool block; a closing paragraph before the final price note with one more Used link and one contextual trade-in link ("see what it could be worth on Edmunds"). 3 affiliate links per page, all sponsored; disclosure appears before the first link.
+- **Verified:** stored content equals intended; live pages show the links with the correct href, rel and target; tool iframe and JSON-LD intact. Affiliate links were NOT clicked by Claude (to avoid creating test clicks); the redirects were validated on Sep 20 per the return doc above. Suggested check: Impact's click report should show clicks from these pages within a day of real traffic.
+- The four protected Task #78 pages were not touched.
+
+## Strategy draft review: AI-tools guide (not yet publishable)
+- Review findings sent to André with a revision prompt for ChatGPT: remove internal notes from the body; replace unconfirmed source links (CarGurus Discover real pages: `cargurus.com/about/press/ai-search-experience`, `investors.cargurus.com/node/16126`); prominent affiliate disclosure and neutral wording about Edmunds; add real findings from the "We Tested CarClever" post; add a comparison table; state which CarClever product each claim describes.
+- Addition for that revision: where Edmunds is mentioned with a link, use the approved Impact Used link and the standard disclosure above.
+
+## Still open
+Google re-indexing requests for 935, 936, 938 (Search Console input did not take; retry); review of the other four strategy drafts; TASKS.md and DECISIONS.md splits (André said go ahead); possible next monetization wave (Edmunds Used links on the 16 model pages, truck and comparison guides) awaiting André's yes; Task #63B CJ-to-Impact migration status to be re-verified; REFERENCE.md and PLAYBOOK.md contain plaintext credentials (André chose to ignore for now).
