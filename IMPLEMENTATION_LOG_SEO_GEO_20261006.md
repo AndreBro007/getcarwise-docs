@@ -20,3 +20,17 @@ A2 part 2: Guides links in site navigation/footer; blog post to pillar links; ve
 ## Notes
 - Mistake logged: fetching 28 pages in parallel from the browser tripped the host's anti-bot challenge ("Checking your browser…" 403) for scripted requests from my sandbox and browser. Normal page navigation passes it. Avoid bursts; space requests.
 - STATE.md update is still pending (file too large for the connector; GitHub web-editor save hung). Checkpoints unchanged.
+
+## A3 — Author reassigned (Oct 6, later) — DONE (schema author); visible byline NOT yet added
+- **Change:** author of all 32 published items previously attributed to the `claude-automation` WordPress user (31 pages incl. the four protected pages and the `/tools/` hub, plus 1 post) set to André Broekman (user ID 1) via REST, one item at a time; every response returned author = 1. Result: 0 items left on `claude-automation`; 58 items under André. Only the author field was sent. Page modified dates changed to Oct 6 (no content changed).
+- **Verified:** live `/tools/best-compact-suv-under-30000/` JSON-LD names Andre Broekman (Person + author), 3 of 3 blocks valid, no `claude-automation` anywhere in the page.
+- **Bio:** André's existing WordPress bio (257 chars: founder of GetCarWise, built CarClever, "research and transparency, not selling cars") was left unchanged; his approved alternative text was NOT applied. His choice which to use.
+- **Open:** the theme shows no visible byline/author box on these pages; adding one is a theme/block task (not started).
+- **Mistake logged:** the REST saves are slow (~4 s each); two long scripts timed out mid-batch and the host's anti-bot challenge appeared. All 32 were verified afterwards by re-querying the author filter, not by trusting the responses.
+
+## STATE.md split (Oct 6, later) — DONE
+- STATE.md (430,126 bytes) split on André's instruction (Option 1: PAT used once in bash, visible in that tool call; the local token file was deleted afterwards and no file contains it). **Rotate the carclever-widget PAT.**
+- Archive `STATE_ARCHIVE_2026-08-02_to_2026-09-18.md` (266,181 bytes) holds original lines 743–774 and 834–2772 verbatim; live STATE.md is 180,555 bytes (keeps banner, checkpoints, 🔴 gate section, everything from Sep 19). Archive and live file were byte-verified against local copies after upload.
+- **Nothing lost:** rebuilding the original from the repo's live file + archive reproduces the pre-split file byte-for-byte (blob `1d8664c209873ca81a13a59550f56d8cefd17d78`), proven twice (local build and repo copies). An archive notice in STATE.md lists older open items carried forward (status not re-verified).
+- PLAYBOOK.md: one line added (startup item 2b about the archive); diff confirms nothing else changed.
+- STATE.md now also holds the Claude Oct 6 entry and the Claude widget checkpoint `183554b` (docs checkpoint held at `4fe2e15`).
