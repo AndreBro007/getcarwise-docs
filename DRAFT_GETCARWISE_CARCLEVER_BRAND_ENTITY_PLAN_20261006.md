@@ -1,8 +1,6 @@
 # Proposed brand and entity plan for GetCarWise and CarClever
 
-**Status: proposed, pending André confirmation. Not for publication.**  
-**Author: André Broekman**  
-**Decision requested:** Confirm the naming rule and whether any real organization profiles should be added to the entity reference list before Claude implements site changes.
+**Proposed, pending André confirmation. Not for publication.**
 
 ## Which name should describe the publisher and which the product?
 
@@ -14,7 +12,7 @@ Sources: [GetCarWise story and methodology](https://getcarwise.app/about-getcarw
 
 ## What is the current source of truth for each name?
 
-Use the official site at [getcarwise.app](https://getcarwise.app/) as the source for publisher identity, product disclosures, and links to CarClever. Use the live [CarClever - Find My Car ChatGPT listing](https://chatgpt.com/plugins?c=lifestyle&category=other) as a product-directory record. Keep that app listing distinct from a social-media or company profile.
+Use the official site at [getcarwise.app](https://getcarwise.app/) as the source for publisher identity, product disclosures, and links to CarClever. Use the live [CarClever - Find My Car ChatGPT listing](https://chatgpt.com/plugins/plugin_asdk_app_6a85781882508191b1794888c5bbf728) as a product-directory record. Keep that app listing distinct from a social-media or company profile.
 
 The handoff and Part 3 implementation log report brand confusion in search results for “GetCarWise,” including unrelated businesses with similar names. This is a reason to use the exact domain and consistent publisher/product naming in owned materials, not a reason to associate the brand with unrelated profiles. The observation is documented in the [SEO/GEO strategy handoff](https://github.com/AndreBro007/getcarwise-docs/blob/main/HANDOFF_CHATGPT_SEO_GEO_CONTENT_STRATEGY_BRIEF_20261006.md) and [Part 3 implementation log](https://github.com/AndreBro007/getcarwise-docs/blob/main/IMPLEMENTATION_LOG_SEO_GEO_20261006_PART3.md).
 
@@ -28,7 +26,7 @@ No independent LinkedIn, X, Instagram, YouTube, Facebook, or review-site profile
 |---|---|---|
 | getcarwise.app | Official owned publisher website | Keep as the canonical publisher URL |
 | ChatGPT app listing for CarClever - Find My Car | Verified product listing, not a publisher social profile | Link as a product destination where useful; do not present as a GetCarWise social profile |
-| LinkedIn, X, Instagram, YouTube, Facebook, review directories | No official GetCarWise profile verified in this research | Add only after André supplies or confirms the exact profile |
+| Official social and company profiles | None exist today, as confirmed by André on Oct 6, 2026 | Leave profile URLs out; see [the later task](TASK_SOCIAL_PROFILES_AND_APP_MARKETING_RESEARCH_20261006.md) |
 
 ## What does Google mean by Organization sameAs?
 
