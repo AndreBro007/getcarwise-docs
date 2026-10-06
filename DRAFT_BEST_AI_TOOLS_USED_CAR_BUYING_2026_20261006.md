@@ -1,95 +1,97 @@
 # Best AI tools for buying a used car in 2026
 
-**Status: proposed, pending André confirmation. Not for publication.**  
-**Author: André Broekman**  
-**Editorial scope:** A practical comparison of six tools for different parts of a used-car purchase. Product features and inventory change; verify the linked product pages and current availability before publication.
+**Proposed, pending André confirmation.**
+
+Some links on this page are affiliate links. If you use one, GetCarWise may receive compensation at no additional cost to you. Our recommendations remain independent.
 
 ## What are the best AI tools for buying a used car in 2026?
 
-There is no single best tool for every stage. CarGurus and TrueCar are useful places to search listings and compare price signals; Cars.com and Autotrader combine inventory with research; Edmunds brings together used listings and pricing tools; CarClever adds conversational search and a decision-support layer. Use more than one source, then verify the specific car independently.
+No single tool covers every decision. CarGurus and TrueCar offer price signals alongside used-car listings; Cars.com and Autotrader pair vehicle research with shopping resources; Edmunds provides used-car listings; and CarClever offers separate conversational search and evaluation products. Use these services to create and compare a shortlist, then verify the specific car, its price, and its condition.
 
-The useful question is not “Which site has the best AI?” It is “What do I need to decide next?” A conversational tool may help translate a wish list into search criteria. A marketplace may expose local listings. A pricing tool may help you compare similar vehicles. None of those steps confirms that an individual car is mechanically sound or that the advertised price is the full amount you will pay.
+The practical question is which decision you are making. Need help turning a wish list into filters? Try a conversational search. Comparing asking prices? Review similar vehicles and the assumptions behind each site's price label. Narrowing a model or year? Use editorial research. Before you buy, check the VIN, paperwork, recalls, warranty terms, financing, and physical condition independently.
 
-This comparison describes the tools by the job their published features support. It does not rank them by an undisclosed test or claim that any one platform has the most accurate listings.
+## What did our CarClever comparison actually test?
 
-## Which tool is best for finding listings that fit my priorities?
+Our published comparison tested the earlier @CarClever ChatGPT experience in June 2026. It used the same used-compact-SUV search as general web search, Cars.com, and CarGurus: a vehicle under $35,000 in Los Angeles with good reliability and low risk. The results describe that test only, not the current Find My Car app, CarClever Lite, or the separate Deal Score tool. [Read the published comparison](https://getcarwise.app/we-tested-carclever-against-web-search-cars-com-and-cargurus-heres-what-ai-actually-knows/).
 
-CarGurus is a good starting point if you want to describe your priorities in ordinary language and browse a curated set of listings. Its CarGurus Discover announcement describes shoppers sharing needs such as budget, lifestyle, and must-have features, then receiving vehicle options. TrueCar is another useful starting point when you want to search used inventory and see its price rating for a vehicle.
+In that test, general web search returned educational information but no specific vehicles. Cars.com returned live listings, filters, and listing details. CarGurus showed its Deal Ratings relative to market comparisons. The tested @CarClever experience returned live inventory ranked with Deal Scores, risk flags, and estimated total-cost information. The article concluded that these tools served different needs: research, inventory discovery, price comparison, or risk and cost screening. Those are the reported findings from the article, not a current head-to-head test of today's products.
 
-A natural-language search can be easier than translating “room for a rear-facing seat, good winter traction, and a budget limit” into a long filter form. Still, turn every preference into a checkable requirement before contacting a seller. Confirm the trim, drivetrain, safety features, mileage, title information, and total price on the actual dealer listing.
+The tested experience was powered by inventory data from Auto.dev, according to the comparison's FAQ. It was not described as drawing that test's listings from Cars.com or CarGurus. Results can change as products and inventory change, so do not assume that the June test establishes what a current tool returns.
 
-CarGurus describes its Deal Ratings as a pricing signal and says fee disclosure affects whether a used listing receives a rating. A “good deal” label is a prompt to investigate; it is not a warranty, inspection result, or promise that a dealer will honor the displayed price. TrueCar describes its Price Rating as a way to recognize a price for a similar vehicle. Treat both as screening aids, and compare like with like: model year, trim, mileage, condition, location, and disclosed fees.
+## How do the main used-car shopping tools compare?
 
-Sources: [CarGurus Discover](https://www.cargurus.com/about/press/big-deal-2026), [CarGurus fee transparency update](https://dealers.cargurus.com/blog/fee-transparency-update), [TrueCar used-car listings](https://www.truecar.com/used-cars-for-sale/), and [TrueCar price-rating FAQ](https://www.truecar.com/faq/).
+Use this table to match a product with a task, not to treat unlike price labels as a shared rating scale. Product descriptions below come from the linked company pages or our published June comparison. “Verify yourself” is the buyer's checklist for the actual vehicle and deal.
 
-## Which tool is best for comparing a specific used car’s price?
+| Tool | Best for | How it prices a car | What you must verify yourself |
+|---|---|---|---|
+| CarGurus Discover and listings | Conversational discovery and browsing used inventory | CarGurus presents Deal Ratings and its market-value estimate; its fee update describes a No Rating policy for used listings without disclosed fees and announced a move toward all-in pricing. | Confirm the current rating, fees, trim, drivetrain, condition, VIN, and seller's written out-the-door price. |
+| TrueCar | Searching used listings and screening asking prices | TrueCar says its used-car Price Rating compares recent listing prices for similar vehicles in the shopper's area; its FAQ says listed price ratings exclude dealer documentation and similar processing fees. | Check the exact vehicle and options, fee amount, price date, and written total. |
+| Cars.com | Listing search, filters, vehicle research, and comparisons | The pages linked here provide shopping and research tools; this comparison does not assign Cars.com a verified price-scoring method. Compare individual asking prices yourself. | Confirm listing availability, vehicle details, seller, fees, title, and condition. |
+| Edmunds Used Car Listings | Finding used-car listings | The linked Edmunds destination is a listing search; compare asking prices with similar vehicles yourself. No Edmunds rating formula is asserted in this guide. | Check current listing details, VIN, dealer fees, title, warranty, and condition. |
+| Autotrader research | Model research and buying guidance | The linked research section is for vehicle research; this comparison does not assign it a verified used-car price-scoring method. | Check current listings and compare equivalent vehicles and full prices. |
+| CarClever – Find My Car ChatGPT app | Conversational search across new and used inventory | GetCarWise describes live inventory search and vehicle evaluation; the app listing describes search by criteria and a VIN Buyer Check. This is not the June test version. | Open the source listing, confirm all specifications and history, and verify price and condition with the seller. |
+| CarClever Lite | Searching live inventory in a web chat | The CarClever Lite page describes live inventory search; do not assume the June test's results or scoring apply. | Confirm the actual listing, VIN, equipment, fees, and seller terms. |
+| CarClever Deal Score | Reviewing a used-car price as a separate evaluation | GetCarWise describes the Deal Score as a market-data-based score. The current product page is separate from the ChatGPT app and Lite search. | Review the inputs and comparables, and confirm condition, title, fees, and repair needs independently. |
 
-Edmunds is a strong choice when you want to compare listings with its pricing information and appraisal tools. TrueCar provides a price rating on used listings, and CarGurus provides Deal Ratings where the listing has the required fee information. These are different estimates built from each service’s data and methods, so a disagreement is a reason to examine the comparables.
+Company feature descriptions: [CarGurus’ AI shopping announcement](https://investors.cargurus.com/node/16126), [CarGurus’ fee-transparency update](https://dealers.cargurus.com/blog/fee-transparency-update), [TrueCar’s used-car listings](https://www.truecar.com/used-cars-for-sale/) and [Price Rating FAQ](https://www.truecar.com/faq/), [Cars.com Explore](https://www.cars.com/explore/), [Autotrader Research](https://www.autotrader.com/research), [Edmunds Used Car Listings](https://edmunds.sjv.io/c/7765200/3949600/52125), and GetCarWise’s [CarClever tools overview](https://getcarwise.app/tools/), [CarClever user guide](https://getcarwise.app/carclever-guide/), and [Deal Score page](https://getcarwise.app/tools/deal-score/). The current [CarClever – Find My Car ChatGPT app listing](https://chatgpt.com/plugins/plugin_asdk_app_6a85781882508191b1794888c5bbf728) identifies that product by name.
 
-Edmunds says its used-car Price Checker and True Market Value tools help shoppers assess price, and its listings display price ratings. TrueCar says its ratings compare a vehicle with similar vehicles. CarGurus describes its Instant Market Value and Deal Ratings as market-pricing tools. The exact comparison set and labels differ; do not treat “great,” “good,” or “fair” as a universal scale shared by all providers.
+## Is CarGurus Discover useful if I do not know which filters to use?
 
-For a useful comparison, open the underlying examples when available. Check that the vehicles have matching trim and drivetrain, similar mileage and condition, and a location that makes sense for your search. Ask whether a listing’s advertised price includes mandatory dealer fees. A listing may move or disappear, and an estimate is not a binding offer.
+CarGurus says its Discover experience lets shoppers describe their needs conversationally and explore vehicle options that match their preferences. That can help translate a broad brief into a starting shortlist. Treat the results as search suggestions: open each listing and check the exact model, trim, drivetrain, equipment, price, and availability with the seller.
 
-Sources: [Edmunds used-car listings](https://www.edmunds.com/used-cars-for-sale/), [Edmunds pricing information](https://help.edmunds.com/hc/en-us/articles/12131482576407-We-provide-car-pricing-information), [TrueCar used-car listings](https://www.truecar.com/used-cars-for-sale/), [CarGurus used-car shopping](https://www.cargurus.com/shop/used), and [CarGurus fee transparency update](https://dealers.cargurus.com/blog/fee-transparency-update).
+CarGurus' AI announcement describes a conversational search experience built around a shopper's needs and preferences. Its dealer fee update separately says used listings without disclosed fees would receive “No Rating” and be moved lower in search results, and that CarGurus planned to calculate its market value and Deal Ratings using all-in price. Because that update describes a company policy and planned calculation change, inspect the live listing and its fee details rather than assuming every displayed label already reflects the final amount. [CarGurus AI announcement](https://investors.cargurus.com/node/16126); [CarGurus fee update](https://dealers.cargurus.com/blog/fee-transparency-update).
 
-## Which tools help with vehicle research beyond price?
+## How does TrueCar calculate its used-car Price Rating?
 
-Cars.com and Autotrader are useful when you want marketplace search alongside editorial research. Cars.com publishes buyer advice, reviews, and used-car shopping resources. Autotrader’s research pages bring together reviews, comparisons, buying advice, and inventory links. Edmunds also offers car research and comparison content.
+TrueCar says its Price Rating uses recent listing prices for similar vehicles in the buyer's area. It describes the labels as comparisons with local prices, and says the pricing data excludes dealer documentation, administrative, and similar processing fees. Use the rating as a screening signal, then compare equivalent vehicles and add fees before deciding whether an asking price works for you. [TrueCar's FAQ](https://www.truecar.com/faq/).
 
-These resources help narrow the model and year you want to inspect. They do not establish the condition of a particular vehicle. When a review describes a model’s general characteristics, compare that with the car’s actual trim and equipment. A review of one model year may not describe another year’s features or changes.
+A similar vehicle is only a useful comparison if the details line up. Check model year, trim, mileage, options, condition, location, and whether the advertised amount includes mandatory fees. If the candidates differ on important details, a rating may not answer the question you care about. TrueCar's own used-car page says its price rating considers mileage, location, options, and condition; those are company descriptions, not an independent audit of the result. [TrueCar used-car listings](https://www.truecar.com/used-cars-for-sale/).
 
-Use reviews to build a shortlist, then use listing-level and vehicle-specific evidence to evaluate each candidate. Ask for the VIN and service records, review the title and warranty documents, check open recalls, and arrange an independent inspection. The Federal Trade Commission advises used-car buyers to get a vehicle history report and have an independent mechanic inspect the car; it also says a history report is not a substitute for an inspection.
+## What should I use Cars.com and Autotrader for?
 
-Sources: [Cars.com advice](https://www.cars.com/news/advice/), [Cars.com Explore](https://www.cars.com/explore/), [Autotrader research](https://www.autotrader.com/research), [Autotrader used-car buying guide](https://www.autotrader.com/car-shopping/used-car-buying-guide), and [FTC: Buying a Used Car From a Dealer](https://consumer.ftc.gov/articles/buying-used-car-dealer).
+Cars.com combines car-shopping resources with research, comparisons, expert reviews, and used-car shopping links. Autotrader's research section publishes model research and buying guidance. These pages can help you understand a model or build a shortlist; they do not inspect an individual car or establish that its advertised price is fair. [Cars.com Explore](https://www.cars.com/explore/); [Autotrader Research](https://www.autotrader.com/research).
 
-## What does CarClever do differently?
+Use editorial research to identify what you want to check on the actual vehicle. A review can discuss a model generally, while a used listing has a particular year, trim, equipment, history, and condition. Confirm that any feature you care about appears on the car for sale, and ask the seller to confirm it in writing. If comparing prices, use listings for vehicles with closely matched specifications and account for fees.
 
-CarClever is GetCarWise’s conversational car-shopping product. The GetCarWise product guide describes natural-language search, listing research, risk indicators, ownership-cost estimates, and links onward to dealer listings. Its current ChatGPT app listing is named “CarClever - Find My Car” and describes live car search. Use it when you want to express a shopping brief in a conversation and turn the response into a shortlist to investigate.
+## What does each CarClever product do?
 
-There is an important product-version distinction. GetCarWise’s public pages also describe older CarClever Lite and Deal Score tools. The ChatGPT app and embedded website tools do not necessarily have identical features. Before publication, identify which interface each sentence describes and confirm it against that interface. In particular, do not imply that the current Find My Car app offers every feature described on older Deal Score pages.
+CarClever is offered through distinct products, so a claim about one should not be assumed to describe the others. The current ChatGPT app is CarClever – Find My Car; CarClever Lite is a separate web chat for live inventory; Deal Score is a separate vehicle evaluation tool. Our June comparison covered an earlier @CarClever ChatGPT experience and should be read as a historical test of that version only.
 
-CarClever is not a dealer, lender, mechanic, or vehicle-history-report provider. GetCarWise says it may earn a commission when a user follows certain Edmunds links and takes qualifying actions; its disclosure says that compensation does not change the shopper’s price or influence its scores. Check the current disclosure near the outbound link before using one.
+The current ChatGPT app listing describes searching live new and used inventory by criteria, including vehicle details, and a VIN-based Buyer Check. The official GetCarWise tools page separately describes CarClever Lite as a web-based live-inventory chat and the Deal Score Calculator as a distinct tool for used-car price evaluation. These are company descriptions; they do not mean an app result has independently verified a car's history or condition. [Find My Car app listing](https://chatgpt.com/plugins/plugin_asdk_app_6a85781882508191b1794888c5bbf728); [GetCarWise tools overview](https://getcarwise.app/tools/); [CarClever Lite](https://carclever-lite.getcarwise.app/carclever-lite-v2); [Deal Score](https://getcarwise.app/tools/deal-score/).
 
-Sources: [CarClever user guide](https://getcarwise.app/carclever-guide/), [GetCarWise story and methodology](https://getcarwise.app/about-getcarwise-our-story/), [CarClever - Find My Car in ChatGPT](https://chatgpt.com/plugins?c=lifestyle&category=other), and [GetCarWise affiliate disclosure](https://getcarwise.app/).
+For a useful starting point, the [CarClever user guide](https://getcarwise.app/carclever-guide/) walks through a current assistant-based session and says its illustrated session was captured on August 2, 2026. That guide's described session is not the same evidence as our June comparison. The legacy test's ranked inventory, risk flags, and cost estimates belong specifically to the earlier @CarClever ChatGPT experience tested in the published comparison. Do not transfer those observations to CarClever Lite, Deal Score, or the current Find My Car app.
 
-## Can an AI tool tell me whether a used car is safe to buy?
+## Can an AI score tell me whether a used car is safe to buy?
 
-No. An AI answer or marketplace score can help organize information, but it cannot establish the car’s actual mechanical condition, confirm the completeness of its history, or guarantee that the seller’s description is accurate. Verify the VIN, documents, recall status, and vehicle condition through independent sources and an inspection.
+No. A search result or price score is not a mechanical inspection, complete history report, or guarantee that the seller's description is accurate. Use it to decide what to investigate next. Then check the vehicle's documents and VIN, ask for records, and arrange an independent inspection of the specific car before you commit.
 
-For dealer sales, read the FTC Buyers Guide and understand whether the car is sold with a warranty or “as is,” subject to the applicable rules. Request the vehicle history report and arrange an independent mechanic’s inspection. The FTC emphasizes that a history report does not replace an inspection. For recalls, use NHTSA’s VIN lookup; NHTSA notes that the lookup does not show every type of past campaign or all recently announced recalls, so check with the manufacturer or dealer if you need current confirmation.
+The Federal Trade Commission advises buyers to get an independent mechanic's inspection and explains that a vehicle history report does not replace one. It also advises reading the dealer's Buyers Guide and understanding the warranty or “as is” terms. [FTC: Buying a Used Car From a Dealer](https://consumer.ftc.gov/articles/buying-used-car-dealer).
 
-A sensible workflow is to use a shopping tool to find candidates, compare their prices and details, then pause before any deposit or signature. Confirm the full out-the-door price in writing, review financing terms separately from the vehicle price, and keep copies of the listing and seller’s representations.
+Check the VIN with NHTSA for unrepaired recalls. NHTSA explains that the VIN search does not show every repaired recall, some recently announced recalls, or certain older and other categories of campaigns, so use the result as one check rather than a complete history. [NHTSA recall lookup](https://www.nhtsa.gov/recalls).
 
-Sources: [FTC used-car dealer guidance](https://consumer.ftc.gov/articles/buying-used-car-dealer), [FTC used-car buying tips](https://consumer.ftc.gov/media/79915), and [NHTSA recall lookup](https://www.nhtsa.gov/recalls).
+## How should I compare financing offers?
 
-## How should I choose between these tools?
+Compare the amount financed, annual percentage rate, interest rate, loan length, and monthly payment; do not choose by monthly payment alone. The Consumer Financial Protection Bureau explains that a longer loan can reduce the monthly payment while increasing the total interest paid. Ask lenders for written offers and compare the same vehicle price and down payment assumptions. [CFPB auto-loan comparison guidance](https://www.consumerfinance.gov/ask-cfpb/how-do-i-compare-auto-loan-offers-what-should-i-look-at-besides-the-monthly-payment-en-753/).
 
-Choose based on the next decision you need to make. Start with a conversational search if you have a fuzzy brief and need to translate it into filters. Use a marketplace when you are ready to scan local inventory. Use a pricing tool to examine how a listing compares with similar vehicles. Use editorial research to compare models and years. Then use independent inspection and official records to decide whether the individual vehicle deserves a closer look.
+Keep vehicle price and financing separate while you compare. Confirm the full amount due, including fees, then review the finance charge and total amount repaid. The FTC likewise advises shoppers to compare financing offers and understand the total cost with financing, not just the monthly payment. [FTC dealer-buying guidance](https://consumer.ftc.gov/articles/buying-used-car-dealer).
+
+## What is a practical way to use these tools?
+
+Start with the task you need help with: use conversational search to express priorities, marketplaces to find candidate listings, and price signals to identify questions about an asking price. Use research pages to compare models. Then move from general information to evidence tied to one specific VIN and written offer.
 
 A practical sequence is:
 
-- Write down the needs that would make a car workable, plus the features you can compromise on.
-- Search more than one marketplace when inventory matters; one site’s results are not a complete picture of every car for sale.
-- Compare vehicles with similar equipment, mileage, condition, and location before reading too much into a price label.
-- Save the listing and ask the seller to confirm the VIN, current availability, fees, title status, and warranty terms.
-- Check recalls and history, and arrange an independent inspection before committing.
+- Write down required features and the compromises you can accept.
+- Search more than one source if you want to compare available listings.
+- Compare vehicles with similar model year, trim, drivetrain, mileage, condition, and location.
+- Ask the seller to confirm the VIN, current availability, fees, title status, and warranty terms.
+- Check recalls, request a vehicle history report, and arrange an independent mechanical inspection.
+- Compare financing offers using the APR, term, amount financed, payment, and total cost.
 
-This sequence keeps “AI” in its proper role: helping you search, summarize, and compare. The purchase decision still depends on evidence about the actual car and written terms from the seller.
+The tools can help organize a search and surface useful questions. The final decision depends on the exact car, its condition, the complete price, and the written terms you receive.
 
-## Which tool should a first-time used-car buyer try first?
+---
 
-If you are unsure what vehicle to search for, begin with a question-led tool such as CarGurus Discover or CarClever and use it to turn your needs into a shortlist. If you already know the model, start with a marketplace such as Cars.com, Edmunds, TrueCar, or Autotrader and compare available examples.
+### Production note for Claude — exclude from published copy
 
-Before contacting a seller, decide what information you still need. Ask for the VIN and complete price, then independently check recalls, history, warranty terms, and condition. Use a pricing label as context, not as a substitute for checking comparable listings or negotiating the written out-the-door price.
-
-## What is the safest way to use an AI car-shopping tool?
-
-Treat each output as a lead to verify. Ask the tool to show its assumptions and the listing it used; open the source listing and confirm the vehicle details yourself. If a tool cannot show where a claim came from, do not rely on that claim for a purchase decision.
-
-Check a vehicle’s VIN through NHTSA for open safety recalls, request a history report, and hire an independent mechanic to inspect the specific car. Read the dealer’s Buyers Guide and purchase documents carefully. Compare financing by its full cost and terms rather than focusing only on the monthly payment. These steps are supported by FTC, NHTSA, and CFPB consumer guidance.
-
-Sources: [NHTSA recalls](https://www.nhtsa.gov/recalls), [FTC used-car guidance](https://consumer.ftc.gov/articles/buying-used-car-dealer), and [CFPB auto-loan comparison guidance](https://www.consumerfinance.gov/ask-cfpb/how-do-i-compare-auto-loan-offers-what-should-i-look-at-besides-the-monthly-payment-en-753/).
-
-## Sources and update note
-
-This comparison relies on product pages and consumer guidance linked above. The feature descriptions are attributed to the companies that provide each tool; they are not an independent audit of the services’ data quality. Recheck current availability, price-rating explanations, fee treatment, and affiliate disclosures before publishing. Keep the date in the title so readers know the comparison is intended for the 2026 shopping context. The existing “We Tested CarClever” post is the product-specific companion for this pillar. Add its canonical permalink after verifying the live URL, and keep any firsthand observations tied to the exact CarClever version that post tested. This comparison does not add new test results.
+Mark the Edmunds Used Car Listings link as sponsored. Use the approved Impact URL already linked above: https://edmunds.sjv.io/c/7765200/3949600/52125
