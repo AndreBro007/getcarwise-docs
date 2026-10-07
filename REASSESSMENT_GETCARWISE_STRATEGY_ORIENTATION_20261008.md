@@ -103,7 +103,7 @@ Stop here. No product or channel chosen, final strategy approved, catalogue arch
 
 Accessed during this session; account-specific application or performance not inferred:
 - OpenAI publication/distribution: https://developers.openai.com/plugins/deploy/app-review
-- Claude connected-app suggestions: https://www.anthropic.com/news/claude-can-now-connect-to-your-apps
+- Claude connected-app suggestions: https://support.claude.com/en/articles/14730684-how-claude-suggests-connected-apps
 - CarGurus conversational search announcement, June 9, 2025: https://www.cargurus.com/about/press/ai-search-experience
 - Auto.dev pricing: https://www.auto.dev/pricing and terms: https://www.auto.dev/terms
 - Reddit Devvit rules: https://developers.reddit.com/docs/devvit_rules
