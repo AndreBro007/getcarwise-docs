@@ -7,13 +7,16 @@
 
 ---
 
+
+> **VIN correction — 8 October 2026:** The September 16 migration investigation explicitly recorded VIN values in the returned `Mpn` field. It separately established that `Mpn`/VIN cannot be searched or filtered through the Catalog Items API (Impact ticket #882346). The September 21 probe checked VIN-like field names and selected text fields, without documenting a check of `Mpn`; it does not establish that returned records lack VINs. Inspect `Mpn` explicitly in a bounded current read and validate completeness/format before wiring enrichment. Historical returned-field evidence is established; current feed-wide completeness is not. [Source](https://github.com/AndreBro007/getcarwise-docs/blob/main/STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md).
+
 ## 1. Scope actually delivered
 
 Exactly what the handoff authorized, nothing more:
 
 - A **private, access-controlled, noindex** engineering prototype at `/internal/impact-prototype` in the `carclever-widget` repo (same repo as Lite, Deal Score, Price Check, VIN Check).
 - **Condition-neutral by design** — the adapter never reads, infers, or displays New/Used/CPO. Confirmed live (Section 5) that Impact's `Condition` field is present in the schema but always an empty string; the code never reads it regardless of that finding.
-- **Optional NHTSA VIN spec-validation layer** — disabled by default (`IMPACT_PROTOTYPE_NHTSA_ENABLED`), scoped only to year/make/model/body-class cross-checks, never condition/ownership/title/accident/mileage/availability/proximity, never logs or returns the VIN. **Confirmed in the closeout pass (Section 9.3): no VIN field exists in this feed at all — stays disabled and uninvoked.**
+- **Optional NHTSA VIN spec-validation layer** — disabled by default (`IMPACT_PROTOTYPE_NHTSA_ENABLED`), scoped only to year/make/model/body-class cross-checks, never condition/ownership/title/accident/mileage/availability/proximity, never logs or returns the VIN. **Correction Oct 8: the closeout probe did not establish absence of VIN values in `Mpn`, documented on Sep 16. The prototype currently leaves NHTSA disabled and uninvoked; current `Mpn` validation and adapter wiring are still needed.**
 - **No public launch, no WordPress publication, no SEO/GEO edit, no Publisher Tag, no bulk Catalog download, no sitewide CTA change, no lead submission.** None of these were touched.
 
 ## 2. Repository / branch / deployment target
@@ -106,14 +109,14 @@ Verified two ways, not just by code review:
 1. **A real `next build`** compiled cleanly both locally and on Vercel's own infrastructure — if the client component had pulled in server-only code, this build would fail outright (`server-only`'s entire purpose).
 2. **Direct inspection of the compiled client bundle.** Grepped all 15 JS chunks produced by the build for `IMPACT_ACCOUNT_SID`, `IMPACT_AUTH_TOKEN`, `IMPACT_CATALOG_ID`, `queryCatalog`, `buildQueryExpression`, and the literal string `api.impact.com/Mediapartners` — **zero matches across every chunk.** The allowlisted model names (`"CR-V"`, `"RAV4"`, etc.), which are meant to be client-visible since they populate the search dropdown, were confirmed present, proving the grep methodology actually works and isn't just missing content due to minification.
 
-### 9.3 — NHTSA/VIN ambiguity — RESOLVED: no VIN field exists in this feed
+### 9.3 — Historical VIN probe — conclusion corrected Oct 8: Mpn was not accounted for
 
 Ran the minimum bounded read required to answer this: **one** live Catalog item (`PageSize=1`), field **names** inspected only. Findings:
 - No field name resembling "VIN" exists anywhere in the schema (70 fields total on the sampled item).
 - Checked the free-text fields (`Description`, `Bullets`, `Name`, `Text3`) for a 17-character VIN-shaped substring — none found.
 - **No VIN value of any kind was printed, logged, stored, or otherwise handled** — only a boolean presence/pattern-match result was ever produced or recorded.
 
-**Conclusion, per the handoff's explicit instruction for this exact outcome: NHTSA stays disabled and uninvoked.** `lib/impact-nhtsa-enrichment.ts` remains a complete, tested, ready-to-wire adapter that is never called from any live code path — kept in the repo for a future Catalog or feed version that might expose a usable VIN, with this finding now documented directly in the module's own header comment.
+**Historical implementation outcome:** NHTSA stayed disabled and uninvoked. **Correction Oct 8:** absence of a field named VIN, and the selected text-field checks above, do not establish absence of a VIN value in `Mpn`. September 16 evidence explicitly recorded VIN in `Mpn`. `lib/impact-nhtsa-enrichment.ts` remains unconnected; its no-usable-VIN header comment and the catalogue adapter's omission of `Mpn` must be reconciled by engineering before enrichment is enabled. This documentation correction does not change code or the feature flag.
 
 ### 9.4 — Acceptance evidence — test suite expanded; interim live gap later closed
 
