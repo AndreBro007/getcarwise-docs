@@ -289,3 +289,21 @@ Accessed October 8, 2026. Rankings and experience concepts are our hypotheses; s
 No new keyword-volume report, ad forecast, account eligibility check, community-demand study, affiliate-dashboard audit or live Edmunds contact-form test was conducted. Instagram ideas are format hypotheses; exact account link features remain to be checked.
 
 Earlier context: [strategy orientation](REASSESSMENT_GETCARWISE_STRATEGY_ORIENTATION_20261008.md).
+
+
+## Competitive research extension — 8 October 2026
+
+Research saved and GitHub re-fetched/verified: [Competitive opportunities and Edmunds leverage](RESEARCH_COMPETITIVE_WEDGES_AND_EDMUNDS_LEVERAGE_20261008.md).
+
+The platform order remains a working hypothesis. The proposed offer order is now:
+1. **Shortlist rescue:** buyers bring existing contenders; clarify their decision and useful dealer questions.
+2. **Same budget, different compromise:** personalise a specific price/age/powertrain/feature trade-off.
+3. **Choose together:** a shared household brief that exposes the workable compromises.
+
+Official competitor pages document conversational search, cross-site listing comparison, car-seat research and AI dealer negotiation. These concepts are not assumed exclusive. The opportunity to test is a particular buyer workflow with better evidence, clearer trade-offs, natural sharing/access and a relevant dealer continuation. No competitor's complete authenticated journey or service effectiveness was tested.
+
+Edmunds supplies more than catalogue candidates: public research and pricing tools, listing contact paths, saved research/alerts, forums and video/social resources. Use permitted resources rather than recreate everything. Public editorial/tools are not automatically licensed API data; Edmunds audience reach is not automatically available to affiliates. Current supported affiliate paths and supplied creative govern monetisation.
+
+Before any execution, define source/offer/version cohorts, exclude owner tests, distinguish brief completion/contact intent/outbound clicks from eligible Impact actions, and account for reporting delays. Our own analytics cannot ordinarily see Edmunds form submission or calls directly. Pivot diagnosis follows the stage where buyers stop; no fabricated conversion threshold or guaranteed zero running cost.
+
+No build, post, outreach, paid campaign or final product choice is authorised by this extension.
