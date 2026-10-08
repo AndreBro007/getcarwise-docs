@@ -4,6 +4,9 @@ Date: 8 October 2026 (Australia/Brisbane)
 Status: proposed urgent engineering scope, prepared from fresh repository/code reads. No application code, live endpoint, deployment or account setting changed.
 Owner report: Auto.dev allowance may last only another one or two days. Remaining calls, exact account plan and reset date are not independently checked.
 
+
+> **VIN correction — 8 October 2026:** The September 16 migration investigation explicitly recorded VIN values in the returned `Mpn` field. It separately established that `Mpn`/VIN cannot be searched or filtered through the Catalog Items API (Impact ticket #882346). The September 21 probe checked VIN-like field names and selected text fields, without documenting a check of `Mpn`; it does not establish that returned records lack VINs. Inspect `Mpn` explicitly in a bounded current read and validate completeness/format before wiring enrichment. Historical returned-field evidence is established; current feed-wide completeness is not. [Source](https://github.com/AndreBro007/getcarwise-docs/blob/main/STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md).
+
 ## Recommendation
 
 Prioritize keeping new CarClever usable before building the adaptive buyer pilot. Start from the current deployed release/v2 code, with an isolated branch and private preview. Reuse the existing private Impact catalogue adapter. Keep the existing screen implementation and externally approved tool contract as the target.
@@ -20,6 +23,7 @@ The AI conversation and the listing source are separate concerns. A shared, norm
 
 ## Fresh evidence checked
 
+- STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md: returned `Mpn` VIN documented; `Mpn` query rejected, support confirmed limitation. This source was added during the October 8 correction after André identified the missed field.
 - carclever-find-my-car release/v2: lib/auto-dev-client.ts, lib/find-matching-vehicle-output.ts, lib/results-card.ts and app/[transport]/route.ts.
 - carclever-widget feature/catalog-locality-audit: lib/impact-catalog.ts and lib/impact-catalog-shared.ts.
 - Docs: RETURN_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md; RETURN_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md; RETURN_CATALOG_LOCALITY_PHASE1_DESK_AUDIT_20260930.md; IMPLEMENTATION_BRIEF_CATALOG_LED_LOCAL_BUYER_JOURNEY_20260930.md; PLAN_V3_REBUILD_FROM_V2_AND_MCP_SHARED_ID_20261008.md.
@@ -31,7 +35,7 @@ The AI conversation and the listing source are separate concerns. A shared, norm
 
 | Source | Intended role | Boundary |
 |---|---|---|
-| Edmunds Impact catalogue | Candidate listing data and returned tracked item links | Not established as a full local inventory replacement; sampled condition empty and VIN unavailable. |
+| Edmunds Impact catalogue | Candidate listing data and returned tracked item links | Not established as a full local inventory replacement; sampled condition empty. VIN was historically returned in Mpn, although Mpn/VIN is not a searchable catalogue field. |
 | NHTSA vPIC | VIN decoding when a genuine VIN is supplied/available | Not a dealer inventory, sale-condition, price, history or photo source. |
 | NHTSA recall endpoints | Recall context at the supported lookup granularity | Model/year campaigns are not proof that a particular vehicle has an outstanding unrepaired recall. |
 | Auto.dev | Existing primary until switch, potentially selected enrichment only if allowance remains and the owner chooses it | A supposed no-Auto.dev mode must make zero Auto.dev requests, including photos/details/retries. |
@@ -54,7 +58,7 @@ Inspect the raw catalogue schema safely, using the existing bounded probe/creden
 
 Look specifically for:
 - stable item identity and usable destination;
-- genuine VIN from an authorized field, or a documented, reliable identifier encoded in a returned destination if allowed and validated;
+- genuine VIN from `Mpn`, explicitly documented in the September 16 migration investigation; validate its current presence, completeness and format, and distinguish this returned value from unsupported VIN search. Inspect the existing tracked destination only as a secondary consistency check;
 - mileage, New/Used/CPO, equipment/powertrain and location;
 - supported geography filters or exact-dealer lookup;
 - feed update semantics;
@@ -82,7 +86,7 @@ Retain the existing screen layout. Its renderer already supports missing mileage
 
 Use returned catalogue tracking links as supplied, subject to the current agreement and link checks. Do not wrap an already tracked URL a second time. No link opening or lead submission is needed for fixture tests.
 
-The current resolve_dealer_url input requires VIN. Determine how follow-up works for a catalogue car with no genuine VIN. Direct links on the cards may work while a host-initiated tool call does not. Do not call that equivalent functionality until it is tested; do not fake a VIN to satisfy the tool.
+The current resolve_dealer_url input requires VIN. For returned candidates with a validated `Mpn` VIN, test that existing follow-up/tool path and preserve the supplied tracked catalogue link where appropriate. The catalogue still cannot be queried by arbitrary VIN: reuse the candidate already returned or a permitted bounded cache when applicable, and distinguish a direct user VIN request from candidate enrichment. Handle missing/invalid `Mpn` explicitly; never fake a VIN to satisfy the tool.
 
 The catalogue token/prototype proves private access, not blanket permission for every new public channel/use. Check applicable data-display and tracking permissions from the current agreement/account materials before a public cutover. Do not contact Edmunds or Impact without an explicit instruction.
 
