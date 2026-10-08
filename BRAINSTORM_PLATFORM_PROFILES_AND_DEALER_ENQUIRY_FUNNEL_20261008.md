@@ -288,4 +288,4 @@ Accessed October 8, 2026. Rankings and experience concepts are our hypotheses; s
 
 No new keyword-volume report, ad forecast, account eligibility check, community-demand study, affiliate-dashboard audit or live Edmunds contact-form test was conducted. Instagram ideas are format hypotheses; exact account link features remain to be checked.
 
-Earlier context: [strategy orientation](REASSESSMENT_GETCARWISE_STRATEGY_ORIENTATION_20261008.md). No admin checkpoint update required by this profile record; earlier AGENTS.md instructions were explicitly revoked by André.
+Earlier context: [strategy orientation](REASSESSMENT_GETCARWISE_STRATEGY_ORIENTATION_20261008.md).
