@@ -2,9 +2,12 @@
 Date: 2026-09-30
 Status: Static evidence and safe diagnostic prepared. **No new live Impact API request or affiliate click performed in this session.**
 
+
+> **VIN correction — 8 October 2026:** The September 16 migration investigation explicitly recorded VIN values in the returned `Mpn` field. It separately established that `Mpn`/VIN cannot be searched or filtered through the Catalog Items API (Impact ticket #882346). The September 21 probe checked VIN-like field names and selected text fields, without documenting a check of `Mpn`; it does not establish that returned records lack VINs. Inspect `Mpn` explicitly in a bounded current read and validate completeness/format before wiring enrichment. Historical returned-field evidence is established; current feed-wide completeness is not. [Source](https://github.com/AndreBro007/getcarwise-docs/blob/main/STRATEGY_EDMUNDS_IMPACT_MIGRATION_20260916.md).
+
 ## Reviewed sources
 - `getcarwise-docs/RETURN_IMPACT_CATALOG_C1_C8_READ_ONLY_TESTS_20260920.md`: 20 bounded GETs; 1,352,716 reported items; model/category+price/exact-dealer queries; 10/10 "dealer_location" completeness in one sanitized sample; Condition 0/10; item freshness 0/10; no ZIP/radius test success; no click.
-- `getcarwise-docs/RETURN_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md`: 62 tests, live authenticated six-card CR-V view, condition empty, no VIN field, product links not clicked, preview private and unmerged.
+- `getcarwise-docs/RETURN_IMPACT_CATALOG_PRIVATE_PROTOTYPE_20260921.md`: 62 tests, live authenticated six-card CR-V view, condition empty, VIN omitted from the prototype adapter (historical `Mpn` field evidence was missed), product links not clicked, preview private and unmerged.
 - `carclever-widget` branch `feature/impact-catalog-prototype`: actual adapter, shared types, API and UI. It normalizes `City` and `State` plus dealer name and stock indicator. Its `PageSize=10` national query renders at most six cards. It does not normalize a ZIP, coordinates, condition or item update timestamp.
 - `carclever-widget` branch `feature/carclever-lite-v2`: `?q=` prefill and `/api/chat-v2` result flow; can inspire UI but cannot supply Catalog locality by itself.
 - Impact's official partner help describes catalog details/Last Updated and platform, FTP or API download options; specific Edmunds download permissions, size and update pattern still need an account check: https://help.impact.com/partner/what-would-you-like-to-learn-about/platform-features/marketing-content/product-marketplace-and-catalogs/download-product-catalogs-as-a-partner
@@ -16,7 +19,7 @@ Status: Static evidence and safe diagnostic prepared. **No new live Impact API r
 | Edmunds origin | Catalog is an Edmunds Product Feed with tracked item URLs. | That every item is currently active at the dealer or exact product link still opens the same vehicle. |
 | Dealer location | One ten-item sample had a location field; adapter exposes City/State. | Postal/coordinate completeness, item-versus-dealer location, local recall across ZIPs, distance accuracy. |
 | Local retrieval | Exact dealer filtering via feed-specific `Manufacturer` worked in a bounded test. | Discovery of all nearby dealers, scalable query cost, candidate completeness, geographic filter support, feed-index access. |
-| Used | Sample Condition empty; no VIN field in sampled schema. | Any reliable authorized used/new source for Catalog cards. Model year and price are insufficient. |
+| Used | Sample Condition empty; VIN historically returned in `Mpn`, not normalized by this adapter. | Any reliable authorized used/new source for Catalog cards. Model year and price are insufficient. |
 | Stock/freshness | StockAvailability was nonempty in the prior sample; catalog has feed-level update time. | Whether stock value predicts current availability and whether individual rows have reliable timestamps/removals. |
 | Product links | Returned tracking URLs structurally valid and displayed in private prototype. | Exact landing success, stale-link rate, verified Impact click/action attribution. |
 
