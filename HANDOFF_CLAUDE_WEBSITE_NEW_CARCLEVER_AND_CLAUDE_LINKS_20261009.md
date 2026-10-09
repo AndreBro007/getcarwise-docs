@@ -1,3 +1,5 @@
+> **SUPERSEDED / EXECUTED — Oct 9 evening:** Do NOT execute this earlier handoff's blanket old-link removal. André approved preserving relevant old-app buttons/descriptions and adding Claude alongside NEW Find My Car only. Claude completed the rollout and published the approved launch announcement. Use IMPLEMENTATION_LOG_WEBSITE_CLAUDE_BUTTONS_20261009.md and REVIEW_CLAUDE_LAUNCH_PUBLIC_SITE_AND_REMAINING_FIXES_20261009.md for current status and remaining fixes.
+
 # Claude handoff — website new CarClever defaults and Claude launch
 
 Date: 9 October 2026 (Brisbane). Lane: ChatGPT strategy -> Claude website execution. Status: implementation READY TO REVIEW; website not changed by ChatGPT; launch article draft only. André asked ChatGPT to audit placement and prepare the complete Priority 3 website work. No need to re-ask generic permission for that requested scope. His possible blog announcement still requires a publication decision; create/review a draft before asking that decision. Keep V3/listing feedback, Auto.dev, Fractal and catalogue cutover decisions separate.
