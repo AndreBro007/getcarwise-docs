@@ -34,3 +34,13 @@ Sources used for limited setup wording: https://support.claude.com/en/articles/1
 - Examples are suggested starting prompts, not new recorded test results or promises of available matches. The post separates listing-supported facts from dealer verification.
 - Current draft remains NOT PUBLISHED. Still confirm the final Claude listing URL in the browser and coordinate with Claude's in-progress site changes.
 - Primary competitor sources: https://claude.com/marketplace/connectors/cargurus and https://cargurus.helpscoutdocs.com/article/599-connect-ai-assistants-to-cargurus-with-the-mcp-connector .
+
+
+## Buyer value and dealer-contact revision — Oct 9, 2026, 17:03+ Brisbane
+- André requested a stronger value proposition and a useful, accurate reason to contact the dealer. Public copy now explains prioritising requirements, narrowing to two or three cars, comparing listing-supported trade-offs, identifying unknowns, and preparing a specific seller enquiry.
+- Added a prominent Edmunds dealer-contact next step and a reusable enquiry template. Dealer contact serves availability, complete price, equipment and records verification; no invented urgency or guarantee.
+- Explicitly separates CarClever's search results from Claude's conversational assistance. These editorial examples do not establish new MCP functions.
+- Removed the public CarGurus FAQ; no competitor disparagement or blanket superiority claim.
+- A dealer enquiry is not itself proof of an eligible paid Impact action. Monetisation remains subject to actual programme terms and attribution. Public disclosure remains intact.
+- Owner interprets current absence from in-chat discovery as pending indexing; no documented propagation SLA established. This replaces the earlier editorial characterisation of an established discovery failure.
+- Publication is still pending owner approval and Claude's website verification.
