@@ -14,6 +14,16 @@ and why.
 
 ---
 
+## UPDATE — Oct 9, 2026 (Claude, Engineering lane): this document lags the live tool description by three sentences
+
+A sentence-level comparison of the live code (`app/[transport]/route.ts` on `release/v2` `cac7028`; the Anthropic build `dd68e15` has the same description) with this document found 13 of 16 sentences here and these three only in the code (added after Sep 9):
+
+1. “Direct filter fields should reflect requirements the user stated or clearly implied; leave unstated restrictions unset.”
+2. “For a broad hybrid, plug-in hybrid, or electric request, likewise resolve suitable real model or variant names and include them in model before calling the tool.”
+3. “For required hybrid or plug-in hybrid searches, use electrified variants only; for preferred searches, acceptable base-model alternatives may also be included.”
+
+The code is the source of truth. Separately, Anthropic’s Oct 9 approval feedback asks for human-readable tool titles (the code sets `annotations.title` but no top-level `title`) and an affiliate disclosure in the listing description (`carclever-widget` TASKS.md #111). The catalogue build does not change the tool description (André, Oct 9).
+
 ## Main tool description
 
 > Finds current vehicles for sale in the United States and returns a concise shortlist matching a user's stated requirements. Appropriate for listing requests with explicit criteria, optimization goals such as lowest price, newest, lowest mileage, or best within a stated budget, practical needs such as a large family SUV or commuter vehicle, or an exact current listing by VIN.
