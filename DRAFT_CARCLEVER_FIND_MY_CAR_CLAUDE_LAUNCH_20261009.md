@@ -1,6 +1,6 @@
 # CarClever – Find My Car Is Now Available on Claude
 
-**Review draft — revised 9 October 2026; not published.** Marketing-led revision. Verify the final public Claude listing URL and preview before publication. WordPress-ready body is in the companion HTML file.
+**PUBLISHED by Claude — 9 October 2026.** Live post ID 1546: https://getcarwise.app/carclever-find-my-car-now-on-claude/ . ChatGPT independently verified the public text against the approved HTML on Oct 9 evening. This file preserves the approved source copy.
 
 CarClever – Find My Car is now live on Claude—and we’re celebrating a new way to move your car search forward.
 
