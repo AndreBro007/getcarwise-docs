@@ -61,7 +61,7 @@ Rollback revision = the WordPress revision saved just before my first edit (rest
 | 666 | post | Used vs. New: The Depreciation Cliff & 0% APR Trap | /used-vs-new-depreciation-cliff-apr-trap-2/ | Claude button beside the ChatGPT button | 1414 |
 | 1008 | post | Used Car Title Brands: Salvage, Rebuilt & Flood - What Buyers  | /used-car-title-brands-salvage-rebuilt-flood/ | Claude button beside the ChatGPT button | 1410 |
 | 1011 | post | New vs Used: The Financial Math — Why Total Cost Matters More  | /new-vs-used-financial-math/ | Claude button beside the ChatGPT button | 1409 |
-| 1469 | post | Best AI Tools for Buying a Used Car in 2026 | /best-ai-tools-for-buying-a-used-car-2026/ | two prose links; 'identifies' -> 'identify' | n/a |
+| 1469 | post | Best AI Tools for Buying a Used Car in 2026 | /best-ai-tools-for-buying-a-used-car-2026/ | two prose links; 'identifies' -> 'identify' | none: this post had no earlier revision (my save created its first); restore from the backup zip |
 
 ## 7. Deliberately NOT changed (22)
 - **Protected Task #78 cohort — 827, 828, 830, 934:** Sep 28 hold and the Oct 7 handoff say never to edit them during the observation window; 934 is also the planned Google test landing page. ChatGPT’s audit proposed a block here; held for André’s explicit decision. Adding one would be a documented intervention.
