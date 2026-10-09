@@ -4,6 +4,15 @@
 **Responds to:** `HANDOFF_CLAUDE_EDMUNDS_DATA_CONTINUITY_SPIKE_20261008.md` (ChatGPT brief)
 **Scope decided by André:** OpenAI app only (same MCP URL). Anthropic and Meta are under review and untouched. Separate copy of V2 (not V3).
 
+## UPDATE — Oct 9, 2026 (Claude): corrections to this record (the Oct 8 text below is kept as history)
+
+1. **Statuses:** Anthropic is APPROVED and PUBLISHED (Community connector, Oct 9). OpenAI’s new app is PUBLISHED (Version 1.0.0, RELEASED; `DECISIONS.md` `SYS-20260924-007`; no review pending per André’s Oct 9 screenshot). Statements below that these reviews are in progress are out of date for those two; Meta was not re-checked.
+2. **Cutover route in section 7 is WITHDRAWN.** The idea of a dedicated production branch for `carclever-openai` contradicts the documented strategy (all three platforms on `release/v2`; test on `staging`, merge into `release/v2`, promote per domain; `carclever-widget` TASKS.md #116 item 2). Documented route for the catalogue code: test on `staging`, merge into `release/v2`, promote on `carclever-openai` only, with behaviour switched per project by environment variables (`LISTING_SOURCE` and the Impact variables exist only on the OpenAI project).
+3. **Branch state:** the spike head is now `8c71b89` (102/102 tests), after adding to the Oct 8 build: year-by-year queries (`Name ~`), nearest-city dealer queries, model lists in `IN` chunks, the large-SUV fallback, no condition label when unknown, VIN from `Mpn`, and the year, mileage and dealer-ZIP mapping now confirmed (20/20 on the diagnostics; André verified one card against Edmunds), no longer “inferred”. `carclever-oai-test` still points at the spike branch (temporary). Nothing has been promoted.
+4. **Auto.dev:** André is over 1,000 calls and still being served (Oct 9). ChatGPT’s `REASSESSMENT_..._20261008` says Auto.dev’s public pricing has a “grandfathered Starter with metered overages”; the pricing page and llms.txt Claude read on Oct 9 list only Free (capped), Growth, Scale and Enterprise. Unreconciled: confirm on André’s Auto.dev billing page (TASKS.md #113, #116).
+5. **Files check (André, Oct 9):** the catalogue Files endpoint returned 0 files; Impact documents three bulk routes (platform download, FTP, Items API); next step is the catalogue details page in the Impact platform (TASKS.md #118).
+6. **Other Oct 9 changes:** the version banners in six admin files were corrected (`release/v2` tip `cac7028`); STATE.md was split a second time (`STATE_ARCHIVE_2026-09-19_to_2026-09-29.md`); document audit and updates are recorded in TASKS.md #114–#117.
+
 ## 1. Headline
 - A working Edmunds/Impact catalogue listing source exists as a **separate, tested branch** and is running on the OpenAI **test** domain only. It returns real Edmunds listings with VIN, year, mileage, dealer city/state, photos and tracked links, with **zero Auto.dev requests** in catalogue mode.
 - **No production domain, branch setting or live deployment was changed.** Live domains verified unchanged repeatedly: `carclever-oai` and `carclever-meta` -> `cac7028` (release/v2); `carclever-anth` and `carclever` -> `dd68e15` (deliberate pin).
