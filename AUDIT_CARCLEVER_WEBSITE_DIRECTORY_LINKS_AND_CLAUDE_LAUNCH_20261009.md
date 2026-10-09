@@ -1,3 +1,5 @@
+> **SUPERSEDED POLICY / EXECUTED ROLLOUT — Oct 9 evening:** André rejected the blanket old-link removal and approved keeping old toolkit links where useful, with the existing explanations. Do NOT execute the removal recommendations below. Claude completed the website rollout and published post 1546. This document is the historical pre-change inventory. See IMPLEMENTATION_LOG_WEBSITE_CLAUDE_BUTTONS_20261009.md and REVIEW_CLAUDE_LAUNCH_PUBLIC_SITE_AND_REMAINING_FIXES_20261009.md for current results.
+
 # CarClever website directory-link audit and Claude launch plan
 
 Date: 9 October 2026, Australia/Brisbane. Lane: ChatGPT strategy. Status: live public-content audit COMPLETE; copy and implementation handoff PREPARED; WordPress changes NOT executed; announcement is a DRAFT.
