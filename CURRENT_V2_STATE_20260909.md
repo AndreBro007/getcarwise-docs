@@ -1,4 +1,13 @@
-# CarClever V2 Current State — updated 2026-09-16
+# CarClever V2 Current State — updated 2026-09-16 (Oct 9 update below)
+
+## UPDATE — Oct 9, 2026 (Claude, Engineering lane): supersedes the statuses below where they differ
+
+- **Anthropic:** APPROVED and PUBLISHED as a Community connector (André, Oct 9). The listing URL is still `carclever-find-my-car.vercel.app/mcp`; the portal’s Change URL button does not allow the change, so Anthropic must change it. Full record: `carclever-widget/ADMIN_RECORD_ANTHROPIC_SUBMISSIONS.md`.
+- **OpenAI:** the new app is published (Version 1.0.0, RELEASED; `DECISIONS.md` `SYS-20260924-007`) with no review pending (André’s Oct 9 screenshot of the plugin list).
+- **Project name:** the OpenAI Vercel project `ccfmc-dev-v2` was renamed `carclever-openai` on Sep 24 (older mentions below are historical).
+- **What each domain serves** (Vercel API and raw MCP `serverInfo.version`, Oct 9): `carclever-oai` and `carclever-meta` serve `cac7028` (`release/v2` tip); `carclever-anth`, `carclever` and `carclever-find-my-car.vercel.app` serve the pinned `dd68e15`. The only code difference is one 24-line disclosure note in `route.ts` (`SYS-20260924-008`).
+- **Freeze rule:** the “freeze V2 / no further proactive code changes while both remain in review” rule below no longer applies to Anthropic or OpenAI. Changes to the published URLs are public changes under VERCEL PRODUCTION SAFETY.
+- **Current work and status document:** a catalogue continuity build on a separate branch, not promoted (`RETURN_CLAUDE_EDMUNDS_CATALOGUE_SPIKE_INTERIM_20261008.md`). The current status document is `carclever-widget/CARCLEVER_3_APPS_CURRENT_STATUS_20260912.md` (read its Oct 2–9 section first).
 
 ## Purpose
 
