@@ -1,3 +1,5 @@
+> **Publication completed Oct 9:** Claude published post 1546 at https://getcarwise.app/carclever-find-my-car-now-on-claude/ with André's approval. Fresh ChatGPT public verification confirms approved text and metadata. The draft/pending wording below records the earlier preparation stage. Sitemap, mobile tables and share-image follow-up: REVIEW_CLAUDE_LAUNCH_PUBLIC_SITE_AND_REMAINING_FIXES_20261009.md. No fresh publication approval is required for the already-published post.
+
 # Launch announcement — editorial metadata and publication checklist
 
 Date prepared: 9 October 2026 (Brisbane). Status: DRAFT, not published. Owner publication decision still required (“might publish” is not explicit publish authority).
