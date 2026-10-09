@@ -84,3 +84,43 @@ Rollback revision = the WordPress revision saved just before my first edit (rest
 
 ## 10. Method notes
 The browser (Claude in Chrome) was used only to verify the listing and layout; edits went through REST. This log was written with the GitHub PAT because it is a long generated table (documented fallback); it contains no credentials.
+
+---
+
+# PHASE 2 (Oct 9, 2026, evening): protected pages, PHEV table, launch announcement
+
+André's replies: protected pages — go ahead; page 937 — fix the best I can; “3.3+ million listings” — leave (an estimate that varies); GA4 click capture and logged-out listing view — park for later; launch blog — approved, using ChatGPT’s latest draft and checklist (commits `c1c5b57` / `ef70b71` / `163155a`, Oct 9 07:04 UTC).
+
+## 11. Protected Task #78 pages — DOCUMENTED INTERVENTION (André approved)
+Pages 827 (best compact SUV under $30k), 828 (midsize sedans), 830 (3-row SUVs) and 934 (compact SUV under $25k, the planned G1 landing page) received the same paired Find My Car module (ChatGPT + Claude buttons, shared description, small print with the affiliate disclosure and no-separate-account note) **outside the iframe**, inserted before the FAQ heading (before “Next Steps” on 830). Nothing else on those pages changed: Edmunds links, iframes, scripts and the JSON-LD schema are identical. Last modified before: 827 Oct 8 05:56:47, 828 05:56:55, 830 05:57:02, 934 05:57:09; all saved about Oct 9 11:30–11:31 (site time). This is an intervention on the Task #78 observation window: **for any analysis, the cohort changed on Oct 9, 2026 at about 11:30 site time.** Backup: `getcarwise_protected_pages_and_937_backup_before_20261009.zip` (original source). Rollback revisions: 827 → 1497, 828 → 1498, 830 → 1499, 934 → 1500.
+
+## 12. Page 937 — mobile table overflow fixed
+The three existing comparison tables are each wrapped in `<div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">`; at 390px the page no longer overflows (tables scroll inside their containers). Rollback revision 1538; backup in the same zip. **Same problem remains, untouched, on protected pages 828, 830 and 934** (their existing tables are 450–600px wide; verified the module is not the cause): same fix available on request.
+
+## 13. Launch announcement — PUBLISHED
+- **Post ID 1546**, `https://getcarwise.app/carclever-find-my-car-now-on-claude/`, title “CarClever – Find My Car Is Now Available on Claude”, status publish, published 2026-10-09T11:34:21 (site time), author 1 (André Broekman), category 113 (Essential Guides, the only content category), excerpt and Rank Math description = the checklist’s suggested text, **no featured image** (see below).
+- **Content saved:** ChatGPT’s draft HTML byte for byte (Gutenberg blocks; 9 H2, 7 H3, about 1,640 words; 6 Claude links, 3 ChatGPT links, 1 guide link, affiliate disclosure at the end). Not changed by Claude. The word “draft” appears only inside example prompts.
+- **Created as a DRAFT first**, previewed in André’s browser (desktop and 390px: no overflow, all Claude links in view, external links open in a new tab, guide link same tab), then published. Created through the REST API; the Rank Math description was set through `/rankmath/v1/updateMeta` and **verified from the public page**.
+- **Fresh logged-out read after publishing:** HTTP 200; `<title>` “CarClever – Find My Car Is Now Available On Claude - GetCarWise” (Rank Math title-casing); description equals the suggested text; canonical and og:url correct; robots index/follow; `article:published_time` set; byline Andre Broekman; category Essential Guides; JSON-LD WebPage, Person, BlogPosting; affiliate disclosure present.
+
+### Checklist results (LAUNCH_CARCLEVER_CLAUDE_EDITORIAL_CHECKLIST_20261009.md)
+1. Claude URL browser-checked (earlier today): `https://claude.ai/directory/carclever-find-my-car` works; the long form redirects to it. Both body hrefs already use the short URL; no change needed.
+2. New ChatGPT identity verified in a browser: `/plugins/plugin_asdk_app_6a85…` loads “CarClever - Find My Car | ChatGPT Plugins”; the `/apps/carclever/asdk_app_6a85…` form redirects to the same `/plugins/` address. The old toolkit app (`698c…`) was not used.
+3. The `/carclever-find-my-car/` guide was updated first (section “Connect in Claude”).
+4. Gutenberg HTML previewed on desktop and mobile; Claude, ChatGPT and guide links tested.
+5. **No featured image:** the largest existing brand assets are 512×512 icons (media 140, 149, 51), too small for a share image; the other images belong to other articles; posts 952 and 1469 also have none; no fabricated screenshot. A real screenshot or a 1200×630 brand image would need a new upload.
+6. Affiliate disclosure retained in the post.
+7. Metadata, date, byline, canonical verified (above). **Internal links added** to the Find My Car guide (1071), Tools hub (452) and Decision Center (1160). **The live `/blog/` page is a dynamic post list (block-theme query loop) and shows the new post first automatically** (verified in the browser); page 300’s stored hand-built HTML (with “Coming Soon” cards) is not what visitors see. I first added a card there by mistake, then **reverted page 300 to its exact original source**. **Sitemap: NOT yet included**: `post-sitemap.xml` still lists 10 posts and is also missing post 1469 (published Oct 6); the page sitemap shows page 1071’s last-modified as Sep 29. The Rank Math sitemap cache looks stale site-wide (pre-existing); clearing it needs a Rank Math admin action (not changed by Claude).
+8. Earlier post 952 preserved (URL, title and story unchanged) and given a dated update note at the top (original July 2026 toolkit announcement is a separate app; Find My Car is on Claude and ChatGPT; link to the new announcement). Rollback revision 1412.
+9. GA4 outbound click capture: NOT verified (parked by André); no test clicks made.
+10. This section is the record. The post was confirmed published by a fresh public read before being marked published here.
+
+## 14. Link edits in this phase (insert-only)
+Guide 1071: “Launch announcement” line in the Connect in Claude section (rollback 1540). Tools hub 452: one line under the first Find My Car description (rollback 1505). Decision Center 1160: “Claude launch announcement” link in the module’s small print (rollback 1507). Original source of 300, 452, 1071, 1160, 952: `getcarwise_link_edits_backup_before_20261009.zip`.
+
+## 15. Open after phase 2
+1. Sitemap stale (see 13.7): clear the Rank Math sitemap cache or wait; then confirm the new URL and 1469 appear.
+2. Pages 828, 830, 934: existing tables overflow on phones (same one-line wrapper fix as 937).
+3. Parked by André: GA4/MonsterInsights outbound-click capture; logged-out view of the Claude listing.
+4. No featured image on the announcement.
+5. Distribution (social, email) and any claim about connector use are outside this task; publication is not proof of use or revenue.
