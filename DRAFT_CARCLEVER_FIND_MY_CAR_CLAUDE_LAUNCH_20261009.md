@@ -4,7 +4,7 @@
 
 CarClever – Find My Car is now live on Claude—and we’re celebrating a new way to move your car search forward.
 
-If you already use Claude to think through a big purchase, you can now bring U.S. new and used vehicle listings into that conversation. Describe what your next car needs to do, explore matching options, refine your shortlist and open a promising vehicle on Edmunds to check availability and contact the dealer.
+If you already use Claude to think through a big purchase, you can now bring U.S. new and used vehicle listings into that conversation. Use CarClever to find candidates, work through the trade-offs with Claude and decide which vehicles deserve a closer look. When you find a promising match, open its Edmunds link and contact the dealer to confirm the facts that matter to your decision.
 
 For GetCarWise, this launch is an exciting milestone. For buyers, it means you can keep the conversation going as your priorities become clearer.
 
@@ -25,6 +25,22 @@ Find My Car helps at the point where research needs to become a practical shortl
 **Verify with the dealer:** Check availability, the written out-the-door price, equipment and relevant records. For a used vehicle, arrange an independent inspection before committing.
 
 You do not have to finish every decision before starting. The conversation gives you somewhere to work through those decisions.
+
+## Get from search results to a decision you can act on
+
+A list of cars is a starting point. The useful part is understanding which ones fit your life, where the compromises are and what you need to know before taking the next step.
+
+CarClever supplies the vehicle-search results; your conversation with Claude helps you work through them:
+
+- **Make your priorities count.** Say which requirements are essential and which you would trade for a newer car, lower mileage or a better price.
+- **Compare a manageable shortlist.** Ask Claude to help you narrow the returned options to two or three worth investigating, using the available listing facts.
+- **Understand the trade-offs.** Ask why one option might suit you better and what you give up by choosing it.
+- **Turn unknowns into useful dealer questions.** Identify the missing details that could change your decision, then ask the seller to confirm them.
+- **Take a concrete next step.** Open a shortlisted vehicle on Edmunds and contact the dealer about that specific car.
+
+You can ask: “Help me narrow these results to three cars worth contacting a dealer about. Explain how each fits my priorities, what is unconfirmed and the first question I should ask about each.”
+
+That is how the conversation helps you move from browsing to a considered enquiry.
 
 ## Your budget is the start of the conversation
 
@@ -58,15 +74,19 @@ If you have a minimum model year or a maximum mileage, include it. Ask Claude to
 
 “Use CarClever – Find My Car to find a Honda CR-V under $30,000 near 90210. Help me compare the returned options by price, model year and mileage.”
 
-Once a listing catches your attention, ask: “What should I confirm with the dealer before arranging a visit?”
+Once a listing catches your attention, ask: “Help me choose which CR-V is worth contacting the dealer about. Compare the available facts and draft a short enquiry asking about availability, the out-the-door price and any missing details that matter to me.”
 
 [Find your shortlist in Claude](https://claude.ai/directory/carclever-find-my-car)
 
 These are starting prompts, not promises that particular vehicles will be available. Results depend on current inventory and the information reported for each listing.
 
-## From “that looks interesting” to a useful dealer conversation
+## Found a promising match? Contact the dealer with a clear purpose
 
-A good next step is specific. Instead of contacting a dealer with a vague enquiry, use your shortlist to identify what could change your decision.
+When a vehicle fits your priorities, a dealer enquiry is how you turn a promising listing into information you can act on. Confirm that the exact car is available, establish the full price and resolve the details you cannot settle from the listing.
+
+You do not need to be ready to buy before asking those questions. You need a car worth investigating and a clear reason to contact its seller.
+
+Use the Edmunds link on that vehicle to review it and make your enquiry. Ask Claude to help you write a message around your actual priorities.
 
 For example:
 
@@ -75,7 +95,13 @@ For example:
 - “Does this vehicle have the equipment I need?”
 - “For this used car, which service and history records are available, and can I arrange an independent inspection?”
 
-Find My Car links open on Edmunds, where you can review the listing and use the available dealer-contact options. Your enquiry is an opportunity to confirm the facts before spending time on a visit.
+Here is a message you can adapt:
+
+“Hi, I’m interested in the [year, make, model and VIN] listed on Edmunds. Is this exact vehicle still available? Please send the written out-the-door price, including fees and required add-ons, and confirm [the equipment or other detail that matters to me]. If those details fit, I’d like to discuss a viewing or test drive.”
+
+For a used car, add questions about relevant records and arranging an independent inspection.
+
+**Your next step: open the Edmunds link for your shortlisted vehicle and contact the dealer about the facts that will help you decide.** Availability, the final price and any unanswered requirements are useful reasons to enquire; there is no need to invent urgency or assume the car is ready to buy.
 
 ## Connect CarClever in Claude
 
@@ -101,9 +127,9 @@ This launch is for CarClever – Find My Car. Our earlier used-car toolkit and t
 
 No. Confirm availability and the final price with the dealer. Unreported accident, ownership or certification information remains unconfirmed. A listing or match score does not replace a history report or an independent inspection.
 
-### Can I also use CarGurus in Claude?
+### What if I have a shortlist but am not ready to buy?
 
-Yes. [CarGurus also offers a Claude connector](https://claude.com/marketplace/connectors/cargurus). You can explore more than one source. When comparing results, use the same location and requirements, and distinguish a maximum price from a preference for newer vehicles closer to that budget.
+Use the conversation to identify what is stopping you from choosing: price, equipment, availability or missing information. When one of those answers has to come from the seller, open the vehicle on Edmunds and contact the dealer with that question. An enquiry helps you decide whether to proceed; it is not a commitment to purchase.
 
 ## Prefer ChatGPT? Try the same Find My Car app
 
@@ -115,7 +141,7 @@ This launch celebrates CarClever’s arrival on Claude. If you use ChatGPT inste
 
 ## Your next car search can start with a conversation
 
-Tell Claude what you need, ask CarClever to find matching vehicles, and use the results to decide what is worth exploring next.
+Tell Claude what you need, ask CarClever to find matching vehicles and work toward a shortlist you can explain. When a car looks right, open its Edmunds link and contact the dealer to confirm availability, the complete price and the details that matter to you.
 
 [Find your next car with CarClever on Claude](https://claude.ai/directory/carclever-find-my-car)
 
